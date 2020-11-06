@@ -325,3 +325,5 @@ medusa_website/media/
 .pytest_cache/
 
 
+# Other
+db/
