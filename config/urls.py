@@ -16,8 +16,8 @@ urlpatterns = [
     path("users/", include("medusa_website.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
+    path("mcq_bank/", include("medusa_website.mcq_bank.urls", namespace="mcq_bank")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
