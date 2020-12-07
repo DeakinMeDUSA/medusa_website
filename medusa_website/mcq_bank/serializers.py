@@ -44,7 +44,7 @@ class AnswerSerializer(serializers.ModelSerializer):
 class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
-        fields = ["id", "question_text", "author", "image"]
+        fields = ["id", "question_text", "category", "author", "image"]
 
 
 #

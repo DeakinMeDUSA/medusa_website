@@ -14,9 +14,16 @@ class QuestionAdmin(admin.ModelAdmin):
         "question_text",
         "has_image",
         "image_url",
+        "category",
     ]
     readonly_fields = ("id", "admin_thumbnail")
-    fields = ["question_text", "author", "image", "admin_thumbnail"]
+    fields = [
+        "question_text",
+        "category",
+        "author",
+        "image",
+        "admin_thumbnail",
+    ]
 
 
 @admin.register(Answer)

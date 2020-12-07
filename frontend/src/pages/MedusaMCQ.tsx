@@ -6,6 +6,7 @@ import MaterialTable, { Icons } from "material-table";
 import {
   AddBox,
   ArrowUpward,
+  Block,
   Check,
   ChevronLeft,
   ChevronRight,
@@ -19,7 +20,7 @@ import {
   Remove,
   SaveAlt,
   Search,
-  ViewColumn
+  ViewColumn,
 } from "@material-ui/icons";
 import axios from "axios";
 import styled from "styled-components";
@@ -50,6 +51,7 @@ interface questionData {
   author: string
   question_text: string
   image: string
+  category: string
 }
 
 interface answerData {
@@ -59,20 +61,36 @@ interface answerData {
   is_correct: boolean
 }
 
+const IsCorrectIcon = styled.img`
+  height: 20px;
+  width: 20px;
+`
+
+// TODO single source of truth for this, see models/question.py
+const questionCategories = {
+  UNCATEGORISED: "Uncategorised",
+  CARDIOLOGY: "Cardiology",
+  NEUROLOGY: "Neurology",
+  PAEDIATRICS: "Paediatrics",
+}
 
 const questionColumns = [
   { title: "id", field: "id", hidden: false, grouping: false },
-  { title: "Author", field: "author" },
   { title: "Question Text", field: "question_text", grouping: false },
+  { title: "Category", field: "category", grouping: true, lookup: questionCategories },
+  { title: "Author", field: "author", grouping: true },
   { title: "Image url", field: "image", grouping: false },
-
 ]
 
 const answerColumns = [
   { title: "id", field: "id", hidden: true, grouping: false },
   { title: "question_id", field: "question_id", hidden: true, grouping: false },
   { title: "Answer Text", field: "answer_text", grouping: false },
-  { title: "Is Correct", field: "is_correct" },
+  {
+    title: "Is Correct", field: "is_correct", lookup: { true: <Check/>, false: <Block/> },
+    // @ts-ignore
+    render: (rowData: answerData) => rowData.is_correct ? <Check/> : <Block/>
+  },
 ]
 
 class MCQAPI {
@@ -156,7 +174,7 @@ export class MCQStore {
     this.api = new MCQAPI()
     this.showQuestionEdit = false
     this.curQuestionId = -1
-    this.curQuestion = { id: -1, author: "", question_text: "", image: "" }
+    this.curQuestion = { id: -1, author: "", question_text: "", image: "", category: "Uncategorised" }
   }
 
 
@@ -260,7 +278,12 @@ const QuestionEditPopup = observer(({ store }: { store: RootStore }) => {
       </Modal.Header>
       <Modal.Body>
         <QuestionDetailDiv>
-          <QuestionTextDiv><b>Question: </b>{store.mcqStore.curQuestion.question_text}</QuestionTextDiv><br/><br/>
+          <QuestionTextDiv>
+            <b>Question: </b>{store.mcqStore.curQuestion.question_text}
+            <br/>
+            <b>Category: </b>{store.mcqStore.curQuestion.category}
+            <br/>
+          </QuestionTextDiv>
           {store.mcqStore.curQuestion.image !== null ? <QuestionImg src={store.mcqStore.curQuestion.image}/> : null}
           <MaterialTable
             title="Answers"
@@ -310,7 +333,7 @@ export const MedusaMCQ = observer(({ store }: { store: RootStore }) => {
                 // @ts-ignore
                 onRowDelete: (oldData) => store.mcqStore.api.deleteQuestion(oldData),
                 // @ts-ignore
-                onRowUpdate: (newData) => store.mcqStore.api.addQuestion(newData)
+                onRowUpdate: (newData) => store.mcqStore.api.modifyQuestion(newData)
               }}
 
               onRowClick={(event, rowData) => {

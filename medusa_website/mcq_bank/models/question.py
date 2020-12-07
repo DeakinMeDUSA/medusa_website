@@ -4,11 +4,24 @@ from django.db import models
 
 from medusa_website.users.models import User
 
+# TODO single source of truth for this, see frontend/src/MedusaMCQ.tsx
+
+QUESTION_CATEGORIES = ["UNCATEGORISED", "CARDIOLOGY", "NEUROLOGY", "PAEDIATRICS"]
+QuestionCategory = models.TextChoices("QuestionCategory", QUESTION_CATEGORIES)
+
 
 class Question(models.Model):
-    question_text = models.CharField(max_length=200, unique=True)
+
+    question_text = models.TextField(max_length=200, unique=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     image = models.ImageField(null=True, blank=True)
+    category = models.CharField(
+        max_length=128,
+        choices=QuestionCategory.choices,
+        default=QuestionCategory.UNCATEGORISED,
+        blank=None,
+        null=True,
+    )
 
     def add_new_answer(self, answer_text: str, is_correct=False):
         from medusa_website.mcq_bank.models import Answer
