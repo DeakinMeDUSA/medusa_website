@@ -78,6 +78,9 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "rest_framework",
     "corsheaders",
+    "webpack_loader",
+    "rest_framework.authtoken",
+    "imagekit",
 ]
 
 LOCAL_APPS = [
@@ -280,3 +283,10 @@ SOCIALACCOUNT_ADAPTER = "medusa_website.users.adapters.SocialAccountAdapter"
 CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = ("http://localhost:3000",)
+WEBPACK_LOADER = {
+    "FRONTEND": {
+        "CACHE": not DEBUG,
+        "BUNDLE_DIR_NAME": "/",  # must end with slash
+        "STATS_FILE": (ROOT_DIR / "frontend/build/webpack-stats.json").as_posix(),
+    },
+}
