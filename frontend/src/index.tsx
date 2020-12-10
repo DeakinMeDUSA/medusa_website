@@ -13,13 +13,13 @@ import { Observer } from 'mobx-react';
 // https://github.com/styled-components/styled-theming
 
 
-// configure({
-//   enforceActions: "always",
-//   computedRequiresReaction: true,
-//   reactionRequiresObservable: true,
-//   observableRequiresReaction: true,
-//   disableErrorBoundaries: true
-// })
+configure({
+  enforceActions: "always",
+  computedRequiresReaction: true,
+  reactionRequiresObservable: true,
+  observableRequiresReaction: true,
+  disableErrorBoundaries: true
+})
 
 // Root Store Declaration
 export class RootStore {
