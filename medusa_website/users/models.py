@@ -13,6 +13,7 @@ class User(AbstractUser):
     graduation_year = IntegerField(
         verbose_name="Year of Graduation", null=True, blank=True
     )
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name"]
 
@@ -24,3 +25,16 @@ class User(AbstractUser):
 
         """
         return reverse("users:detail", kwargs={"username": self.username})
+
+    @property
+    def answered_questions(self):
+        from medusa_website.mcq_bank.models import Record
+        return Record.objects.filter(user=self)
+
+    @property
+    def correct_questions(self):
+        return self.answered_questions.filter(answer__is_correct=True)
+
+    @property
+    def incorrect_qustions(self):
+        return self.answered_questions.filter(answer__is_correct=False)

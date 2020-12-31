@@ -1,8 +1,7 @@
 from typing import Optional
 
 from django.db import models
-
-from medusa_website.users.models import User
+from typing import Union
 
 # TODO single source of truth for this, see frontend/src/MedusaMCQ.tsx
 
@@ -11,6 +10,8 @@ QuestionCategory = models.TextChoices("QuestionCategory", QUESTION_CATEGORIES)
 
 
 class Question(models.Model):
+    from medusa_website.users.models import User
+
 
     question_text = models.TextField(max_length=200, unique=True)
     author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
@@ -22,6 +23,15 @@ class Question(models.Model):
         blank=None,
         null=True,
     )
+
+
+    @classmethod
+    def create_with_auth(cls, question_text: str, author: User, image: Union[bytes, str], category: str):
+        """ Used when user is creating questions from  the front end"""
+        if len(question_text) == 0:
+            raise ValueError("Cannot create Question with no question text")
+
+        new_q =  cls.objects.create(question_text=question_text, author=author, image=image, category=category)
 
     def add_new_answer(self, answer_text: str, is_correct=False):
         from medusa_website.mcq_bank.models import Answer

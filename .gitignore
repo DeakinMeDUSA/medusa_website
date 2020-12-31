@@ -327,3 +327,5 @@ medusa_website/media/
 
 # Other
 db/
+.idea/medusa_website.iml
+.idea/misc.xml
