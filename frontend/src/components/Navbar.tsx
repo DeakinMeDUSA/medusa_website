@@ -34,6 +34,12 @@ const NavLink = styled(Link)`
   color: #d2d6dc;
 `
 
+const NavExtLink = styled.a`
+  text-decoration: none;
+  color: #d2d6dc;
+`
+
+
 const NavLinksList = styled.ul`
   list-style: none;
   display: flex;
@@ -50,42 +56,42 @@ const UserPin = styled(MdPersonPin)`
 export const Menu = () => {
   return (
     <NavLinksList>
-      <NavItem>
-        <NavLink to={"/"}>Home</NavLink>
-      </NavItem>
-      <NavItem>
-        <NavLink to={"/medusa_mcq"}>Medusa MCQ </NavLink>
-      </NavItem>
+      <NavItem> <NavLink to={"/"}>Home</NavLink> </NavItem>
+      {/*<NavItem> <NavLink to={"/"}>News</NavLink> </NavItem>*/}
+      <NavItem> <NavLink to={"/about"}>About</NavLink> </NavItem>
+      <NavItem> <NavExtLink href="https://www.facebook.com/pg/medusa.deakin/events">Events</NavExtLink> </NavItem>
+      <NavItem> <NavLink to={"/members"}>Members</NavLink> </NavItem>
+      <NavItem> <NavLink to={"/user"}>My Account</NavLink> </NavItem>
+      <NavItem> <NavLink to={"/medusa_mcq"}>Medusa MCQ </NavLink> </NavItem>
     </NavLinksList>
   );
 };
 
 
-
 export const Navbar = observer(({ store }: { store: RootStore }) => {
   return (<>
-    <Composition
-      as={NavDiv}
-      template={templateMobile}
-      gap={20}
-      padding={20}
-      alignItems="center"
-    >
-      {(Areas) => (
-        <>
-          <Areas.Logo><NavLogo src={logo_lowres}/></Areas.Logo>
-          <Areas.Menu justify="end">
-            {/*<Only as={Menu} from="md" />*/}
-            <Menu/>
+      <Composition
+        as={NavDiv}
+        template={templateMobile}
+        gap={20}
+        padding={20}
+        alignItems="center"
+      >
+        {(Areas) => (
+          <>
+            <Areas.Logo><NavLogo src={logo_lowres}/></Areas.Logo>
+            <Areas.Menu justify="end">
+              {/*<Only as={Menu} from="md" />*/}
+              <Menu/>
 
-          </Areas.Menu>
-          <Areas.User justify="end"><UserPin/></Areas.User>
+            </Areas.Menu>
+            <Areas.User justify="end"><UserPin/></Areas.User>
 
 
-        </>
-      )}
+          </>
+        )}
 
-    </Composition>
+      </Composition>
       {/*<StatusDiv>Answers = {JSON.stringify(store.mcqStore.questions)}</StatusDiv>*/}
       {/*<StatusDiv>QuestionID = {JSON.stringify(store.mcqStore.curQuestionId)}</StatusDiv>*/}
       {/*<StatusDiv>showQuestionEdit = {JSON.stringify(store.mcqStore.showQuestionEdit)}</StatusDiv>*/}
