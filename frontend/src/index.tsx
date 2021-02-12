@@ -7,6 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { action, configure, makeObservable, observable } from "mobx";
 import { MCQStore } from "./pages/MedusaMCQ";
 import { Observer } from 'mobx-react';
+import { AboutStore } from "./pages/About";
 
 //TODO https://styled-components.com/docs/advanced#theming
 // Add themes?
@@ -24,18 +25,26 @@ configure({
 // Root Store Declaration
 export class RootStore {
   mcqStore!: MCQStore;
+  aboutStore!: AboutStore;
 
   constructor() {
     makeObservable(this, {
       mcqStore: observable,
+      aboutStore: observable,
       addMCQStore: action,
+      addAboutStore: action,
     })
     // this.authStore = new AuthStore(this);
     this.addMCQStore(new MCQStore(this))
+    this.addAboutStore(new AboutStore(this))
   }
 
   addMCQStore = (store: MCQStore) => {
     this.mcqStore = store;
+
+  }
+  addAboutStore = (store: AboutStore) => {
+    this.aboutStore = store;
 
   }
 }

@@ -2,17 +2,30 @@ import React from "react";
 import { observer } from "mobx-react";
 import { RootStore } from "../index";
 import InstagramFeed from "../js/InstagramFeed"
+import { action, makeObservable, observable } from "mobx";
+import { JuicerFeed } from "../components/JuicerFeed";
+import styled from "styled-components";
 
-@observer
-class InstaComp extends React.Component {
+
+class InstaComp {
   myRef: any
-  private instafeed: any;
   instadata: any;
-  private instahtml: string;
-  store : RootStore
+  store: RootStore
+  instafeed: any;
+  instahtml: string;
 
   constructor(store: RootStore) {
-    super(store)
+    // super(store)
+
+    makeObservable(this, {
+      myRef: observable,
+      instahtml: observable,
+      instafeed: observable,
+
+      dataCallback: action,
+      getInstahtml: observable,
+
+    })
     this.store = store;
     this.myRef = React.createRef();
     console.log(this.myRef)
@@ -35,26 +48,33 @@ class InstaComp extends React.Component {
     })
   }
 
-  dataCallback(instadata: any, instahtml: string){
+  dataCallback(instadata: any, instahtml: string) {
     console.log(instadata)
     console.log(instahtml)
     this.instadata = instadata
-    this.instahtml = instahtml
+    this.instahtml = `<div>${instahtml}<div>`
   }
 
-  render() {
-    return (<div>{this.instahtml}</div>)
+  getInstahtml(): string {
+    return this.instahtml
   }
+
 }
+
+const JuicerDiv = styled.div`
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+`
 
 
 export const Home = observer(({ store }: { store: RootStore }) => {
   return (
     <div>This is the Home page
+      <JuicerDiv><JuicerFeed feedId="medusa-deakin" /></JuicerDiv>
       <div>API Root URL : {store.mcqStore.api.rootURL}</div>
-      <InstaComp/>
     </div>
     //  TODO use https://instafeedjs.com/#/?id=instafeedjs
   );
 })
-
