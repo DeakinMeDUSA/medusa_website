@@ -272,7 +272,9 @@ ACCOUNT_AUTHENTICATION_METHOD = "username"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = (
+    "none"  # TODO Setup email provider and set back to mandatory
+)
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "medusa_website.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -280,13 +282,29 @@ SOCIALACCOUNT_ADAPTER = "medusa_website.users.adapters.SocialAccountAdapter"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ["*"]
 
 CORS_ORIGIN_WHITELIST = ("http://localhost:3000",)
+CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
+
+
 WEBPACK_LOADER = {
     "FRONTEND": {
         "CACHE": not DEBUG,
         "BUNDLE_DIR_NAME": "/",  # must end with slash
         "STATS_FILE": (ROOT_DIR / "frontend/build/webpack-stats.json").as_posix(),
     },
+}
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ),
+}
+
+JWT_AUTH = {
+    "JWT_RESPONSE_PAYLOAD_HANDLER": "medusa_website.users.utils.my_jwt_response_handler"
 }
