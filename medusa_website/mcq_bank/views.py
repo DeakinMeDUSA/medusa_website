@@ -51,4 +51,5 @@ class AnswerCreate(generics.CreateAPIView):
     serializer_class = AnswerSerializer
 
 
-react_frontend = TemplateView.as_view(template_name="mcq_bank/index.html")
+class IndexView(TemplateView):
+    template_name = "mcq_bank/index.html"

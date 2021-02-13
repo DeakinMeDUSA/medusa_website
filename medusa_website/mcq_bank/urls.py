@@ -12,5 +12,5 @@ urlpatterns = [
     path("api/answers", views.AnswersList.as_view()),
     path("api/answer/<int:id>", views.AnswerRetrieveUpdateDestroy.as_view()),
     path("api/answer/create", views.AnswerCreate.as_view()),
-    path(r"frontend/", views.react_frontend),
+    path(r"frontend/", views.IndexView.as_view()),
 ]
