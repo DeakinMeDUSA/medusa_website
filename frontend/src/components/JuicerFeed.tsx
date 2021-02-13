@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
 
-export class JuicerFeed extends Component {
-  componentDidMount () {
+export type JuicerFeedProps = {
+  feedId: string
+  maxItems?: number
+};
+
+export class JuicerFeed extends Component<JuicerFeedProps> {
+  componentDidMount() {
     if (!document.querySelector('.juicer-io-resources-wrapper')) {
       this.appendResourcesWrapper()
     }
   }
 
-  appendResourcesWrapper () {
+  appendResourcesWrapper() {
     const juicerResourcesWrapper = document.createElement('div')
     juicerResourcesWrapper.setAttribute('class', 'juicer-io-resources-wrapper')
 
@@ -27,11 +32,10 @@ export class JuicerFeed extends Component {
     document.body.appendChild(juicerResourcesWrapper)
   }
 
-  render () {
+  render() {
 
     return (
-      // @ts-ignore
-      <ul className='juicer-feed' data-feed-id={this.props.feedId} data-per="20"/>
+      <ul className='juicer-feed' data-feed-id={this.props.feedId} data-per={this.props.maxItems ? this.props.maxItems : 50}/>
     )
   }
 }

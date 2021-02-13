@@ -18,6 +18,8 @@ django-cors-headers
 django-rest-authtoken
 django-webpack-loader
 django-imagekit
+djangorestframework-jwt
 
+# Others
 pandas
 openpyxl

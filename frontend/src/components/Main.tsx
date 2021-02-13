@@ -7,7 +7,7 @@ import { RootStore } from "../index";
 import { MedusaMCQ } from "../pages/MedusaMCQ";
 import { About } from "../pages/About";
 import { Members } from "../pages/Members";
-import { User } from "../pages/User";
+import { UserPage } from "../pages/User";
 
 export const Main = observer(({ store }: { store: RootStore }) => {
   return <Observer>{() =>
@@ -15,7 +15,7 @@ export const Main = observer(({ store }: { store: RootStore }) => {
       <Route exact path='/' render={() => <Observer>{() => <Home store={store}/>}</Observer>}/>
       <Route exact path='/about' render={() => <Observer>{() => <About store={store}/>}</Observer>}/>
       <Route exact path='/members' render={() => <Observer>{() => <Members store={store}/>}</Observer>}/>
-      <Route exact path='/user' render={() => <Observer>{() => <User store={store}/>}</Observer>}/>
+      <Route exact path='/user' render={() => <Observer>{() => <UserPage store={store}/>}</Observer>}/>
       <Route exact path='/medusa_mcq' render={() => <Observer>{() => <MedusaMCQ store={store}/>}</Observer>}/>
 
     </Switch>

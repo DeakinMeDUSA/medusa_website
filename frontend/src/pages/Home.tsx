@@ -72,7 +72,7 @@ const JuicerDiv = styled.div`
 export const Home = observer(({ store }: { store: RootStore }) => {
   return (
     <div>This is the Home page
-      <JuicerDiv><JuicerFeed feedId="medusa-deakin" /></JuicerDiv>
+      <JuicerDiv><JuicerFeed feedId="medusa-deakin" maxItems={10}/></JuicerDiv>
       <div>API Root URL : {store.mcqStore.api.rootURL}</div>
     </div>
     //  TODO use https://instafeedjs.com/#/?id=instafeedjs

@@ -53,7 +53,7 @@ const UserPin = styled(MdPersonPin)`
   width: 2em;
 `
 
-export const Menu = () => {
+export const Menu = ({store}: {store: RootStore}) => {
   return (
     <NavLinksList>
       <NavItem> <NavLink to={"/"}>Home</NavLink> </NavItem>
@@ -82,8 +82,7 @@ export const Navbar = observer(({ store }: { store: RootStore }) => {
             <Areas.Logo><NavLogo src={logo_lowres}/></Areas.Logo>
             <Areas.Menu justify="end">
               {/*<Only as={Menu} from="md" />*/}
-              <Menu/>
-
+              <Menu store={store}/>
             </Areas.Menu>
             <Areas.User justify="end"><UserPin/></Areas.User>
 
