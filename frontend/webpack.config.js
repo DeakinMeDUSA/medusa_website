@@ -1,5 +1,4 @@
 const path = require('path')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'development',  // or 'production'
@@ -9,7 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, './build/static'),  // path to our Django static directory
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.tsx', '.ts'],
+    extensions: ['.tsx', '.ts'],
   },
   module: {
     rules: [
@@ -18,32 +17,28 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
-      {
-        test: /\.jsx|\.js/,
-        use: {
-          loader: 'babel-loader',
-          options: { presets: ['@babel/preset-react', '@babel/preset-env'] },
-        },
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.scss/,
-        use: ['style-loader', 'css-loader', 'postcss-lodaer', 'sass-loader'], // Note that postcss loader must come before sass-loader
-      },
+      // {
+      //   test: /\.jsx|/,
+      //   use: {
+      //     loader: 'babel-loader',
+      //     options: { presets: ['@babel/preset-react', '@babel/preset-env'] },
+      //   },
+      //   exclude: [/node_modules/, /build/, /lib/],
+      // },
       {
         test: /\.css$/,
         use: [
           'style-loader',
-          'css-loader'
-        ]
+          'css-loader',
+        ],
       },
       {
-          test: /\.(jpe?g|png|gif|svg)$/i,
-          loader: 'file-loader',
-          options: {
-            name: '[path][name].[ext]',
-          }
-      }
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]',
+        },
+      },
     ],
   },
 }

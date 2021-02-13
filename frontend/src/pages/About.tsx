@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { observer } from "mobx-react";
 import { RootStore } from "../index";
 import styled from "styled-components";

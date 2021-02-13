@@ -1,7 +1,6 @@
 import { observer } from "mobx-react";
 import { RootStore } from "../index";
 import React from "react";
-import { LoginSignupForm } from "../components/Signup";
 import { action, makeObservable, observable } from "mobx";
 import axios from "axios";
 
@@ -260,7 +259,7 @@ export const UserPage = observer(({ store }: { store: RootStore }) => {
       <h3>
         {store.userStore.isLoggedIn
           ? `Hello, ${store.userStore.username}`
-          : <LoginSignupForm store={store}/>}
+          : "Not signed in"}
       </h3>
 
     </div>
