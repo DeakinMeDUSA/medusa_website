@@ -3,11 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { App } from './App';
 import { BrowserRouter } from 'react-router-dom';
-import { action, configure, makeObservable, observable } from "mobx";
-import { MCQStore } from "./pages/MedusaMCQ";
+import { configure } from "mobx";
 import { Observer } from 'mobx-react';
-import { AboutStore } from "./pages/About";
-import { UserStore } from "./pages/User";
+import { RootStore } from "./components/RootStore";
 
 //TODO https://styled-components.com/docs/advanced#theming
 // Add themes?
@@ -21,41 +19,6 @@ configure({
   observableRequiresReaction: true,
   disableErrorBoundaries: true
 })
-
-// Root Store Declaration
-export class RootStore {
-  mcqStore!: MCQStore;
-  aboutStore!: AboutStore;
-  userStore!: UserStore;
-
-  constructor() {
-    makeObservable(this, {
-      mcqStore: observable,
-      aboutStore: observable,
-      userStore: observable,
-      addMCQStore: action,
-      addAboutStore: action,
-      addUserStore: action,
-    })
-    // this.authStore = new AuthStore(this);
-    this.addMCQStore(new MCQStore(this))
-    this.addAboutStore(new AboutStore(this))
-    this.addUserStore(new UserStore(this))
-  }
-
-  addMCQStore = (store: MCQStore) => {
-    this.mcqStore = store;
-
-  }
-  addAboutStore = (store: AboutStore) => {
-    this.aboutStore = store;
-
-  }
-  addUserStore = (store: UserStore) => {
-    this.userStore = store;
-
-  }
-}
 
 const rootStore = new RootStore()
 

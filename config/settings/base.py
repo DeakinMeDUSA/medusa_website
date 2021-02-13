@@ -5,6 +5,8 @@ from pathlib import Path
 
 import environ
 
+from medusa_website.mcq_bank.utils import CustomManifestReactLoader
+
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 APPS_DIR = ROOT_DIR / "medusa_website"  # medusa_website/
@@ -160,6 +162,7 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     str(APPS_DIR / "static"),
     str(FRONTEND_DIR / "build"),
+    str(FRONTEND_DIR / "build/static"),
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
@@ -314,3 +317,9 @@ REST_FRAMEWORK = {
 # JWT_AUTH = {
 #     "JWT_RESPONSE_PAYLOAD_HANDLER": "medusa_website.users.utils.my_jwt_response_handler"
 # }
+MANIFEST_LOADER = {
+    "output_dir": FRONTEND_DIR / "build",
+    "manifest_file": "manifest.json",
+    "cache": False,
+    "loader": CustomManifestReactLoader,
+}

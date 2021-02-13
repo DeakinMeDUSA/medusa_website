@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { RootStore } from "../index";
+import { RootStore } from "../components/RootStore";
 import styled from "styled-components";
 import { action, makeObservable, observable } from "mobx";
 import { Button } from "react-bootstrap";

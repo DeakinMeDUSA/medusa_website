@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { action, makeObservable, observable } from "mobx";
-import { RootStore } from "../index"
+import { RootStore } from "../components/RootStore";
 import { Observer, observer } from "mobx-react";
 import MaterialTable, { Icons } from "material-table";
 import {
@@ -360,6 +360,3 @@ export const MedusaMCQ = observer(({ store }: { store: RootStore }) => {
     )
   }
 )
-
-
-

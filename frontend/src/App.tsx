@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { Main } from "./components/Main";
 import { Navbar } from "./components/Navbar";
-import { RootStore } from "./index";
+import { RootStore } from "./components/RootStore";
 import { observer } from "mobx-react";
 
 

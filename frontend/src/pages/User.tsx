@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { RootStore } from "../index";
+import { RootStore } from "../components/RootStore";
 import React from "react";
 import { action, makeObservable, observable } from "mobx";
 import axios from "axios";

@@ -5,7 +5,7 @@ import logo_lowres from '../media/logo_lowres.png'
 import { Link } from "react-router-dom";
 import { MdPersonPin } from "react-icons/md";
 import { observer } from "mobx-react";
-import { RootStore } from "../index";
+import { RootStore } from "./RootStore";
 
 const templateMobile = `
   logo menu user
