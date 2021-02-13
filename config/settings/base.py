@@ -83,6 +83,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework.authtoken",
     "imagekit",
+    "manifest_loader",
 ]
 
 LOCAL_APPS = [
@@ -158,7 +159,7 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
     str(APPS_DIR / "static"),
-    # str(FRONTEND_DIR / "build/static"),
+    str(FRONTEND_DIR / "build"),
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [

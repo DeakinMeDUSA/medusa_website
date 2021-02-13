@@ -52,4 +52,4 @@ class AnswerCreate(generics.CreateAPIView):
 
 
 class IndexView(TemplateView):
-    template_name = "mcq_bank/index.html"
+    template_name = "react/index.html"
