@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import dusa from "../../media/about/sponsors/dusa.png";
 import { Composition } from "atomic-layout";
+import React from "react";
 
 const MainTextStyle = styled.div`
   //float: right;

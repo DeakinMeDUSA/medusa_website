@@ -17,14 +17,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
-    "noEmit": true,
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true,
     "useDefineForClassFields": true,
     "typeRoots": [
       "./node_modules/@types",
       "src/types/*"
-    ]
+    ],
+//    "noEmit": true
   },
   "include": [
     "src"

@@ -1,3 +1,5 @@
+{% load static i18n %}<!DOCTYPE html>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,4 +17,8 @@
     <p>No polls are available.</p>
 {% endif %}
 </body>
+<div id="root"></div>
+<script src="{% static 'index-bundle.js' %}"></script>
+
+
 </html>

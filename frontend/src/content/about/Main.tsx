@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import school_of_med from "../../media/about/main/school_of_med.jpg"
 

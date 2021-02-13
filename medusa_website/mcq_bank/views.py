@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView
 from rest_framework import generics
 
 from medusa_website.mcq_bank.models import Answer, Question
@@ -48,3 +49,6 @@ class AnswersList(generics.ListAPIView):
 class AnswerCreate(generics.CreateAPIView):
     queryset = Answer.objects.all()
     serializer_class = AnswerSerializer
+
+
+react_frontend = TemplateView.as_view(template_name="mcq_bank/index.html")

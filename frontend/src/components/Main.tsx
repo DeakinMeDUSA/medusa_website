@@ -1,4 +1,3 @@
-import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { Observer, observer } from "mobx-react";
@@ -8,6 +7,7 @@ import { MedusaMCQ } from "../pages/MedusaMCQ";
 import { About } from "../pages/About";
 import { Members } from "../pages/Members";
 import { UserPage } from "../pages/User";
+import React from 'react';
 
 export const Main = observer(({ store }: { store: RootStore }) => {
   return <Observer>{() =>

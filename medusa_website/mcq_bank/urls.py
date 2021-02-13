@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
@@ -12,4 +12,5 @@ urlpatterns = [
     path("api/answers", views.AnswersList.as_view()),
     path("api/answer/<int:id>", views.AnswerRetrieveUpdateDestroy.as_view()),
     path("api/answer/create", views.AnswerCreate.as_view()),
+    path(r"frontend/", views.react_frontend),
 ]
