@@ -24,7 +24,7 @@
       "./node_modules/@types",
       "src/types/*"
     ],
-//    "noEmit": true
+    "noEmit": true
   },
   "include": [
     "src"
