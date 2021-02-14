@@ -3,22 +3,15 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DetailView, RedirectView, UpdateView
-from rest_framework import permissions, status
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-from .serializers import UserSerializer
 
 User = get_user_model()
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
-    slug_field = "username"
-    slug_url_kwarg = "username"
+    slug_field = "email"
+    slug_url_kwarg = "email"
 
 
 user_detail_view = UserDetailView.as_view()
@@ -29,10 +22,10 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     fields = ["name", "email", "graduation_year"]
 
     def get_success_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
+        return reverse("users:detail", kwargs={"email": self.request.user.email})
 
     def get_object(self):
-        return User.objects.get(username=self.request.user.username)
+        return User.objects.get(email=self.request.user.email)
 
     def form_valid(self, form):
         messages.add_message(
@@ -48,7 +41,7 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
     def get_redirect_url(self):
-        return reverse("users:detail", kwargs={"username": self.request.user.username})
+        return reverse("users:detail", kwargs={"email": self.request.user.email})
 
 
 user_redirect_view = UserRedirectView.as_view()

@@ -1,4 +1,4 @@
-from django.contrib.auth import forms as admin_forms
+from cuser import forms as admin_forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -12,20 +12,19 @@ class UserChangeForm(admin_forms.UserChangeForm):
 
 
 class UserCreationForm(admin_forms.UserCreationForm):
-
     error_message = admin_forms.UserCreationForm.error_messages.update(
-        {"duplicate_username": _("This username has already been taken.")}
+        {"duplicate_email": _("This email has already been used.")}
     )
 
     class Meta(admin_forms.UserCreationForm.Meta):
         model = User
 
-    def clean_username(self):
-        username = self.cleaned_data["username"]
+    def clean_email(self):
+        email = self.cleaned_data["email"]
 
         try:
-            User.objects.get(username=username)
+            User.objects.get(email=email)
         except User.DoesNotExist:
-            return username
+            return email
 
-        raise ValidationError(self.error_messages["duplicate_username"])
+        raise ValidationError(self.error_messages["duplicate_email"])

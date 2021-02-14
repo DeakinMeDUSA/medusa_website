@@ -37,8 +37,8 @@ class UserAPI {
       })
   }
 
-  async getUser(username: string | null): Promise<any> {
-    if (username !== null) {
+  async getUser(email: string | null): Promise<any> {
+    if (email !== null) {
       return await axios.get(`${this.rootURL}users/current-user/`, {
         headers: {
           Authorization: `JWT ${localStorage.getItem('token')}`,
@@ -112,7 +112,7 @@ export class UserStore {
   @observable rootStore!: RootStore;
   @observable api!: UserAPI
   @observable isLoggedIn!: boolean
-  @observable username!: string | null
+  @observable email!: string | null
   @observable email!: string
   @observable displayedForm!: string
 
@@ -125,7 +125,7 @@ export class UserStore {
     this.rootStore = rootStore
     this.api = new UserAPI()
     this.isLoggedIn = localStorage.getItem('token') ? true : false
-    this.username = this.isLoggedIn ? localStorage.getItem('username') : ""
+    this.email = this.isLoggedIn ? localStorage.getItem('email') : ""
     this.displayedForm = ""
     this.email = ""
 
@@ -154,44 +154,44 @@ export class UserStore {
   handleLogin = (data: any) => {
     return (this.api.loginUser(data)
       .then((result) => {
-        this.setUser({ token: result.data.token, username: result.data.user.username })
+        this.setUser({ token: result.data.token, email: result.data.user.email })
       }))
   }
   @action
   handleUserState = () => {
     if (this.isLoggedIn) {
-      this.api.getUser(localStorage.getItem('username'))
+      this.api.getUser(localStorage.getItem('email'))
         .then(res => {
           // console.log(res.data);
           this.setUser({
-            username: res.data.username
+            email: res.data.email
           });
         });
     }
   }
 
   @action
-  setUser = ({ token, username }: { token?: string, username: string }) => {
+  setUser = ({ token, email }: { token?: string, email: string }) => {
     if (token) {
       localStorage.setItem('token', token);
-      localStorage.setItem('username', username);
+      localStorage.setItem('email', email);
     }
     this.isLoggedIn = true
     this.displayedForm = ""
-    this.username = username
+    this.email = email
 
   }
   @action
   handleSignup = (data: any) => {
     return (this.api.signupUser(data)
-      .then(result => this.setUser({ token: data.token, username: result.data.username })))
+      .then(result => this.setUser({ token: data.token, email: result.data.email })))
   }
   @action
   handleLogout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('username');
+    localStorage.removeItem('email');
     this.isLoggedIn = false
-    this.username = ""
+    this.email = ""
   }
 
   // handleAnswerModify = (answerInfo: answerData) => {

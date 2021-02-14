@@ -83,6 +83,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework.authtoken",
     "imagekit",
+    "cuser",
 ]
 
 LOCAL_APPS = [
@@ -274,9 +275,19 @@ LOGGING = {
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_AUTHENTICATION_METHOD = "username"
+# ACCOUNT_AUTHENTICATION_METHOD = "email"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_UNIQUE_EMAIL = True
+
+# https://django-allauth.readthedocs.io/en/latest/advanced.html#custom-user-models
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_PRESERVE_USERNAME_CASING = False
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+ACCOUNT_USERNAME_VALIDATORS = "medusa_website.users.validators.CustomEmailValidator"
+
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = (
     "none"  # TODO Setup email provider and set back to mandatory
@@ -313,3 +324,7 @@ REST_FRAMEWORK = {
 # JWT_AUTH = {
 #     "JWT_RESPONSE_PAYLOAD_HANDLER": "medusa_website.users.utils.my_jwt_response_handler"
 # }
+MEMBERLIST_XLSX = Path(
+    MEDIA_ROOT, "users", "Club Weekly Membership Report Schedule.xlsx"
+)
+MEMBERLIST_CSV = Path(MEDIA_ROOT, "users", "memberlist.csv")

@@ -4,11 +4,10 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
-from rest_framework_jwt.views import obtain_jwt_token
 
 from medusa_website.users import utils
 
-urlpatterns = [
+urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
     path(
         "about/", TemplateView.as_view(template_name="pages/about.html"), name="about"
@@ -20,10 +19,8 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
     path("mcq_bank/", include("medusa_website.mcq_bank.urls", namespace="mcq_bank")),
-    path("token-auth/", obtain_jwt_token),
-    path("csrf/", utils.csrf),
     path("ping/", utils.ping),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development, just visit
