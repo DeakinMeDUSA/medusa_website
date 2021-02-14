@@ -4,45 +4,59 @@
   "private": true,
   "homepage": "",
   "dependencies": {
-    "@material-ui/core": "^4.11.2",
+    "@babel/plugin-proposal-decorators": "^7.12.13",
+    "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/react-collapse": "^5.0.0",
-    "@types/react-router": "^5.1.8",
+    "@types/history": "^4.7.8",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/styled-components": "^5.1.4",
+    "@types/yup": "^0.29.8",
+    "antd": "^4.7.0",
     "atomic-layout": "^0.16.2",
-    "axios": "^0.21.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
-    "formik": "^2.2.6",
+    "common-tags": "^1.8.0",
+    "customize-cra": "^1.0.0",
+    "formik": "^2.2.1",
+    "history": "^5.0.0",
+    "js-file-download": "^0.4.12",
     "material-table": "^1.69.2",
-    "mobx": "^6.0.4",
-    "mobx-react": "^7.0.5",
+    "mobx": "^5.15.7",
+    "mobx-react": "^6.2.5",
     "mobx-react-router": "^4.1.0",
-    "react": "^17.0.1",
-    "react-bootstrap": "^1.4.0",
-    "react-collapse": "^5.1.0",
-    "react-dom": "^17.0.1",
-    "react-icons": "^4.1.0",
+    "prettier": "^2.1.2",
+    "rc-progress": "^3.1.0",
+    "react": "^16.13.1",
+    "react-app-rewired": "^2.1.6",
+    "react-bootstrap": "^1.3.0",
+    "react-dom": "^16.13.1",
+    "react-ga": "^3.3.0",
+    "react-promise-tracker": "^2.1.0",
+    "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.1",
-    "styled-components": "^5.2.1",
-    "typescript": "^4.1.2",
-    "web-vitals": "^0.2.4",
-    "webpack-bundle-tracker": "^1.0.0-alpha.1",
-    "yup": "^0.32.8"
+    "react-scripts": "^3.4.3",
+    "react-spinners": "^0.9.0",
+    "react-spring": "^8.0.27",
+    "react-use-measure": "^2.0.2",
+    "styled-components": "^5.1.1",
+    "typeface-roboto": "^1.1.13",
+    "typescript": "^3.8.0",
+    "webpack": "4.42.0",
+    "yarn": "^1.22.10",
+    "yup": "^0.29.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dev": "webpack --mode development"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -58,11 +72,9 @@
     ]
   },
   "devDependencies": {
-    "@types/react-dom": "^17.0.0",
+    "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.6",
     "@types/styled-components": "^5.1.4",
-    "clean-webpack-plugin": "^3.0.0",
-    "ts-loader": "^8.0.17",
-    "webpack-cli": "^4.5.0"
+    "webpack-bundle-tracker": "^0.4.3"
   }
 }

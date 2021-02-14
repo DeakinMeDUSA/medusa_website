@@ -1,9 +1,8 @@
 import React from 'react';
 import './App.css';
-import { Main } from "./components/Main";
-import { Navbar } from "./components/Navbar";
 import { RootStore } from "./components/RootStore";
 import { observer } from "mobx-react";
+import { MedusaMCQ } from "./components/MedusaMCQ";
 
 
 export const App = observer(({ store }: { store: RootStore }) => {
@@ -14,8 +13,7 @@ export const App = observer(({ store }: { store: RootStore }) => {
     // authStore={rootStore.authStore}
     // >
     <div className="App">
-      <Navbar store={store}/>
-      <Main store={store}/>
+      <MedusaMCQ store={store}/>
     </div>
     // {/*</Provider>*/}
   )

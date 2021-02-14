@@ -17,7 +17,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
     "noFallthroughCasesInSwitch": true,
     "useDefineForClassFields": true,
     "typeRoots": [

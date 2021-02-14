@@ -15,7 +15,7 @@ class User(AbstractUser):
     )
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name"]
+    REQUIRED_FIELDS = ["name", "graduation_year"]
 
     def get_absolute_url(self):
         """Get url for user's detail view.
@@ -29,6 +29,7 @@ class User(AbstractUser):
     @property
     def answered_questions(self):
         from medusa_website.mcq_bank.models import Record
+
         return Record.objects.filter(user=self)
 
     @property

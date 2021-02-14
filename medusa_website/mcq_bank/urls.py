@@ -5,8 +5,7 @@ from . import views
 app_name = "mcq_bank"
 
 urlpatterns = [
-    path(r"", views.IndexView.as_view()),
-    re_path(r"^(?:.*)/?$", views.IndexView.as_view()),
+    path(r"", views.IndexView.as_view(), name="index"),
     path("<int:question_id>/", views.detail, name="detail"),
     path("api/questions", views.QuestionListCreate.as_view()),
     path("api/question/<int:id>", views.QuestionRetrieveUpdateDestroy.as_view()),

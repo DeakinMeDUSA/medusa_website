@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { action, makeObservable, observable } from "mobx";
+import { action, observable } from "mobx";
 import { RootStore } from "../components/RootStore";
 import { Observer, observer } from "mobx-react";
 import MaterialTable, { Icons } from "material-table";
@@ -144,57 +144,60 @@ class MCQAPI {
 }
 
 export class MCQStore {
-  questions: questionData[] | undefined;
-  answers: any
-  rootStore: RootStore;
-  api: MCQAPI
-  curQuestionId: number
-  curQuestion: questionData
-  showQuestionEdit: boolean
+  @observable questions: questionData[] | undefined;
+  @observable answers: any
+  @observable rootStore!: RootStore;
+  @observable api!: MCQAPI
+  @observable curQuestionId!: number
+  @observable curQuestion!: questionData
+  @observable showQuestionEdit!: boolean
 
   constructor(rootStore: RootStore) {
-    makeObservable(this, {
-      questions: observable,
-      answers: observable,
-      curQuestionId: observable,
-      curQuestion: observable,
-      setQuestions: action,
-      setAnswers: action,
-      handleShowQuestionEdit: action,
-      handleHideQuestionEdit: action,
-      showQuestionEdit: observable,
-      setQuestionid: action,
-      setQuestion: action,
-      handleAnswerAdd: action,
-      handleAnswerModify: action,
-      handleAnswerDelete: action,
+    this.addRootStore(rootStore)
+    this.addMCQAPI(new MCQAPI())
+    this.setDefaultVals()
 
-    })
-    this.rootStore = rootStore
-    this.api = new MCQAPI()
-    this.showQuestionEdit = false
+  }
+  @action
+  setDefaultVals = () => {
     this.curQuestionId = -1
     this.curQuestion = { id: -1, author: "", question_text: "", image: "", category: "Uncategorised" }
+    this.showQuestionEdit = false
   }
 
+  @action
+  addRootStore = (store: RootStore) => {
+    this.rootStore = store;
+  }
 
+  @action
+  addMCQAPI = (api: MCQAPI) => {
+    this.api = api;
+
+  }
+
+  @action
   setQuestions(questions: any) {
     this.questions = questions
   }
 
+  @action
   setQuestion(question: questionData) {
     this.curQuestion = question
   }
 
+  @action
   setAnswers(answers: any) {
     console.log(`Setting answers to ${JSON.stringify(answers)}`)
     this.answers = answers
   }
 
+  @action
   setQuestionid(questionId: number) {
     this.curQuestionId = questionId
   }
 
+  @action
   handleAnswerAdd = (answerInfo: answerData) => {
     return (this.api.addAnswer(this.updateAnsWithQID(answerInfo, this.curQuestionId))
       .then(() => {
@@ -204,6 +207,7 @@ export class MCQStore {
         this.setAnswers(result.data)
       }))
   }
+  @action
   handleAnswerModify = (answerInfo: answerData) => {
     return (
       this.api.modifyAnswer(this.updateAnsWithQID(answerInfo, this.curQuestionId))
@@ -215,6 +219,7 @@ export class MCQStore {
         })
     )
   }
+  @action
   handleAnswerDelete = (answerInfo: answerData) => {
     console.log(answerInfo)
     return (
@@ -228,6 +233,7 @@ export class MCQStore {
     )
   }
 
+  @action
   handleShowQuestionEdit = (question_id: number) => {
 
     this.api.getQuestion(question_id).then((result) => {
@@ -241,10 +247,12 @@ export class MCQStore {
     this.showQuestionEdit = true
   }
 
+  @action
   handleHideQuestionEdit = () => {
     this.showQuestionEdit = false
   }
 
+  @action
   updateAnsWithQID(answerInfo: answerData, questionId: number) {
     answerInfo.question_id = questionId
     return answerInfo
@@ -320,7 +328,6 @@ export const MedusaMCQ = observer(({ store }: { store: RootStore }) => {
       <>
         <div>
           <span>This is the MedusaMCQ page</span>
-          {/*<span>\n\n{JSON.stringify(store.reQuestions)}</span>*/}
           <Observer>{() =>
             <MaterialTable
               title={`All MCQ Questions`}

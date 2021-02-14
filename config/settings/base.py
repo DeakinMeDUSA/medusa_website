@@ -5,8 +5,6 @@ from pathlib import Path
 
 import environ
 
-from medusa_website.mcq_bank.utils import CustomManifestReactLoader
-
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
 APPS_DIR = ROOT_DIR / "medusa_website"  # medusa_website/
@@ -85,7 +83,6 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework.authtoken",
     "imagekit",
-    "manifest_loader",
 ]
 
 LOCAL_APPS = [
@@ -161,7 +158,7 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
     str(APPS_DIR / "static"),
-    str(FRONTEND_DIR / "build"),
+    # str(FRONTEND_DIR / "build"),
     str(FRONTEND_DIR / "build/static"),
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
@@ -306,9 +303,8 @@ WEBPACK_LOADER = {
     },
 }
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    # "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ),
@@ -317,9 +313,3 @@ REST_FRAMEWORK = {
 # JWT_AUTH = {
 #     "JWT_RESPONSE_PAYLOAD_HANDLER": "medusa_website.users.utils.my_jwt_response_handler"
 # }
-MANIFEST_LOADER = {
-    "output_dir": FRONTEND_DIR / "build",
-    "manifest_file": "manifest.json",
-    "cache": False,
-    "loader": CustomManifestReactLoader,
-}

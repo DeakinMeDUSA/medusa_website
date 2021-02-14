@@ -1,7 +1,6 @@
-import { observer } from "mobx-react";
-import { RootStore } from "../components/RootStore";
+import { RootStore } from "./RootStore";
 import React from "react";
-import { action, makeObservable, observable } from "mobx";
+import { action, observable } from "mobx";
 import axios from "axios";
 
 
@@ -110,29 +109,19 @@ class UserAPI {
 }
 
 export class UserStore {
-  rootStore: RootStore;
-  api: UserAPI
-  isLoggedIn: boolean
-  username: string | null
-  email: string
-  displayedForm: string
+  @observable rootStore!: RootStore;
+  @observable api!: UserAPI
+  @observable isLoggedIn!: boolean
+  @observable username!: string | null
+  @observable email!: string
+  @observable displayedForm!: string
 
   constructor(rootStore: RootStore) {
-    makeObservable(this, {
-      isLoggedIn: observable,
-      username: observable,
-      email: observable,
-      displayedForm: observable,
+    this.setInit(rootStore)
+  }
 
-
-      handleLogin: action,
-      handleUserState: action,
-      setUser: action,
-      handleSignup: action,
-      handleLogout: action,
-
-
-    })
+  @action
+  setInit = (rootStore: RootStore) => {
     this.rootStore = rootStore
     this.api = new UserAPI()
     this.isLoggedIn = localStorage.getItem('token') ? true : false
@@ -160,19 +149,20 @@ export class UserStore {
   // setQuestionid(questionId: number) {
   //   this.curQuestionId = questionId
   // }
-  //
+
+  @action
   handleLogin = (data: any) => {
     return (this.api.loginUser(data)
       .then((result) => {
         this.setUser({ token: result.data.token, username: result.data.user.username })
       }))
   }
-
+  @action
   handleUserState = () => {
     if (this.isLoggedIn) {
       this.api.getUser(localStorage.getItem('username'))
         .then(res => {
-          console.log(res.data);
+          // console.log(res.data);
           this.setUser({
             username: res.data.username
           });
@@ -180,7 +170,7 @@ export class UserStore {
     }
   }
 
-
+  @action
   setUser = ({ token, username }: { token?: string, username: string }) => {
     if (token) {
       localStorage.setItem('token', token);
@@ -191,12 +181,12 @@ export class UserStore {
     this.username = username
 
   }
-
+  @action
   handleSignup = (data: any) => {
     return (this.api.signupUser(data)
       .then(result => this.setUser({ token: data.token, username: result.data.username })))
   }
-
+  @action
   handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
@@ -250,18 +240,3 @@ export class UserStore {
   //   return answerInfo
   // }
 }
-
-
-export const UserPage = observer(({ store }: { store: RootStore }) => {
-
-  return (
-    <div>This is the User page
-      <h3>
-        {store.userStore.isLoggedIn
-          ? `Hello, ${store.userStore.username}`
-          : "Not signed in"}
-      </h3>
-
-    </div>
-  );
-})

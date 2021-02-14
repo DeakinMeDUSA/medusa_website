@@ -13,7 +13,7 @@ import { RootStore } from "./components/RootStore";
 
 
 configure({
-  enforceActions: "always",
+  enforceActions: "observed",
   computedRequiresReaction: true,
   reactionRequiresObservable: true,
   observableRequiresReaction: true,
@@ -23,13 +23,11 @@ configure({
 const rootStore = new RootStore()
 
 ReactDOM.render(
-  <React.StrictMode>
     <Observer>{() =>
       <BrowserRouter>
         <App store={rootStore}/>
       </BrowserRouter>}
-    </Observer>
-  </React.StrictMode>,
+    </Observer>,
   document.getElementById('root')
 );
 
