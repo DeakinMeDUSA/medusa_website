@@ -52,7 +52,7 @@ coverage.xml
 
 # Django stuff:
 staticfiles/
-static/
+/static/
 
 # Sphinx documentation
 docs/_build/
@@ -330,3 +330,5 @@ medusa_website/media/
 db/
 .idea/medusa_website.iml
 .idea/misc.xml
+
+*.css.map
