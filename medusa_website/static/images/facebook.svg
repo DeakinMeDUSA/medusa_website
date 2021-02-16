@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="896" height="1664" preserveAspectRatio="xMidYMid meet"
+     viewBox="0 0 896 1664"
+     style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);">
+    <path d="M895 12v264H738q-86 0-116 36t-30 108v189h293l-39 296H592v759H286V905H31V609h255V391q0-186 104-288.5T667 0q147 0 228 12z"
+          fill="black"/>
+    <rect x="0" y="0" width="896" height="1664" fill="rgba(0, 0, 0, 0)"/>
+</svg>
