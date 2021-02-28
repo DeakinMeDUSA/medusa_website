@@ -12,7 +12,7 @@ FRONTEND_DIR = Path(ROOT_DIR, "frontend")
 
 env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(ROOT_DIR / ".env"))
@@ -84,6 +84,7 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "imagekit",
     "cuser",
+    "pg_copy",
 ]
 
 LOCAL_APPS = [
@@ -328,3 +329,4 @@ MEMBERLIST_XLSX = Path(
     MEDIA_ROOT, "users", "Club Weekly Membership Report Schedule.xlsx"
 )
 MEMBERLIST_CSV = Path(MEDIA_ROOT, "users", "memberlist.csv")
+PG_COPY_BACKUP_PATH = Path(ROOT_DIR, "db_backup")

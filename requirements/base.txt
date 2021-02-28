@@ -20,5 +20,9 @@ django-webpack-loader
 django-imagekit
 djangorestframework-jwt
 django-username-email
+django-pg-copy
+django-anymail==8.1  # https://github.com/anymail/django-anymail
 
 # Others
+sentry-sdk==0.19.2  # https://github.com/getsentry/sentry-python
+environ
