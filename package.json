@@ -2,7 +2,8 @@
   "name": "medusa-website-frontend",
   "version": "1.0.0",
   "engines": {
-    "node": "12.14"
+    "node": "12.14",
+    "yarn": "1.22"
   },
   "scripts": {
     "build": "cd frontend && yarn install && yarn build"
