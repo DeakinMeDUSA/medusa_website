@@ -11,7 +11,7 @@ SECRET_KEY = env(
     default="0vnFEIt1W2haqkzaV2dglzcOclb9lptXkmrcfQSOs4diBimLWvqnY6OWj2IuaCX9",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "medusa.pythonanywhere.com"]
 SECURE_SSL_REDIRECT = False
 # CACHES
 # ------------------------------------------------------------------------------

@@ -306,7 +306,7 @@ SOCIALACCOUNT_ADAPTER = "medusa_website.users.adapters.SocialAccountAdapter"
 # ------------------------------------------------------------------------------
 
 CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [""]
 
 CORS_ORIGIN_WHITELIST = ("http://localhost:3000",)
 CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
