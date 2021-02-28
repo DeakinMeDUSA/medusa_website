@@ -18,6 +18,7 @@
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/static" />
       <excludeFolder url="file://$MODULE_DIR$/medusa_website/static/css" />
+      <excludeFolder url="file://$MODULE_DIR$/db_backup" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.8 (medusa_website)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -333,3 +333,4 @@ db/
 
 *.css.map
 .env
+/db_backup
