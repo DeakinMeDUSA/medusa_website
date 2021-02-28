@@ -37,16 +37,16 @@ class UserAPI {
       })
   }
 
-  async getUser(email: string | null): Promise<any> {
-    if (email !== null) {
-      return await axios.get(`${this.rootURL}users/current-user/`, {
-        headers: {
-          Authorization: `JWT ${localStorage.getItem('token')}`,
-          // 'X-CSRFToken': await this.getCsrfToken()
-        }
-      })
-    }
-  }
+  // async getUser(email: string | null): Promise<any> {
+  //   if (email !== null) {
+  //     return await axios.get(`${this.rootURL}users/current-user/`, {
+  //       headers: {
+  //         Authorization: `JWT ${localStorage.getItem('token')}`,
+  //         // 'X-CSRFToken': await this.getCsrfToken()
+  //       }
+  //     })
+  //   }
+  // }
 
   async getCsrfToken() {
     if (this.csrfToken === null) {
