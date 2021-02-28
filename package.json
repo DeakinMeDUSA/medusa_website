@@ -2,7 +2,7 @@
   "name": "medusa-website-frontend",
   "version": "1.0.0",
   "scripts": {
-    "build": "cd frontend && npm install && npm run build"
+    "build": "cd frontend && yarn install && yarn build"
   },
   "dependencies": {},
   "devDependencies": {},
