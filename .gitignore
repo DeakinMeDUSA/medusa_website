@@ -332,3 +332,4 @@ db/
 .idea/misc.xml
 
 *.css.map
+.env
