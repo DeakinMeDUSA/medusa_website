@@ -113,7 +113,6 @@ export class UserStore {
   @observable api!: UserAPI
   @observable isLoggedIn!: boolean
   @observable email!: string | null
-  @observable email!: string
   @observable displayedForm!: string
 
   constructor(rootStore: RootStore) {
@@ -129,7 +128,7 @@ export class UserStore {
     this.displayedForm = ""
     this.email = ""
 
-    this.handleUserState()
+    // this.handleUserState()
   }
 
 
@@ -157,18 +156,18 @@ export class UserStore {
         this.setUser({ token: result.data.token, email: result.data.user.email })
       }))
   }
-  @action
-  handleUserState = () => {
-    if (this.isLoggedIn) {
-      this.api.getUser(localStorage.getItem('email'))
-        .then(res => {
-          // console.log(res.data);
-          this.setUser({
-            email: res.data.email
-          });
-        });
-    }
-  }
+  // @action
+  // handleUserState = () => {
+  //   if (this.isLoggedIn) {
+  //     this.api.getUser(localStorage.getItem('email'))
+  //       .then(res => {
+  //         // console.log(res.data);
+  //         this.setUser({
+  //           email: res.data.email
+  //         });
+  //       });
+  //   }
+  // }
 
   @action
   setUser = ({ token, email }: { token?: string, email: string }) => {

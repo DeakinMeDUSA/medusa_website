@@ -334,3 +334,4 @@ db/
 *.css.map
 .env
 /db_backup
+db.sqlite3
