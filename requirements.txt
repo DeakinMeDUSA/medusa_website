@@ -33,3 +33,12 @@ openpyxl~=3.0.5
 gunicorn==20.0.4  # https://github.com/benoitc/gunicorn
 psycopg2==2.8.6  # https://github.com/psycopg/psycopg2
 hiredis==1.1.0  # https://github.com/redis/hiredis-py
+
+# Local
+# ------------------------------------------------------------------------------
+factory-boy==3.0.1  # https://github.com/FactoryBoy/factory_boy
+
+django-debug-toolbar==3.1.1  # https://github.com/jazzband/django-debug-toolbar
+django-extensions==3.0.9  # https://github.com/django-extensions/django-extensions
+django-coverage-plugin==1.8.0  # https://github.com/nedbat/django_coverage_plugin
+pytest-django==4.1.0  # https://github.com/pytest-dev/pytest-django
