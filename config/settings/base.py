@@ -312,7 +312,7 @@ CORS_ORIGIN_WHITELIST = ("http://localhost:3000",)
 CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
 
 WEBPACK_LOADER = {
-    "FRONTEND": {
+    "DEFAULT": {
         "CACHE": not DEBUG,
         "BUNDLE_DIR_NAME": "/",  # must end with slash
         "STATS_FILE": (ROOT_DIR / "frontend/build/webpack-stats.json").as_posix(),

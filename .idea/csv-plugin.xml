@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="C:\Users\chris\AppData\Roaming\JetBrains\PyCharm2020.3\scratches\org_chart_style.html">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="C:\Users\chris\AppData\Roaming\JetBrains\PyCharm2020.3\scratches\scratch_unicode.py">
           <value>
             <Attribute>
@@ -10,10 +17,31 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\frontend\src\mcq_bank\QuestionsList.tsx">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\medusa_website\media\users\medusa_members_google_group.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\medusa_website\org_chart\card_template.html">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\medusa_website\org_chart\org_chart_template.html">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
             </Attribute>
           </value>
         </entry>
