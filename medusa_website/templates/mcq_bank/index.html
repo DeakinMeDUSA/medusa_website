@@ -1,10 +1,15 @@
 {% extends "base.html" %}
 {% load render_bundle from webpack_loader %}
 {% block content %}
-  {% render_bundle 'main' 'css' config='FRONTEND' %}
+  <script>window.isDev = {{ debug|yesno:"true,false" }};
+  window.isEmbedded = true
+  window.max_files = 25</script>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+
   {#  React app inserted into root div#}
   <div id="root"></div>
-  {% render_bundle 'vendor' 'js' config='FRONTEND' %}
-  {% render_bundle 'runtime-main' 'js' config='FRONTEND' %}
-  {% render_bundle 'main' 'js' config='FRONTEND' %}
+{#  {% render_bundle 'vendors' %}#}
+  {% render_bundle 'null' %}
+  {% render_bundle 'mcq_bank' %}
+  {% render_bundle 'runtime-mcq_bank' %}
 {% endblock %}

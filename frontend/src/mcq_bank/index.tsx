@@ -2,10 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { App } from './App';
-import { BrowserRouter } from 'react-router-dom';
 import { configure } from "mobx";
-import { Observer } from 'mobx-react';
-import { RootStore } from "./components/RootStore";
+import { RootStore } from "./RootStore";
 
 //TODO https://styled-components.com/docs/advanced#theming
 // Add themes?
@@ -20,14 +18,9 @@ configure({
   disableErrorBoundaries: true
 })
 
-const rootStore = new RootStore()
 
 ReactDOM.render(
-    <Observer>{() =>
-      <BrowserRouter>
-        <App store={rootStore}/>
-      </BrowserRouter>}
-    </Observer>,
+  <App store={new RootStore()}/>,
   document.getElementById('root')
 );
 

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from medusa_website.mcq_bank.models import Answer, Question
+from medusa_website.mcq_bank.models import Answer, Question, Record
 
 
 class AnswerSerializer(serializers.ModelSerializer):
@@ -45,6 +45,22 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = ["id", "question_text", "category", "author", "image"]
+
+
+class RecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Record
+        # question = models.ForeignKey(Question, on_delete=models.SET_NULL, blank=True, null=True)
+        #     answer = models.ForeignKey(Answer, on_delete=models.SET_NULL, blank=True, null=True)
+        #     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+        #     timestamp
+        fields = ["id", "question", "answer", "user", "timestamp", "is_correct"]
+
+    def create(self, validated_data):
+        print(f"validated_data = {validated_data}")
+        new_record = Record(**validated_data)
+        new_record.save()
+        return new_record
 
 
 #

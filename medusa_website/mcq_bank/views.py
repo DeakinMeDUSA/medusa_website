@@ -1,21 +1,19 @@
+from django.conf import settings
 from django.shortcuts import render
+from django.utils import timezone
 from django.views.generic import TemplateView
 from rest_framework import generics
+from rest_framework.request import Request
 
-from medusa_website.mcq_bank.models import Answer, Question
+from medusa_website.mcq_bank.models import Answer, Question, Record
 
-from .serializers import AnswerSerializer, QuestionSerializer
+from ..users.admin import User
+from .exceptions import AnswerRecordNotValid, UserNotValid
+from .serializers import AnswerSerializer, QuestionSerializer, RecordSerializer
 
 
 def index(request):
-    latest_question_list = Question.objects.all()
-    context = {"latest_question_list": latest_question_list}
-    return render(request, "mcq_bank/index.html", context)
-
-
-def detail(request, question_id):
-    context = {"question_id": question_id}
-    return render(request, "mcq_bank/detail.html", context)
+    return render(request, "mcq_bank/index.html", {"debug": settings.DEBUG})
 
 
 class QuestionListCreate(generics.ListCreateAPIView):
@@ -44,6 +42,40 @@ class AnswersList(generics.ListAPIView):
         if question_id is not None:
             queryset = queryset.filter(question_id=question_id)
         return queryset
+
+
+class RecordHistory(generics.ListAPIView):
+    serializer_class = RecordSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        queryset = Record.objects.filter(user=user)
+        question_id = self.request.query_params.get("question_id", None)
+        if question_id is not None:
+            queryset = queryset.filter(question__id=question_id)
+        return queryset
+
+
+class RecordCreate(generics.CreateAPIView):
+    queryset = Record.objects.all()
+    serializer_class = RecordSerializer
+
+    def create(self, request: Request, *args, **kwargs):
+        print(f"request.data = {request.data}")
+        user_id = request.data.get("user")
+        question = request.data.get("question")
+        answer = request.data.get("answer")
+        if question is None or answer is None:
+            raise AnswerRecordNotValid()
+
+        try:
+            User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise UserNotValid(f"Could not find user for user id = {user_id}")
+
+        request.data["timestamp"] = timezone.now()
+
+        return super().create(request, *args, **kwargs)
 
 
 class AnswerCreate(generics.CreateAPIView):

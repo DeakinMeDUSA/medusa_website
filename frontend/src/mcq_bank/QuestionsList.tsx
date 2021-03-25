@@ -1,6 +1,6 @@
 import React, { forwardRef } from "react";
 import { action, observable } from "mobx";
-import { RootStore } from "../components/RootStore";
+import { RootStore } from "./RootStore";
 import { Observer, observer } from "mobx-react";
 import MaterialTable, { Icons } from "material-table";
 import {
@@ -61,10 +61,26 @@ interface answerData {
   is_correct: boolean
 }
 
+interface answerRecordData {
+  // These are all ids, but aren't named with _id so they match the rest framework
+  question: number
+  answer: number
+  user: number
+}
+
 const IsCorrectIcon = styled.img`
   height: 20px;
   width: 20px;
 `
+
+const ReviewQuestionsButton = styled.button`
+  background: red;
+  border: none;
+  height: 40px;
+  width: 600px;
+  font-size: 14px;
+  text-align: center;
+`;
 
 // TODO single source of truth for this, see models/question.py
 const questionCategories = {
@@ -82,7 +98,7 @@ const questionColumns = [
   { title: "Image url", field: "image", grouping: false },
 ]
 
-const answerColumns = [
+const answerEditColumns = [
   { title: "id", field: "id", hidden: true, grouping: false },
   { title: "question_id", field: "question_id", hidden: true, grouping: false },
   { title: "Answer Text", field: "answer_text", grouping: false },
@@ -91,6 +107,12 @@ const answerColumns = [
     // @ts-ignore
     render: (rowData: answerData) => rowData.is_correct ? <Check/> : <Block/>
   },
+]
+
+const answerReviewColumns = [
+  { title: "id", field: "id", hidden: true, grouping: false },
+  { title: "question_id", field: "question_id", hidden: true, grouping: false },
+  { title: "Answer Text", field: "answer_text", grouping: false },
 ]
 
 class MCQAPI {
@@ -137,6 +159,10 @@ class MCQAPI {
       answerInfo)
   }
 
+  async SubmitAnswerRecord(answerSubmit: answerRecordData): Promise<any> {
+    return await axios.post(this.rootURL.concat("mcq_bank/api/record/create"), answerSubmit)
+  }
+
   async getQAnswers(question_id: number): Promise<any> {
     console.log(`getQAnswers() : question_id = ${question_id}`)
     return await axios.get(this.rootURL.concat(`mcq_bank/api/answers?question_id=${question_id}`))
@@ -144,13 +170,17 @@ class MCQAPI {
 }
 
 export class MCQStore {
-  @observable questions: questionData[] | undefined;
+  @observable questions!: questionData[];
   @observable answers: any
   @observable rootStore!: RootStore;
   @observable api!: MCQAPI
   @observable curQuestionId!: number
   @observable curQuestion!: questionData
   @observable showQuestionEdit!: boolean
+  @observable showQuestionReview!: boolean
+  @observable questionsToReview!: questionData[]
+  @observable questionReviewIdx!: number
+  @observable selectedAnswerId!: number
 
   constructor(rootStore: RootStore) {
     this.addRootStore(rootStore)
@@ -158,11 +188,17 @@ export class MCQStore {
     this.setDefaultVals()
 
   }
+
   @action
   setDefaultVals = () => {
     this.curQuestionId = -1
     this.curQuestion = { id: -1, author: "", question_text: "", image: "", category: "Uncategorised" }
     this.showQuestionEdit = false
+    this.showQuestionReview = false
+    this.questionReviewIdx = 0
+    this.questionsToReview = []
+    this.questions = []
+    this.selectedAnswerId = -1
   }
 
   @action
@@ -182,8 +218,19 @@ export class MCQStore {
   }
 
   @action
+  setQuestionsToReview(questions: any) {
+    this.questionsToReview = questions
+  }
+
+  @action
   setQuestion(question: questionData) {
     this.curQuestion = question
+    this.curQuestionId = question.id
+  }
+
+  @action
+  setSelectedAnswer(answerId: number) {
+    this.selectedAnswerId = answerId
   }
 
   @action
@@ -248,14 +295,81 @@ export class MCQStore {
   }
 
   @action
+  handleShowQuestionReview = (question_id: number) => {
+
+    this.api.getQuestion(question_id).then((result) => {
+      this.setQuestion(result.data)
+    })
+    this.api.getQAnswers(question_id).then((result) => {
+      this.setAnswers(result.data)
+    })
+
+    this.curQuestionId = question_id
+    this.showQuestionReview = true
+  }
+
+  @action
   handleHideQuestionEdit = () => {
     this.showQuestionEdit = false
+  }
+  @action
+  handleHideQuestionReview = () => {
+    this.showQuestionReview = false
+    this.questionReviewIdx = 0
+    this.questionsToReview = []
+    this.selectedAnswerId = -1
+
+  }
+  @action
+  handleSkipQuestionReview = () => {
+    this.questionReviewIdx = this.questionReviewIdx + 1
+    this.selectedAnswerId = -1
+    if (this.questionReviewIdx < this.questionsToReview?.length) {
+      this.setQuestion(this.questionsToReview[this.questionReviewIdx])
+      this.api.getQAnswers(this.curQuestionId).then((result) => {
+        this.setAnswers(result.data)
+      })
+    } else {
+      alert("No more questions remain, closing")
+      this.handleHideQuestionReview()
+    }
   }
 
   @action
   updateAnsWithQID(answerInfo: answerData, questionId: number) {
     answerInfo.question_id = questionId
     return answerInfo
+  }
+
+  @action
+  startQuestionReview(include_answered = true, max_questions: number = 30) {
+    this.api.getQuestions({ per_page: 0, page_n: 0 }).then((result) => {
+      this.setQuestionsToReview(result.data);
+      // @ts-ignore
+      console.log(this.questionsToReview.toString())
+      console.log("Loaded questions to review as above")
+      if (this.questionsToReview.length > 1) {
+        this.handleShowQuestionReview(this.questionsToReview[0].id)
+      } else {
+        alert("No questions found?")
+      }
+    })
+  }
+
+  @action
+  handleQuestionReviewSubmit = () => {
+    // this.rootStore.userStore.
+    if (this.selectedAnswerId !== null) {
+      console.log({
+        answer_id: this.selectedAnswerId,
+        question_id: this.curQuestionId
+      })
+      this.api.SubmitAnswerRecord({
+        answer: this.selectedAnswerId,
+        question: this.curQuestionId,
+        user: 2, // test@medusa.org.au
+      })
+    }
   }
 }
 
@@ -295,7 +409,7 @@ const QuestionEditPopup = observer(({ store }: { store: RootStore }) => {
           {store.mcqStore.curQuestion.image !== null ? <QuestionImg src={store.mcqStore.curQuestion.image}/> : null}
           <MaterialTable
             title="Answers"
-            columns={answerColumns}
+            columns={answerEditColumns}
             data={store.mcqStore.answers}
             icons={tableIcons}
             options={{ emptyRowsWhenPaging: false, search: false, paging: false }}
@@ -323,11 +437,68 @@ const QuestionEditPopup = observer(({ store }: { store: RootStore }) => {
 })
 
 
-export const MedusaMCQ = observer(({ store }: { store: RootStore }) => {
+const QuestionReviewPopup = observer(({ store }: { store: RootStore }) => {
+  return (
+    <Modal
+      show={store.mcqStore.showQuestionReview}
+      onHide={store.mcqStore.handleHideQuestionReview}
+      centered={true}
+      size="lg"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title>Reviewing
+          question {store.mcqStore.questionReviewIdx + 1} of {store.mcqStore.questionsToReview.length}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <QuestionDetailDiv>
+          <QuestionTextDiv>
+            <b>Question: </b>{store.mcqStore.curQuestion.question_text}
+            <br/>
+            <b>Category: </b>{store.mcqStore.curQuestion.category}
+            <br/>
+          </QuestionTextDiv>
+          {store.mcqStore.curQuestion.image !== null ? <QuestionImg src={store.mcqStore.curQuestion.image}/> : null}
+          <MaterialTable
+            title="Select Answer(s)"
+            columns={answerReviewColumns}
+            data={store.mcqStore.answers}
+            icons={tableIcons}
+            options={{ emptyRowsWhenPaging: false, search: false, paging: false, selection: true }}
+            editable={{}}
+            onSelectionChange={(rows) => {
+              if (rows.length === 1) {
+                console.log(`Selected answer ${rows[0]}`)
+                // @ts-ignore
+                store.mcqStore.setSelectedAnswer(rows[0].id)
+              }
+            }}
+          />
+        </QuestionDetailDiv>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={store.mcqStore.handleHideQuestionReview}>
+          Stop Question Review
+        </Button>
+        <Button variant="secondary" onClick={store.mcqStore.handleSkipQuestionReview}>
+          Skip Question
+        </Button>
+        <Button variant="primary" onClick={store.mcqStore.handleQuestionReviewSubmit}>
+          Submit Question
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  )
+})
+
+
+export const QuestionsList = observer(({ store }: { store: RootStore }) => {
     return (
       <>
         <div>
           <span>This is the MedusaMCQ page</span>
+          <ReviewQuestionsButton onClick={() => store.mcqStore.startQuestionReview()}>
+            Review all questions
+          </ReviewQuestionsButton>
           <Observer>{() =>
             <MaterialTable
               title={`All MCQ Questions`}
@@ -363,6 +534,7 @@ export const MedusaMCQ = observer(({ store }: { store: RootStore }) => {
 
         </div>
         <QuestionEditPopup store={store}/>
+        <QuestionReviewPopup store={store}/>
       </>
     )
   }
