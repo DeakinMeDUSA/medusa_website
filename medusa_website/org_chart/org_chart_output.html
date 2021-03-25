@@ -1,0 +1,645 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+  .org-chart {
+    font-size: 17px;
+    color: #ffffff;
+    font-family: 'Heebo', sans-serif;
+    /* font-family: "Source Sans Pro", sans-serif; */
+    display: grid;
+    gap: 0px;
+
+    box-shadow: 2px 5px 15px 0px #17161694;
+    margin: 5px auto;
+    border-radius: 5px;
+    min-width: 420px;
+    max-width: 1050px;
+    background-color: #282c34;
+    padding: 10px;
+
+  }
+
+
+  .subcommittee {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 20px;
+    box-shadow: 2px 5px 15px 0px #17161694;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 5px;
+
+
+  }
+
+
+  .subcommittee-title {
+    display: block;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    position: relative;
+    top: 15px;
+    font-family: 'Heebo', sans-serif;
+    font-size: larger;
+    font-variant-caps: small-caps;
+    letter-spacing: 2px;
+  }
+
+  .subcommittee-executive {
+    background-color: #b94a48;
+  }
+
+  .subcommittee-general {
+    background-color: coral;
+  }
+
+  .subcommittee-clinical {
+    background-color: sandybrown;
+  }
+
+  .subcommittee-preclinical {
+    background-color: lightskyblue;
+  }
+
+  .subcommittee-special {
+    background-color: #2bc35e;
+  }
+
+  .org-card {
+    width: 300px;
+    height: 120px;
+    display: grid;
+    padding: 5px;
+    grid-template-columns: 2% 96% 2%;
+    grid-template-rows: 4% 92% 4%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 2px 5px 15px 0px #17161694;
+    background-color: #122529;
+    border-radius: 3px;
+  }
+
+  .org-card .name-tag {
+    grid-column: 1 / span 4;
+    grid-row: 2 / span 1;
+    align-self: center;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 0.6rem; /*12px;*/
+    letter-spacing: .1rem;
+    text-align: left;
+    border-radius: 3px;
+  }
+
+  .org-card h1, h3 {
+    margin: 8px;
+    font-weight: unset;
+  }
+
+
+  .accordion {
+    background-color: #eee;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    text-align: left;
+    border: none;
+    outline: none;
+    transition: 0.4s;
+  }
+
+  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+  .active, .accordion:hover {
+    background-color: #ccc;
+  }
+
+  /* Style the accordion panel. Note: hidden by default */
+  .panel {
+    padding: 0 18px;
+    background-color: white;
+    display: none;
+    overflow: hidden;
+  }
+</style>
+
+<div class="org-chart">
+  <div class="subcommittee-title"> Executive Committee</div>
+  <div class="subcommittee subcommittee-executive">
+    <div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Paolo Masangcay</strong>
+    </h1>
+    <h3>President</h3>
+    <h3><a style="color: #ffffff" href="mailto:president@medusa.org.au">president@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Rachel Tobin</strong>
+    </h1>
+    <h3>Vice-president</h3>
+    <h3><a style="color: #ffffff" href="mailto:vp@medusa.org.au">vp@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Casey Law</strong>
+    </h1>
+    <h3>Treasurer</h3>
+    <h3><a style="color: #ffffff" href="mailto:treasurer@medusa.org.au">treasurer@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Kim Tran</strong>
+    </h1>
+    <h3>Secretary</h3>
+    <h3><a style="color: #ffffff" href="mailto:secretary@medusa.org.au">secretary@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Alicia Chan</strong>
+    </h1>
+    <h3>Pre-clinical President</h3>
+    <h3><a style="color: #ffffff" href="mailto:preclinical.president@medusa.org.au">preclinical.president@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Gabriel Lirios</strong>
+    </h1>
+    <h3>GCS President</h3>
+    <h3><a style="color: #ffffff" href="mailto:president.gcsc@medusa.org.au">president.gcsc@medusa.org.au</a></h3>
+  </div>
+</div>
+
+  </div>
+
+  <div class="subcommittee-title"> General Committee</div>
+  <div class="subcommittee subcommittee-general">
+    <div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Jonothan Somic</strong>
+    </h1>
+    <h3>Academic Chair</h3>
+    <h3><a style="color: #ffffff" href="mailto:academic@medusa.org.au">academic@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Ellie Damianos</strong>
+    </h1>
+    <h3>AMSA Chair </h3>
+    <h3><a style="color: #ffffff" href="mailto:amsa.clinical@medusa.org.au">amsa.clinical@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Sally Barker</strong>
+    </h1>
+    <h3>Community and Wellbeing Chair (1)</h3>
+    <h3><a style="color: #ffffff" href="mailto:community@medusa.org.au">community@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Laura Benson</strong>
+    </h1>
+    <h3>Community and Wellbeing Chair (2)</h3>
+    <h3><a style="color: #ffffff" href="mailto:community@medusa.org.au">community@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Chris Culhane</strong>
+    </h1>
+    <h3>IT Chair</h3>
+    <h3><a style="color: #ffffff" href="mailto:IT@medusa.org.au">IT@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Phoebe Hegerty</strong>
+    </h1>
+    <h3>Social Chair (1)</h3>
+    <h3><a style="color: #ffffff" href="mailto:social@medusa.org.au">social@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Kirsten Murray</strong>
+    </h1>
+    <h3>Social Chair (2)</h3>
+    <h3><a style="color: #ffffff" href="mailto:social@medusa.org.au">social@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Jane Theophillia Wijaya</strong>
+    </h1>
+    <h3>Social Media Chair</h3>
+    <h3><a style="color: #ffffff" href="mailto:social.media@medusa.org.au">social.media@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Emily Bellis</strong>
+    </h1>
+    <h3>Sponsorship Chair</h3>
+    <h3><a style="color: #ffffff" href="mailto:sponsorship@medusa.org.au">sponsorship@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Hashni Senanayake</strong>
+    </h1>
+    <h3>Gender Equity Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:gender.equity@medusa.org.au">gender.equity@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Sophie Heath</strong>
+    </h1>
+    <h3>First Nations Officer</h3>
+    <h3><a style="color: #ffffff" href="mailto:first.nations@medusa.org.au">first.nations@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Adam Walsh</strong>
+    </h1>
+    <h3>Publication Chair</h3>
+    <h3><a style="color: #ffffff" href="mailto:publications@medusa.org.au">publications@medusa.org.au</a></h3>
+  </div>
+</div>
+
+  </div>
+
+
+  <div class="subcommittee-title"> Clinical Committee</div>
+  <div class="subcommittee subcommittee-clinical">
+    <div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Mariyah Hoosenally</strong>
+    </h1>
+    <h3>Ballarat 3rd Year Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:ballarat@medusa.org.au">ballarat@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Milla McLean</strong>
+    </h1>
+    <h3>Ballarat 4th Year Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:ballarat@medusa.org.au ">ballarat@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Laura Le Mercier</strong>
+    </h1>
+    <h3>Eastern 3rd Year Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:eastern@medusa.org.au ">eastern@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Natalie Maher</strong>
+    </h1>
+    <h3>Eastern 4th Year Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:eastern@medusa.org.au ">eastern@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Brandon Hernandez</strong>
+    </h1>
+    <h3>GCS 3rd Year Academic Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:academic.gcsc@medusa.org.au ">academic.gcsc@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Catherine Zhang</strong>
+    </h1>
+    <h3>GCS 4th Year Academic Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:academic.gcsc@medusa.org.au ">academic.gcsc@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Daniel Milanovic</strong>
+    </h1>
+    <h3>GCS Social Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:social.gcsc@medusa.org.au ">social.gcsc@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Zoe Zhang</strong>
+    </h1>
+    <h3>GCS Sponsorship</h3>
+    <h3><a style="color: #ffffff" href="mailto:sponsorship.gcsc@medusa.org.au ">sponsorship.gcsc@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Claire Topfer</strong>
+    </h1>
+    <h3>Warrnambool 3rd Year Rep (1)</h3>
+    <h3><a style="color: #ffffff" href="mailto:warrnambool@medusa.org.au ">warrnambool@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Joshua Hong</strong>
+    </h1>
+    <h3>Warrnambool 3rd Year Rep (2)</h3>
+    <h3><a style="color: #ffffff" href="mailto:warrnambool@medusa.org.au ">warrnambool@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>James van der Wolde</strong>
+    </h1>
+    <h3>Warrnambool 4th Year Rep (1)</h3>
+    <h3><a style="color: #ffffff" href="mailto:warrnambool@medusa.org.au ">warrnambool@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Carissa Boettcher</strong>
+    </h1>
+    <h3>Warrnambool 4th Year Rep (2)</h3>
+    <h3><a style="color: #ffffff" href="mailto:warrnambool@medusa.org.au ">warrnambool@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Yacoub Jayoghli</strong>
+    </h1>
+    <h3>RCCS Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:immerse@medusa.org.au ">immerse@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Geo Zhou</strong>
+    </h1>
+    <h3>Clinical International Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:international.clinical@medusa.org.au">international.clinical@medusa.org.au</a></h3>
+  </div>
+</div>
+
+  </div>
+  <div class="subcommittee-title"> Preclinical Committee</div>
+  <div class="subcommittee subcommittee-preclinical">
+    <div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Maya Raj</strong>
+    </h1>
+    <h3>Preclinical Academic Rep (1st Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:academic.preclinical.1@medusa.org.au">academic.preclinical.1@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Taylah Cook</strong>
+    </h1>
+    <h3>Preclinical Academic Rep (2nd Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:academic.preclinical@medusa.org.au ">academic.preclinical@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Alin Lin</strong>
+    </h1>
+    <h3>Preclinical AMSA Rep (2nd Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:amsa.preclinical@medusa.org.au">amsa.preclinical@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Stevie Green</strong>
+    </h1>
+    <h3>Preclinical AMSA Rep (1st Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:amsa.preclinical@medusa.org.au">amsa.preclinical@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Chloe Han</strong>
+    </h1>
+    <h3>Preclinical C&W Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:community.preclinical@medusa.org.au ">community.preclinical@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Victor Shahen</strong>
+    </h1>
+    <h3>Preclinical Community Rep (1st Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:community.preclinical@medusa.org.au ">community.preclinical@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Briana Nickel</strong>
+    </h1>
+    <h3>Preclinical International Rep</h3>
+    <h3><a style="color: #ffffff" href="mailto:international.preclin@medusa.org.au ">international.preclin@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Ashlee Ditson</strong>
+    </h1>
+    <h3>Preclinical Social Rep (1st Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:social@medusa.org.au">social@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Julia Haigh</strong>
+    </h1>
+    <h3>Preclinical Vice President</h3>
+    <h3><a style="color: #ffffff" href="mailto:vp.preclinical@medusa.org.au ">vp.preclinical@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Marcus Di Sipio</strong>
+    </h1>
+    <h3>Preclinical Wellbeing Rep (1st Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:community@medusa.org.au">community@medusa.org.au</a></h3>
+  </div>
+</div>
+
+
+  </div>
+  <div class="subcommittee-title"> Special Interest Groups</div>
+  <div class="subcommittee subcommittee-special">
+    <div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Hardeep Kaur</strong>
+    </h1>
+    <h3>Crossing Borders Chair</h3>
+    <h3><a style="color: #ffffff" href="mailto:crossing.borders@medusa.org.au ">crossing.borders@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Sidiq Bashari</strong>
+    </h1>
+    <h3>Crossing Borders Preclinical Rep (1st Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:crossing.borders@medusa.org.au">crossing.borders@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Sharadhi Ratnaker</strong>
+    </h1>
+    <h3>Crossing Borders Preclinical Rep (2nd Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:crossing.borders@medusa.org.au">crossing.borders@medusa.org.au</a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Sylvia Hsueh</strong>
+    </h1>
+    <h3>DSIG Chair</h3>
+    <h3><a style="color: #ffffff" href="mailto:dsig@medusa.org.au ">dsig@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Florence McLennan</strong>
+    </h1>
+    <h3>DSIG Preclinical Rep (1st Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:dsig.preclinical@medusa.org.au ">dsig.preclinical@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Fred Gorman</strong>
+    </h1>
+    <h3>DSIG Preclinical Rep (2nd Year)</h3>
+    <h3><a style="color: #ffffff" href="mailto:dsig.preclinical@medusa.org.au ">dsig.preclinical@medusa.org.au </a></h3>
+  </div>
+</div>
+
+<div class="org-card">
+  <div class="name-tag">
+    <h1>
+      <strong>Shipra Sankpal</strong>
+    </h1>
+    <h3>PsychD Chair</h3>
+    <h3><a style="color: #ffffff" href="mailto:psychd@medusa.org.au">psychd@medusa.org.au</a></h3>
+  </div>
+</div>
+
+
+  </div>
+
+</div>
+<!-- Add extra whitespace at bottom so Weebly doesn't cut of the box shadow -->
+<div style="height: 20px"></div>
