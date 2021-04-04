@@ -1,12 +1,10 @@
-from typing import Optional
-
 from django.db import models
-
-from medusa_website.mcq_bank.models import Answer, Question
-from medusa_website.users.models import User
 
 
 class Record(models.Model):
+    from medusa_website.mcq_bank.models import Answer, Question
+    from medusa_website.users.models import User
+
     """ Model to record the events of Question/Answers"""
 
     question = models.ForeignKey(
@@ -18,4 +16,4 @@ class Record(models.Model):
 
     @property
     def is_correct(self):
-        return self.answer.is_correct
+        return self.answer.correct
