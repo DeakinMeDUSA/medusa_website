@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% load quiz_tags %}
+
+{% block title %} Question id : {{ question.id }} {% endblock %}
+{% block description %} Question id : {{ question.id }}  {% endblock %}
+
+{% block content %}
+
+  <p class="lead">Question Text: {{ question.text }}</p>
+  <p>
+    <small class="muted">{% trans "Question category" %}:</small>
+    <strong>{{ question.category }}</strong>
+  </p>
+  {% if question.image %}
+    <img src="{{ question.image.url }}" alt="{{ question.text }}"/>
+  {% endif %}
+  <hr>
+
+  <p><p></p><strong>Answers:</strong></p>
+
+
+  <table class="table table-bordered table-striped">
+
+    <thead>
+    <tr>
+      <th>{% trans "Answer ID" %}</th>
+      <th>{% trans "Answer Text" %}</th>
+      <th>Correct?</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for answer in question.get_answers %}
+      <tr>
+        <td>{{ answer.id }}</td>
+        <td>{{ answer.text }}</td>
+        <td>
+          {% if answer.correct %}
+            <p>{% trans "Correct" %}</p>
+          {% else %}
+            <p>{% trans "Incorrect" %}</p>
+          {% endif %}
+        </td>
+{#        <td>#}
+{#          <a href="{% url 'mcq_bank:question_detail' question.id %}">#}
+{#            View Question {{ question.id }}#}
+{#          </a>#}
+{#        </td>#}
+      </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+  </table>
+
+
+  <hr>
+
+
+{% endblock %}

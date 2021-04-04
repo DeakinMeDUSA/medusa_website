@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\medusa_website\mcq_bank\views.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\medusa_website\media\users\medusa_members_google_group.csv">
           <value>
             <Attribute>

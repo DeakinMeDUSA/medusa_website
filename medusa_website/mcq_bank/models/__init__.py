@@ -3,5 +3,6 @@ from .category import Category, SubCategory
 from .progress import Progress, ProgressManager
 from .question import Question
 from .quiz import Quiz
+from .quiz_session import QuizSession
 from .record import Record
 from .sitting import Sitting, SittingManager

@@ -76,7 +76,7 @@ class Question(models.Model):
 
     @property
     def num_correct_ans(self):
-        return len([a for a in self.answers.all() if a.is_correct])
+        return len([a for a in self.answers.all() if a.correct])
 
     @property
     def has_image(self) -> bool:

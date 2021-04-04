@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load quiz_tags %}
+{% block title %}
+  {% trans "Quiz session of" %} {{ quiz_session.id }} {% trans "for" %} {{ quiz_session.user }}
+{% endblock %}
+
+{% block content %}
+  <h2>{% trans "Quiz title" %}: {{ quiz_session.id }}</h2>
+  <hr>
+  <p>{% trans "User" %}: {{ quiz_session.user }}</p>
+  <p>{% trans "Started" %}: {{ quiz_session.started }}</p>
+  <p>{% trans "Completed" %}: {{ quiz_session.finished }}</p>
+  <p>{% trans "Score" %}: {{ quiz_session.percent_correct }}%</p>
+
+  <table class="table table-bordered table-striped">
+
+    <thead>
+    <tr>
+      <th>{% trans "Question" %}</th>
+      <th>{% trans "Your answer" %}</th>
+      <th>Correct?</th>
+      <th>Review Question</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for question in questions %}
+      {% quiz_session_answer_for_question quiz_session question as answer %}
+      <tr>
+        <td>
+          {{ question.text }}
+        </td>
+        <td>{{ answer.text }}</td>
+        <td>
+          {% if answer.correct %}
+            <p>{% trans "Correct" %}</p>
+          {% else %}
+            <p>{% trans "Incorrect" %}</p>
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'mcq_bank:question_detail' question.id %}">
+            View Question {{ question.id }}
+          </a>
+        </td>
+      </tr>
+
+    {% endfor %}
+
+    </tbody>
+
+  </table>
+{% endblock %}

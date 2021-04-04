@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}All Quizzes{% endblock %}
+
+{% block content %}
+  <a href="{% url 'mcq_bank:quiz_list' %}">List of Quizzes</a>
+  <a href="{% url 'mcq_bank:category' %}">Categories</a>
+  <a href="{% url 'mcq_bank:progress' %}">My Progress</a>
+  <a href="{% url 'mcq_bank:history' %}">Past sessions</a>
+{% endblock %}

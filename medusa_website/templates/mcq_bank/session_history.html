@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block title %}{% trans "Past Quiz sessions" %}{% endblock %}
+
+{% block content %}
+  <h2>{% trans "List of past sessions" %}</h2>
+  {% if quiz_sessions %}
+
+    <table class="table table-bordered table-striped">
+
+      <thead>
+      <tr>
+        <th>{% trans "Started datetime" %}</th>
+        <th>{% trans "Completed datetime" %}</th>
+        <th>{% trans "Score" %} (%)</th>
+        <th>{% trans "Review" %}</th>
+
+      </tr>
+      </thead>
+
+      <tbody>
+
+      {% for quiz_session in quiz_sessions %}
+
+        <tr>
+          <td>{{ quiz_session.started }}</td>
+          <td>{{ quiz_session.finished }}</td>
+          <td>{{ quiz_session.percent_correct }}</td>
+          <td>
+            <a href="{% url 'mcq_bank:quiz_session_detail' quiz_session.id %}">
+              {% trans "View details" %}
+            </a>
+        </tr>
+
+      {% endfor %}
+
+      </tbody>
+
+    </table>
+  {% else %}
+    <p>{% trans "There are no matching quizzes" %}.</p>
+  {% endif %}
+{% endblock %}

@@ -1,9 +1,11 @@
 from django.urls import path
 
 from . import views
+from .new_views import QuestionDetail, QuizSessionDetail, QuizSessionListView
 from .views import (
     CategoriesListView,
     QuizDetailView,
+    QuizIndex,
     QuizListView,
     QuizMarkingDetail,
     QuizMarkingList,
@@ -22,7 +24,8 @@ urlpatterns = [
     path("api/answer/create", views.AnswerCreate.as_view()),
     path("api/record/list", views.RecordHistory.as_view()),
     path("api/record/create", views.RecordCreate.as_view()),
-    path("index/", view=QuizListView.as_view(), name="quiz_list"),
+    path("index/", view=QuizIndex.as_view(), name="quiz_index"),
+    path("quiz_list/", view=QuizListView.as_view(), name="quiz_list"),
     path("category/", view=CategoriesListView.as_view(), name="quiz_category_list_all"),
     path(
         "category/<str:category_name>",
@@ -39,4 +42,9 @@ urlpatterns = [
         "quiz/<slug:quiz_name>/", view=QuizDetailView.as_view(), name="quiz_start_page"
     ),
     path("quiz/<slug:quiz_name>/take/", view=QuizTake.as_view(), name="quiz_question"),
+    path("history", view=QuizSessionListView.as_view(), name="quiz_session_list"),
+    path(
+        "history/<int:id>", view=QuizSessionDetail.as_view(), name="quiz_session_detail"
+    ),
+    path("question/<int:id>", view=QuestionDetail.as_view(), name="question_detail"),
 ]
