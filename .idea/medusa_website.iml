@@ -20,7 +20,7 @@
       <excludeFolder url="file://$MODULE_DIR$/medusa_website/static/css" />
       <excludeFolder url="file://$MODULE_DIR$/db_backup" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.8 (medusa_website)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Poetry (medusa_website)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="embed" level="application" />
     <orderEntry type="library" name="bootstrap" level="application" />
