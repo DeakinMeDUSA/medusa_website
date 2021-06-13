@@ -1,24 +1,31 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
+
 {% load quiz_tags %}
 {% block title %}
   {% trans "Quiz session of" %} {{ quiz_session.id }} {% trans "for" %} {{ quiz_session.user }}
 {% endblock %}
 
 {% block content %}
-  <h2>{% trans "Quiz title" %}: {{ quiz_session.id }}</h2>
+  <h2>{% trans "Quiz Session ID" %}: {{ quiz_session.id }}</h2>
   <hr>
   <p>{% trans "User" %}: {{ quiz_session.user }}</p>
   <p>{% trans "Started" %}: {{ quiz_session.started }}</p>
   <p>{% trans "Completed" %}: {{ quiz_session.finished }}</p>
   <p>{% trans "Score" %}: {{ quiz_session.percent_correct }}%</p>
+  <a href="{% url 'mcq_bank:run_session' %}">Start quiz</a>
 
-  <table class="table table-bordered table-striped">
+  {#  <table class="table table-bordered table-striped">#}
+  <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
+  <table id="session-table" class="tablesorter-metro-dark">
+
 
     <thead>
     <tr>
       <th>{% trans "Question" %}</th>
       <th>{% trans "Your answer" %}</th>
+      <th>Category</th>
       <th>Correct?</th>
       <th>Review Question</th>
     </tr>
@@ -32,6 +39,7 @@
           {{ question.text }}
         </td>
         <td>{{ answer.text }}</td>
+        <td>{{ answer.question.category }}</td>
         <td>
           {% if answer.correct %}
             <p>{% trans "Correct" %}</p>
@@ -52,3 +60,14 @@
 
   </table>
 {% endblock %}
+{% block javascript %}
+  {{ block.super }}
+  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.js" %}></script>
+  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.widgets.js" %}></script>
+
+  <script type="application/javascript">
+    $(function () {
+      $('#session-table').tablesorter()
+    })
+  </script>
+{% endblock javascript %}

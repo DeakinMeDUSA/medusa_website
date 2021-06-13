@@ -18,7 +18,7 @@
   {% endif %}
   <hr>
 
-  <p><p></p><strong>Answers:</strong></p>
+  <p></p><strong>Answers:</strong>
 
 
   <table class="table table-bordered table-striped">
@@ -43,11 +43,11 @@
             <p>{% trans "Incorrect" %}</p>
           {% endif %}
         </td>
-{#        <td>#}
-{#          <a href="{% url 'mcq_bank:question_detail' question.id %}">#}
-{#            View Question {{ question.id }}#}
-{#          </a>#}
-{#        </td>#}
+        {#        <td>#}
+        {#          <a href="{% url 'mcq_bank:question_detail' question.id %}">#}
+        {#            View Question {{ question.id }}#}
+        {#          </a>#}
+        {#        </td>#}
       </tr>
 
     {% endfor %}

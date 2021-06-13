@@ -6,13 +6,7 @@ from allauth.account.models import EmailAddress
 from cuser.models import AbstractCUser, CUser
 from django.conf import settings
 from django.db import models
-from django.db.models import (
-    CharField,
-    EmailField,
-    ForeignKey,
-    IntegerField,
-    ManyToManyField,
-)
+from django.db.models import CharField, EmailField, IntegerField, ManyToManyField
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _

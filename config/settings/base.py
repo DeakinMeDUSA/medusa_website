@@ -25,7 +25,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
-TIME_ZONE = "UTC"
+TIME_ZONE = "Australia/Melbourne"
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = "en-us"
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
@@ -77,6 +77,7 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
+    "django_tables2",
 ]
 THIRD_PARTY_APPS = [
     "webpack_loader",
@@ -90,6 +91,8 @@ THIRD_PARTY_APPS = [
     "imagekit",
     "cuser",
     "pg_copy",
+    "bootstrap_modal_forms",
+    "widget_tweaks",
 ]
 
 LOCAL_APPS = [
@@ -166,8 +169,9 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
     str(APPS_DIR / "static"),
-    # str(FRONTEND_DIR / "build"),
+    # str(ROOT_DIR / "node_modules"),
     str(FRONTEND_DIR / "build/static"),
+    str(ROOT_DIR / "assets"),
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
@@ -190,7 +194,7 @@ TEMPLATES = [
         # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-BACKEND
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-        "DIRS": [str(APPS_DIR / "templates"), str(FRONTEND_DIR / "build")],
+        "DIRS": [str(APPS_DIR / "templates")],
         "OPTIONS": {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
@@ -316,8 +320,11 @@ CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
 WEBPACK_LOADER = {
     "DEFAULT": {
         "CACHE": not DEBUG,
-        "BUNDLE_DIR_NAME": "/",  # must end with slash
-        "STATS_FILE": (ROOT_DIR / "frontend/build/webpack-stats.json").as_posix(),
+        "BUNDLE_DIR_NAME": "webpack_bundles/",  # must end with slash
+        "STATS_FILE": (ROOT_DIR / "webpack-stats.json").as_posix(),
+        "TIMEOUT": None,
+        "IGNORE": [r".+\.hot-update.js", r".+\.map"],
+        "LOADER_CLASS": "webpack_loader.loader.WebpackLoader",
     },
 }
 REST_FRAMEWORK = {
@@ -336,3 +343,7 @@ MEMBERLIST_XLSX = Path(
 )
 MEMBERLIST_CSV = Path(MEDIA_ROOT, "users", "memberlist.csv")
 PG_COPY_BACKUP_PATH = Path(ROOT_DIR, "db_backup")
+
+CRISPY_FAIL_SILENTLY = not DEBUG
+
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"

@@ -1,18 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% block title %}{% trans "All Quizzes" %}{% endblock %}
+{% load django_tables2 %}
+
+{% block title %}{% trans "All Categories" %}{% endblock %}
 
 {% block content %}
-<h2>{% trans "Category list" %}</h2>
-
-<ul>
-  {% for cat in object_list %}
-  <li>
-	<a href="{% url 'mcq_bank:quiz_category_list_matching' category_name=cat.category %}">
-	  {{ cat.category }}
-	</a>
-  </li>
-  {% endfor %}
-</ul>
+  <h2>{% trans "Category list" %}</h2>
+  {% render_table table %}
 
 {% endblock %}

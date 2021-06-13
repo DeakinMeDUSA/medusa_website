@@ -4,7 +4,7 @@
 {% load quiz_tags %}
 
 {% block title %} {{ quiz.title}} {% endblock %}
-{% block description %} {% trans "Exam Results for" %} {{ quiz.title }} {% endblock %}
+{% block description %} {% trans "Quiz completed" %} {% endblock %}
 
 {% block content %}
 
@@ -45,11 +45,9 @@
 
 	{% endif %}
 
-	<p>{% trans "Review the questions below and try the exam again in the future"%}.</p>
-
 	{% if user.is_authenticated %}
 
-	  <p>{% trans "The result of this exam will be stored in your progress section so you can review and monitor your progression" %}.</p>
+    <p>The result of this exam will be stored in <a href={% url 'mcq_bank:history' %}>your progress</a> section so you can review and monitor your progression</p>
 
 	{% endif %}
   </div>

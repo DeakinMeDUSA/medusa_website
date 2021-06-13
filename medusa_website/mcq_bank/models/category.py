@@ -1,6 +1,7 @@
 import re
 
 from django.db import models
+from django.urls import reverse
 
 
 class CategoryManager(models.Manager):
@@ -24,6 +25,11 @@ class Category(models.Model):
 
     def __str__(self):
         return self.category
+
+    def get_absolute_url(self):
+        return reverse(
+            "mcq_bank:category_detail", kwargs={"category_name": self.category}
+        )
 
 
 class SubCategory(models.Model):

@@ -5,7 +5,7 @@
       <configuration>
         <option name="rootFolder" value="$MODULE_DIR$" />
         <option name="settingsModule" value="config/settings/local.py" />
-        <option name="manageScript" value="$MODULE_DIR$/manage.py" />
+        <option name="manageScript" value="manage.py" />
         <option name="environment" value="&lt;map/&gt;" />
         <option name="doNotUseTestRunner" value="false" />
         <option name="trackFilePattern" value="migrations" />
@@ -15,19 +15,19 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/db" />
-      <excludeFolder url="file://$MODULE_DIR$/venv" />
-      <excludeFolder url="file://$MODULE_DIR$/static" />
       <excludeFolder url="file://$MODULE_DIR$/medusa_website/static/css" />
       <excludeFolder url="file://$MODULE_DIR$/db_backup" />
+      <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
-    <orderEntry type="jdk" jdkName="Poetry (medusa_website)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (medusa_website)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="embed" level="application" />
     <orderEntry type="library" name="bootstrap" level="application" />
     <orderEntry type="library" name="font-awesome" level="application" />
+    <orderEntry type="library" name="jquery-3.3.1.slim" level="application" />
   </component>
   <component name="PackageRequirementsSettings">
-    <option name="requirementsPath" value="$MODULE_DIR$/requirements/local.txt" />
+    <option name="requirementsPath" value="I:\GitHub\medusa_website\requirements.txt" />
   </component>
   <component name="PyDocumentationSettings">
     <option name="renderExternalDocumentation" value="true" />
@@ -40,6 +40,10 @@
     <option name="TEMPLATE_FOLDERS">
       <list>
         <option value="$MODULE_DIR$/medusa_website/templates" />
+        <option value="$MODULE_DIR$/medusa_website/templates/account" />
+        <option value="$MODULE_DIR$/medusa_website/templates/mcq_bank" />
+        <option value="$MODULE_DIR$/medusa_website/templates/pages" />
+        <option value="$MODULE_DIR$/medusa_website/templates/users" />
       </list>
     </option>
   </component>

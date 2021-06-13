@@ -1,0 +1,40 @@
+{% load widget_tweaks %}
+
+<form method="post" action="">
+  {% csrf_token %}
+
+  <div class="modal-header">
+    <h5 class="modal-title">Existing quiz session found - continue or create new one?</h5>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+      {% for error in form.non_field_errors %}
+        {{ error }}
+      {% endfor %}
+    </div>
+
+    <div>
+      <p>Questions complete: {{ questions_answered }}/{{ questions_total }} ({{ percent_complete }}%)</p>
+    </div>
+
+
+    <div class="switch-field">
+      <div>
+        <input type="radio" id="radio-one" name="choice" value="start_over" checked/>
+        <label for="radio-one">Start Over</label>
+      </div>
+      <div>
+        <input type="radio" id="radio-two" name="choice" value="continue"/>
+        <label for="radio-two">Continue</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger close" data-dismiss="modal" aria-label="Close" onclick="$('#modal').modal('hide');">Cancel</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </div>
+
+</form>

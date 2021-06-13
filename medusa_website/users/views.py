@@ -24,7 +24,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse("users:detail", kwargs={"email": self.request.user.email})
 
-    def get_object(self):
+    def get_object(self, **kwargs):
         return User.objects.get(email=self.request.user.email)
 
     def form_valid(self, form):

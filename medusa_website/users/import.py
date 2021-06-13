@@ -50,9 +50,9 @@ def create_google_group_export(dusa_report: pd.DataFrame):
 
 
 if __name__ == "__main__":
-    dusa_report = read_dusa_report()
-    dusa_report.to_csv(REPORT_PATH.with_suffix(".csv"), index=False)
-    google_group_export = create_google_group_export(dusa_report)
+    DUSA_REPORT = read_dusa_report()
+    DUSA_REPORT.to_csv(REPORT_PATH.with_suffix(".csv"), index=False)
+    google_group_export = create_google_group_export(DUSA_REPORT)
     google_group_export.to_csv(
         REPORT_PATH.with_name("medusa_members_google_group.csv"), index=False
     )

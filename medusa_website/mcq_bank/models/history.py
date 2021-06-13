@@ -2,22 +2,15 @@ import re
 
 from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
+from django.db.models import QuerySet
 
 from medusa_website.mcq_bank.models.category import Category
-from medusa_website.mcq_bank.models.sitting import Sitting
 from medusa_website.users.models import User
 
 
-class ProgressManager(models.Manager):
-    def new_progress(self, user):
-        new_progress = self.create(user=user, score="")
-        new_progress.save()
-        return new_progress
-
-
-class Progress(models.Model):
+class History(models.Model):
     """
-    Progress is used to track an individual signed in users score on different
+    History is used to track an individual signed in users score on different
     quiz's and categories
 
     Data stored in csv using the format:
@@ -32,10 +25,8 @@ class Progress(models.Model):
         validators=[validate_comma_separated_integer_list],
     )
 
-    objects = ProgressManager()
-
     class Meta:
-        verbose_name = "User Progress"
+        verbose_name = "User History"
         verbose_name_plural = "User progress records"
 
     @property
@@ -128,9 +119,18 @@ class Progress(models.Model):
             )
             self.save()
 
-    def show_exams(self):
-        """
-        Finds the previous quizzes marked as 'exam papers'.
-        Returns a queryset of complete exams.
-        """
-        return Sitting.objects.filter(user=self.user, complete=True)
+    @property
+    def current_session(self):
+        from medusa_website.mcq_bank.models import QuizSession
+
+        return QuizSession.get_current(user=self.user)
+
+    @property
+    def sessions(self) -> QuerySet["QuizSession"]:
+        return self.user.quiz_sessions.all()
+
+    @classmethod
+    def get_create_for_user(cls, user: User) -> "History":
+        new_progress = cls(user=user)
+        new_progress.save()
+        return new_progress

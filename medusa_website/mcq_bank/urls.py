@@ -1,50 +1,75 @@
 from django.urls import path
 
-from . import views
-from .new_views import QuestionDetail, QuizSessionDetail, QuizSessionListView
 from .views import (
-    CategoriesListView,
+    AnswerCreateView,
+    AnswerRetrieveUpdateDestroyView,
+    AnswersListView,
+    CategoriesTableView,
+    HistoryView,
+    QuestionDetailView,
+    QuestionListCreateView,
+    QuestionRetrieveUpdateDestroyView,
     QuizDetailView,
-    QuizIndex,
+    QuizIndexView,
     QuizListView,
-    QuizMarkingDetail,
-    QuizMarkingList,
-    QuizTake,
-    QuizUserProgressView,
-    ViewQuizListByCategory,
+    QuizSessionCreateView,
+    QuizSessionDetailView,
+    QuizSessionEndOrContinueView,
+    QuizSessionRunView,
+    QuizTakeView,
+    RecordCreateView,
+    RecordHistoryView,
+    ViewQuestionsByCategoryView,
 )
 
 app_name = "mcq_bank"
 
 urlpatterns = [
-    path("api/questions", views.QuestionListCreate.as_view()),
-    path("api/question/<int:id>", views.QuestionRetrieveUpdateDestroy.as_view()),
-    path("api/answers", views.AnswersList.as_view()),
-    path("api/answer/<int:id>", views.AnswerRetrieveUpdateDestroy.as_view()),
-    path("api/answer/create", views.AnswerCreate.as_view()),
-    path("api/record/list", views.RecordHistory.as_view()),
-    path("api/record/create", views.RecordCreate.as_view()),
-    path("index/", view=QuizIndex.as_view(), name="quiz_index"),
+    # API Endpoints, to be depreciated
+    path("api/questions/", QuestionListCreateView.as_view()),
+    path("api/question/<int:id>", QuestionRetrieveUpdateDestroyView.as_view()),
+    path("api/answers", AnswersListView.as_view()),
+    path("api/answer/<int:id>", AnswerRetrieveUpdateDestroyView.as_view()),
+    path("api/answer/create", AnswerCreateView.as_view()),
+    path("api/record/list", RecordHistoryView.as_view()),
+    path("api/record/create", RecordCreateView.as_view()),
+    # Others
+    path("index/", view=QuizIndexView.as_view(), name="quiz_index"),
     path("quiz_list/", view=QuizListView.as_view(), name="quiz_list"),
-    path("category/", view=CategoriesListView.as_view(), name="quiz_category_list_all"),
+    path(
+        "category/", view=CategoriesTableView.as_view(), name="quiz_category_list_all"
+    ),
     path(
         "category/<str:category_name>",
-        view=ViewQuizListByCategory.as_view(),
-        name="quiz_category_list_matching",
+        view=ViewQuestionsByCategoryView.as_view(),
+        name="category_detail",
     ),
-    path("progress/", view=QuizUserProgressView.as_view(), name="quiz_progress"),
-    path("marking/", view=QuizMarkingList.as_view(), name="quiz_marking"),
+    path("question/<int:id>", view=QuestionDetailView.as_view(), name="question"),
+    path("history/", view=HistoryView.as_view(), name="history"),
     path(
-        "marking/<int:id>", view=QuizMarkingDetail.as_view(), name="quiz_marking_detail"
+        "quiz/create/", view=QuizSessionCreateView.as_view(), name="quiz_session_create"
+    ),
+    path(
+        "quiz/check_create/",
+        view=QuizSessionEndOrContinueView.as_view(),
+        name="check_session",
+    ),
+    path(
+        "quiz/session/<int:id>",
+        view=QuizSessionRunView.as_view(),
+        name="quiz_session_run",
     ),
     #  passes variable 'quiz_name' to quiz_take view
     path(
         "quiz/<slug:quiz_name>/", view=QuizDetailView.as_view(), name="quiz_start_page"
     ),
-    path("quiz/<slug:quiz_name>/take/", view=QuizTake.as_view(), name="quiz_question"),
-    path("history", view=QuizSessionListView.as_view(), name="quiz_session_list"),
+    path("session/", view=QuizTakeView.as_view(), name="run_session"),
     path(
-        "history/<int:id>", view=QuizSessionDetail.as_view(), name="quiz_session_detail"
+        "history/<int:id>",
+        view=QuizSessionDetailView.as_view(),
+        name="quiz_session_detail",
     ),
-    path("question/<int:id>", view=QuestionDetail.as_view(), name="question_detail"),
+    path(
+        "question/<int:id>", view=QuestionDetailView.as_view(), name="question_detail"
+    ),
 ]

@@ -29,6 +29,7 @@ class Question(models.Model):
         blank=True,
         null=True,
         on_delete=models.CASCADE,
+        related_name="questions",
     )
 
     sub_category = models.ForeignKey(
@@ -92,7 +93,8 @@ class Question(models.Model):
         else:
             return None
 
-    def check_if_correct(self, guess):
+    @staticmethod
+    def check_if_correct(guess: str):
         from medusa_website.mcq_bank.models.answer import Answer
 
         answer = Answer.objects.get(id=guess)
@@ -116,7 +118,8 @@ class Question(models.Model):
             for answer in self.order_answers(self.answers.all())
         ]
 
-    def answer_choice_to_string(self, guess):
+    @staticmethod
+    def answer_choice_to_string(guess):
         from medusa_website.mcq_bank.models.answer import Answer
 
         return Answer.objects.get(id=guess).text

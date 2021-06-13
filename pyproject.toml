@@ -42,6 +42,10 @@ black = "^21.5b2"
 pre-commit = "^2.13.0"
 pylint-django = "^2.4.4"
 flake8-isort = "^4.0.0"
+rich = "^10.2.2"
+django-bootstrap-modal-forms = "^2.2.0"
+django-widget-tweaks = "^1.4.8"
+
 
 [tool.poetry.dev-dependencies]
 

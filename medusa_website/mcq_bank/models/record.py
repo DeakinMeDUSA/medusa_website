@@ -8,11 +8,15 @@ class Record(models.Model):
     """ Model to record the events of Question/Answers"""
 
     question = models.ForeignKey(
-        Question, on_delete=models.SET_NULL, blank=True, null=True
+        Question,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="records",
     )
     answer = models.ForeignKey(Answer, on_delete=models.SET_NULL, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    timestamp = models.DateTimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     @property
     def is_correct(self):

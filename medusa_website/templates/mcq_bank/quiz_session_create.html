@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load quiz_tags %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {% trans "Create new quiz session" %} {% trans "for" %} {{ quiz_session.user }}
+{% endblock %}
+
+{% block content %}
+  <link href="{% static 'css/forms.css' %}" rel="stylesheet">
+
+  <p class="lead">Create new Quiz Session</p>
+
+  {% if  current_session %}
+
+    <h3>There is currently a session in progress. </h3>
+
+  {% endif %}
+
+  {% crispy form %}
+
+{% endblock %}

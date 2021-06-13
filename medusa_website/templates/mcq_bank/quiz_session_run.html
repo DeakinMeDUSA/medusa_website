@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load quiz_tags %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  {% trans "Run quiz session" %} {{ quiz_session.id }} {% trans "for" %} {{ quiz_session.user }}
+{% endblock %}
+
+{% block content %}
+  {% crispy form %}
+
+{% endblock %}

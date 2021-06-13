@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from imagekit.admin import AdminThumbnail
 
-from .models import Answer, Category, Progress, Question, Quiz, SubCategory
+from .models import Answer, Category, History, Question, Quiz, SubCategory
 
 
 class AnswerInline(admin.TabularInline):
@@ -101,7 +101,7 @@ class SubCategoryAdmin(admin.ModelAdmin):
     list_filter = ("category",)
 
 
-@admin.register(Progress)
+@admin.register(History)
 class ProgressAdmin(admin.ModelAdmin):
     """
     to do:

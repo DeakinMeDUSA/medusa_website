@@ -1,9 +1,38 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% block title %}All Quizzes{% endblock %}
 
 {% block content %}
-  <a href="{% url 'mcq_bank:quiz_list' %}">List of Quizzes</a>
-  <a href="{% url 'mcq_bank:category' %}">Categories</a>
-  <a href="{% url 'mcq_bank:progress' %}">My Progress</a>
-  <a href="{% url 'mcq_bank:history' %}">Past sessions</a>
+  <ul>
+    <li><a href="{% url "mcq_bank:quiz_session_create" %}">Continue previous session / Create new session</a></li>
+    <li><a href="{% url "mcq_bank:quiz_list" %}">List of created Quizzes</a></li>
+    <li><a href="{% url "mcq_bank:quiz_category_list_all" %}">Categories</a></li>
+    <li><a href="{% url "mcq_bank:history" %}">Quiz History and Progress</a></li>
+  </ul>
+
+  <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+
+      </div>
+    </div>
+  </div>
+
+  <button id="check-session" class="btn btn-primary" type="button" name="button">
+    Check session
+  </button>
+
+
 {% endblock %}
+
+{% block javascript %}
+  {{ block.super }}
+  <script type="text/javascript">
+    $(document).ready(function () {
+
+      $('#check-session').modalForm({
+        formURL: "{% url 'mcq_bank:check_session' %}",
+      })
+    })
+
+  </script>
+{% endblock javascript %}

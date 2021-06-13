@@ -27,7 +27,7 @@
           <td>{{ quiz.exam_paper }}</td>
           <td>{{ quiz.single_attempt }}</td>
           <td>
-            <a href="{% url 'mcq_bank:quiz_start_page' quiz_name=quiz.url %}">
+            <a href="{% url "mcq_bank:quiz_start_page" quiz_name=quiz.url %}">
               {% trans "View details" %}
             </a>
         </tr>
