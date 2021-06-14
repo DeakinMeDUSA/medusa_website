@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load render_table from django_tables2 %}
 
 {% load i18n %}
 
@@ -11,84 +12,12 @@
 {% block description %} {% trans "User History Page" %} {% endblock %}
 
 {% block content %}
+  <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
+  <h2>{% trans "Category Progress" %}</h2>
+  {% render_table category_progress_table %}
 
-  {% if cat_scores %}
-
-    <h1>{% trans "Question Category Scores" %}</h1>
-    <hr>
-    {#    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet">#}
-    <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
-    {#    <table id="progress-table" class="table tablesorter table-bordered table-striped">#}
-    <table id="table-history-categories" class="tablesorter-metro-dark">
-
-
-      <thead>
-      <tr>
-        <th>{% trans "Category" %}</th>
-        <th>{% trans "Correctly answererd" %}</th>
-        <th>{% trans "Incorrect" %}</th>
-        <th>%</th>
-      </tr>
-      </thead>
-
-      <tbody>
-
-
-      {% for cat, value in cat_scores.items %}
-        <tr>
-          <td>{{ cat }}</td>
-          <td>{{ value.0 }}</td>
-          <td>{{ value.1 }}</td>
-          <td>{{ value.2 }}</td>
-        </tr>
-
-      {% endfor %}
-
-      </tbody>
-
-    </table>
-
-
-  {% endif %}
-
-  <h2>{% trans "List of past sessions" %}</h2>
-  {% if sessions %}
-{#    <table class="table table-bordered table-striped">#}
-    <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
-    <table id="table-history-sessions" class="tablesorter-metro-dark">
-      <thead>
-      <tr>
-        <th>{% trans "Started datetime" %}</th>
-        <th>{% trans "Completed datetime" %}</th>
-        <th>{% trans "Score" %} (%)</th>
-        <th>{% trans "Review" %}</th>
-
-      </tr>
-      </thead>
-
-      <tbody>
-
-      {% for quiz_session in quiz_sessions %}
-
-        <tr>
-          <td>{{ quiz_session.started }}</td>
-          <td>{{ quiz_session.finished }}</td>
-          <td>{{ quiz_session.percent_correct }}</td>
-          <td>
-            <a href="{% url 'mcq_bank:quiz_session_detail' quiz_session.id %}">
-              {% trans "View details" %}
-            </a>
-        </tr>
-
-      {% endfor %}
-
-      </tbody>
-
-    </table>
-  {% else %}
-    <p>{% trans "There are no matching quizzes" %}.</p>
-  {% endif %}
-
+  <h2>{% trans "Session History" %}</h2>
+  {% render_table session_history_table %}
 
 {% endblock %}
 {% block javascript %}
@@ -98,8 +27,8 @@
 
   <script type="application/javascript">
     $(function () {
-      $('#table-history-categories').tablesorter()
-      $('#table-history-sessions').tablesorter()
+      $('#category-progress-table').tablesorter()
+      $('#session-history-table').tablesorter()
     })
   </script>
 {% endblock javascript %}
