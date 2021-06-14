@@ -45,16 +45,16 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
 DATABASES = {
-    # "default": {
-    #     "NAME": "medusa_website",
-    #     "ENGINE": "django.db.backends.postgresql",
-    #     "DATABASE_URL": "postgres://localhost/medusa_website",
-    #     "USER": "postgres",
-    # }
     "default": {
-        "NAME": ROOT_DIR / "db.sqlite3",
-        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "medusa_website",
+        "ENGINE": "django.db.backends.postgresql",
+        "DATABASE_URL": "postgres://localhost/medusa_website",
+        "USER": "postgres",
     }
+    # "default": {
+    #     "NAME": ROOT_DIR / "db.sqlite3",
+    #     "ENGINE": "django.db.backends.sqlite3",
+    # }
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
