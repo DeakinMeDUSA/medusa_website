@@ -5,7 +5,7 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from imagekit.admin import AdminThumbnail
 
-from .models import Answer, Category, History, Question, Quiz, SubCategory
+from .models import Answer, Category, History, Question, Quiz
 
 
 class AnswerInline(admin.TabularInline):
@@ -91,16 +91,6 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ("category",)
 
 
-@admin.register(SubCategory)
-class SubCategoryAdmin(admin.ModelAdmin):
-    search_fields = ("sub_category",)
-    list_display = (
-        "sub_category",
-        "category",
-    )
-    list_filter = ("category",)
-
-
 @admin.register(History)
 class ProgressAdmin(admin.ModelAdmin):
     """
@@ -108,7 +98,4 @@ class ProgressAdmin(admin.ModelAdmin):
             create a user section
     """
 
-    search_fields = (
-        "user",
-        "score",
-    )
+    search_fields = ("user",)

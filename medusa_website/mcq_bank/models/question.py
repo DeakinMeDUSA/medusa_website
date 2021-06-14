@@ -2,7 +2,7 @@ from typing import Optional, Union
 
 from django.db import models
 
-from medusa_website.mcq_bank.models.category import Category, SubCategory
+from medusa_website.mcq_bank.models.category import Category
 from medusa_website.mcq_bank.models.quiz import Quiz
 from medusa_website.users.models import User
 
@@ -30,14 +30,6 @@ class Question(models.Model):
         null=True,
         on_delete=models.CASCADE,
         related_name="questions",
-    )
-
-    sub_category = models.ForeignKey(
-        SubCategory,
-        verbose_name="Sub-Category",
-        blank=True,
-        null=True,
-        on_delete=models.CASCADE,
     )
 
     explanation = models.TextField(

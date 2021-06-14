@@ -38,11 +38,18 @@ class History(models.Model):
         the second is number of questions remaining,
         the third is the percentage of questions attempted.
         """
+        from medusa_website.mcq_bank.models import Record
+
         cat_progress = {}
 
         for cat in Category.objects.all():
-            total_qs = cat.questions.count()
-            user_answers = cat.questions.filter(user=self.user)
+            all_cat_qs = Category.objects.all()
+            user_answers = Record.objects.filter(question__category=cat, user=self.user)
+            distinct_answers = user_answers.distinct("question")
+            cat_complete_percent = round(
+                100 * distinct_answers.count() / all_cat_qs.count()
+            )
+            cat_progress[cat.name]
 
         return cat_progress
 

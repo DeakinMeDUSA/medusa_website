@@ -1,5 +1,5 @@
 from .answer import Answer
-from .category import Category, SubCategory
+from .category import Category
 from .history import History
 from .question import Question
 from .quiz import Quiz
