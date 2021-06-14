@@ -27,10 +27,7 @@ class MedusaMemberValidator:
         except ValueError:
             raise ValidationError(self.message, code=self.code)
 
-        if (
-            self.validate_domain_part(domain_part) is False
-            and self.validate_member_status(value) is False
-        ):
+        if self.validate_domain_part(domain_part) is False and self.validate_member_status(value) is False:
             raise ValidationError(self.message, code=self.code)
 
     def validate_member_status(self, email):

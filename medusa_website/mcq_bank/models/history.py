@@ -43,9 +43,7 @@ class History(models.Model):
             all_cat_qs = cat.questions.all()
             answered = Record.objects.filter(question__category=cat, user=self.user)
             distinct_answers = answered.distinct("question")
-            cat_attempted_percent = percent(
-                distinct_answers.count(), all_cat_qs.count()
-            )
+            cat_attempted_percent = percent(distinct_answers.count(), all_cat_qs.count())
             correct_q = [r for r in answered if r.is_correct]
             cat_average_score = percent(len(correct_q), answered.count())
             cat_progress.append(

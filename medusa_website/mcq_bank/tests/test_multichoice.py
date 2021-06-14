@@ -14,13 +14,9 @@ class TestMCQuestionModel(TestCase):
             explanation="I, I don't know that!",
         )
 
-        self.answer1 = Answer.objects.create(
-            id=123, question=self.q, content="African", correct=False
-        )
+        self.answer1 = Answer.objects.create(id=123, question=self.q, content="African", correct=False)
 
-        self.answer2 = Answer.objects.create(
-            id=456, question=self.q, content="European", correct=True
-        )
+        self.answer2 = Answer.objects.create(id=456, question=self.q, content="European", correct=True)
 
     def test_answers(self):
         answers = Answer.objects.filter(question=self.q)

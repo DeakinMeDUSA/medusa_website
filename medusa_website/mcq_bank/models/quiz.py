@@ -10,9 +10,7 @@ from medusa_website.mcq_bank.models.category import Category
 class Quiz(models.Model):
     title = models.CharField(verbose_name="Title", max_length=60, blank=False)
 
-    description = models.TextField(
-        verbose_name="Description", blank=True, help_text="a description of the quiz"
-    )
+    description = models.TextField(verbose_name="Description", blank=True, help_text="a description of the quiz")
 
     url = models.CharField(
         max_length=60,
@@ -72,13 +70,9 @@ class Quiz(models.Model):
         validators=[MaxValueValidator(100)],
     )
 
-    success_text = models.TextField(
-        blank=True, help_text="Displayed if user passes.", verbose_name="Success Text"
-    )
+    success_text = models.TextField(blank=True, help_text="Displayed if user passes.", verbose_name="Success Text")
 
-    fail_text = models.TextField(
-        verbose_name="Fail Text", blank=True, help_text="Displayed if user fails."
-    )
+    fail_text = models.TextField(verbose_name="Fail Text", blank=True, help_text="Displayed if user fails.")
 
     draft = models.BooleanField(
         blank=True,
@@ -90,9 +84,7 @@ class Quiz(models.Model):
     def save(self, force_insert=False, force_update=False, *args, **kwargs):
         self.url = re.sub("\s+", "-", self.url).lower()
 
-        self.url = "".join(
-            letter for letter in self.url if letter.isalnum() or letter == "-"
-        )
+        self.url = "".join(letter for letter in self.url if letter.isalnum() or letter == "-")
 
         if self.single_attempt is True:
             self.exam_paper = True

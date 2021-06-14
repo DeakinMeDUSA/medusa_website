@@ -1,19 +1,15 @@
-from rest_framework import generics
+from django.contrib.auth.mixins import LoginRequiredMixin
+from vanilla import CreateView, ListView, UpdateView
 
 from medusa_website.mcq_bank.models import Answer
 
-from ..serializers import AnswerSerializer
 
-
-class AnswerRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
+class AnswerUpdateView(UpdateView):
     queryset = Answer.objects.all()
-    serializer_class = AnswerSerializer
     lookup_url_kwarg = "id"
 
 
-class AnswersListView(generics.ListAPIView):
-    serializer_class = AnswerSerializer
-
+class AnswersListView(ListView):
     def get_queryset(self):
         queryset = Answer.objects.all()
         question_id = self.request.query_params.get("question_id", None)
@@ -22,6 +18,5 @@ class AnswersListView(generics.ListAPIView):
         return queryset
 
 
-class AnswerCreateView(generics.CreateAPIView):
+class AnswerCreateView(CreateView, LoginRequiredMixin):
     queryset = Answer.objects.all()
-    serializer_class = AnswerSerializer

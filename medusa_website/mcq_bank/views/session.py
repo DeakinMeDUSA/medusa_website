@@ -55,9 +55,7 @@ class QuizSessionEndOrContinueView(BSModalFormView, LoginRequiredMixin):
         progress = current_session.progress if current_session else (0, 0)
         context["questions_answered"] = progress[0]
         context["questions_total"] = progress[1]
-        context["percent_complete"] = (
-            round(100 * progress[0] / progress[1], 2) if progress[1] > 0 else 0
-        )
+        context["percent_complete"] = round(100 * progress[0] / progress[1], 2) if progress[1] > 0 else 0
 
         print(context)
         return context
@@ -78,19 +76,6 @@ class QuizSessionEndOrContinueView(BSModalFormView, LoginRequiredMixin):
 
         else:
             raise RuntimeError(f"Form choice {request.POST['choice']} is invalid!")
-
-    # def get_success_url(self):
-    #     print("stop here")
-    #
-    #     return super(QuizSessionEndOrContinueView, self).get_success_url()
-    #
-    #     # if self.choice == "stop":  # stop and create new session
-    #     #
-    #     #     return reverse_lazy('index')
-    #     # elif self.choice == "continue":  # Continue old session
-    #     #     return reverse_lazy('index')
-    #     # else:
-    #     #     raise RuntimeError(f"Choice {self.choice} is not valid")
 
 
 class QuizSessionCreateView(CreateView, LoginRequiredMixin):
@@ -135,9 +120,7 @@ class QuizSessionCreateView(CreateView, LoginRequiredMixin):
             )
 
             # return HttpResponseRedirect(reverse("mcq_bank:quiz_session_run", kwargs={"id": quiz_session.id}))
-            return HttpResponseRedirect(
-                reverse("mcq_bank:quiz_session_detail", kwargs={"id": quiz_session.id})
-            )
+            return HttpResponseRedirect(reverse("mcq_bank:quiz_session_detail", kwargs={"id": quiz_session.id}))
 
     def get_context_data(self, *args, **kwargs):
         context = super(QuizSessionCreateView, self).get_context_data(**kwargs)

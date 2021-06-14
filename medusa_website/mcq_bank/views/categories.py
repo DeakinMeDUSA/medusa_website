@@ -14,9 +14,7 @@ class CategoriesTable(tables.Table):
 
     # id = tables.Column(linkify=True)
     category = tables.Column(linkify=True)
-    num_questions = tables.Column(
-        verbose_name="No. of questions", accessor="questions__count"
-    )
+    num_questions = tables.Column(verbose_name="No. of questions", accessor="questions__count")
 
 
 class CategoriesTableView(tables.SingleTableView):
@@ -30,13 +28,9 @@ class ViewQuestionsByCategoryView(ListView):
     template_name = "mcq_bank/view_quiz_category.html"
 
     def dispatch(self, request, *args, **kwargs):
-        self.category = get_object_or_404(
-            Category, category=self.kwargs["category_name"]
-        )
+        self.category = get_object_or_404(Category, category=self.kwargs["category_name"])
 
-        return super(ViewQuestionsByCategoryView, self).dispatch(
-            request, *args, **kwargs
-        )
+        return super(ViewQuestionsByCategoryView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(ViewQuestionsByCategoryView, self).get_context_data(**kwargs)

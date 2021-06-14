@@ -47,24 +47,18 @@ class Question(models.Model):
         help_text="The order in which multichoice answer options are displayed to the user",
         verbose_name="Answer Order",
     )
-    quiz = models.ManyToManyField(
-        Quiz, verbose_name="Quiz", blank=True, related_name="questions"
-    )
+    quiz = models.ManyToManyField(Quiz, verbose_name="Quiz", blank=True, related_name="questions")
 
     def __str__(self):
         return self.text
 
     @classmethod
-    def create_with_auth(
-        cls, question_text: str, author: User, image: Union[bytes, str], category: str
-    ):
-        """ Used when user is creating questions from  the front end"""
+    def create_with_auth(cls, question_text: str, author: User, image: Union[bytes, str], category: str):
+        """Used when user is creating questions from  the front end"""
         if len(question_text) == 0:
             raise ValueError("Cannot create Question with no question text")
 
-        new_q = cls.objects.create(
-            question_text=question_text, author=author, image=image, category=category
-        )
+        new_q = cls.objects.create(question_text=question_text, author=author, image=image, category=category)
         return new_q
 
     @property
@@ -105,10 +99,7 @@ class Question(models.Model):
         return self.order_answers(self.answers.all())
 
     def get_answers_list(self):
-        return [
-            (answer.id, answer.text)
-            for answer in self.order_answers(self.answers.all())
-        ]
+        return [(answer.id, answer.text) for answer in self.order_answers(self.answers.all())]
 
     @staticmethod
     def answer_choice_to_string(guess):

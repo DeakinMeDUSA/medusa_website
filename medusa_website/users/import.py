@@ -7,9 +7,7 @@ from django.conf import settings
 from openpyxl import load_workbook
 
 # %%
-REPORT_PATH = Path(
-    settings.MEDIA_ROOT, "users", "Club Weekly Membership Report Schedule.xlsx"
-)
+REPORT_PATH = Path(settings.MEDIA_ROOT, "users", "Club Weekly Membership Report Schedule.xlsx")
 
 
 def extract_subscription_type(sub_row: str):
@@ -36,9 +34,7 @@ def read_dusa_report():
 
 
 def create_google_group_export(dusa_report: pd.DataFrame):
-    google_export = pd.DataFrame(
-        columns=["Member Email", "Member Type", "Member Role", "Group Email [Required]"]
-    )
+    google_export = pd.DataFrame(columns=["Member Email", "Member Type", "Member Role", "Group Email [Required]"])
     google_export["Member Email"] = dusa_report["Email"]
     google_export["Member Type"] = "USER"
     google_export["Member Role"] = "MEMBER"
@@ -53,6 +49,4 @@ if __name__ == "__main__":
     DUSA_REPORT = read_dusa_report()
     DUSA_REPORT.to_csv(REPORT_PATH.with_suffix(".csv"), index=False)
     google_group_export = create_google_group_export(DUSA_REPORT)
-    google_group_export.to_csv(
-        REPORT_PATH.with_name("medusa_members_google_group.csv"), index=False
-    )
+    google_group_export.to_csv(REPORT_PATH.with_name("medusa_members_google_group.csv"), index=False)

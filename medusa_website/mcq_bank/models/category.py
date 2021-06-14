@@ -5,9 +5,7 @@ from django.urls import reverse
 
 
 class Category(models.Model):
-    name = models.CharField(
-        verbose_name="Category", max_length=250, blank=True, unique=True, null=True
-    )
+    name = models.CharField(verbose_name="Category", max_length=250, blank=True, unique=True, null=True)
 
     class Meta:
         verbose_name = "Category"
@@ -17,9 +15,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse(
-            "mcq_bank:category_detail", kwargs={"category_name": self.category}
-        )
+        return reverse("mcq_bank:category_detail", kwargs={"category_name": self.category})
 
     @classmethod
     def new_category(cls, name):

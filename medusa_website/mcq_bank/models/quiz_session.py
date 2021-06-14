@@ -40,9 +40,7 @@ class QuizSession(models.Model):
         blank=False,
         related_name="quiz_sessions",
     )
-    questions = models.ManyToManyField(
-        Question, blank=True, related_name="quiz_sessions"
-    )
+    questions = models.ManyToManyField(Question, blank=True, related_name="quiz_sessions")
     answers = models.ManyToManyField(Answer, blank=True, related_name="quiz_sessions")
     complete = models.BooleanField(default=False, verbose_name="Complete")
     started = models.DateTimeField(auto_now_add=True, verbose_name="Session Started")
@@ -53,9 +51,7 @@ class QuizSession(models.Model):
 
     @property
     def remaining_questions(self) -> QuerySet[Question]:
-        return Question.objects.filter(quiz_sessions=self).exclude(
-            answers__in=self.answers.all()
-        )
+        return Question.objects.filter(quiz_sessions=self).exclude(answers__in=self.answers.all())
 
     @property
     def correct_answers(self) -> QuerySet[Answer]:
@@ -96,13 +92,9 @@ class QuizSession(models.Model):
     def add_user_answer(self, answer: Answer):
         # Ensure answers can't be added multiple times
         if answer.question.id not in self.questions.values_list("id", flat=True):
-            raise RuntimeError(
-                "Answer given for a question that isn't in the QuizSession"
-            )
+            raise RuntimeError("Answer given for a question that isn't in the QuizSession")
         if answer.question.id in self.answers.values_list("question__id", flat=True):
-            raise RuntimeError(
-                "Answer given is for a question that has already been answered!"
-            )
+            raise RuntimeError("Answer given is for a question that has already been answered!")
         self.answers.add(answer)
         self.save()
         ans_rec = Record(user=self.user, answer=answer, question=answer.question)

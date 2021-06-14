@@ -5,15 +5,9 @@ from pathlib import Path
 
 import pandas as pd
 
-CARD_TEMPLATE = Path(
-    r"I:\GitHub\medusa_website\medusa_website\org_chart\card_template.html"
-).read_text()
-ORG_CHART_TEMPATE = Path(
-    r"I:\GitHub\medusa_website\medusa_website\org_chart\org_chart_template.html"
-).read_text()
-OUTPUT_CHART = Path(
-    r"I:\GitHub\medusa_website\medusa_website\org_chart\org_chart_output.html"
-)
+CARD_TEMPLATE = Path(r"I:\GitHub\medusa_website\medusa_website\org_chart\card_template.html").read_text()
+ORG_CHART_TEMPATE = Path(r"I:\GitHub\medusa_website\medusa_website\org_chart\org_chart_template.html").read_text()
+OUTPUT_CHART = Path(r"I:\GitHub\medusa_website\medusa_website\org_chart\org_chart_output.html")
 EXCEL_FILE = Path(r"C:\Users\chris\Dropbox\Uni\MEDUSA IT\Org Chart 2021\OrgChart.xlsx")
 org_df: pd.DataFrame = pd.read_excel(EXCEL_FILE, sheet_name="For CSV Export")
 
@@ -38,9 +32,7 @@ def gen_card_div(emp: Employee):
     output_card = copy(CARD_TEMPLATE)
     replace_attrs = ["name", "position", "email"]
     for attr in replace_attrs:
-        output_card = re.sub(
-            f"%{attr}%", str(getattr(emp, attr)), output_card, flags=re.IGNORECASE
-        )
+        output_card = re.sub(f"%{attr}%", str(getattr(emp, attr)), output_card, flags=re.IGNORECASE)
     return output_card
 
 
@@ -57,9 +49,7 @@ all_cards = {}
 for person in all_people:
     if all_cards.get(subcommittee_mapping[person.sub_committee]) is None:
         all_cards[subcommittee_mapping[person.sub_committee]] = []
-    all_cards[subcommittee_mapping[person.sub_committee]].append(
-        gen_card_div(emp=person)
-    )
+    all_cards[subcommittee_mapping[person.sub_committee]].append(gen_card_div(emp=person))
 
 for subcommittee, sub_cards in all_cards.items():
     ORG_CHART_TEMPATE = re.sub(

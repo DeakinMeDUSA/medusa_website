@@ -17,9 +17,7 @@ class User(AbstractCUser):
 
     #: First and last name do not cover name patterns around the globe
     name = CharField(_("Name of User"), blank=True, max_length=255)
-    graduation_year = IntegerField(
-        verbose_name="Year of Graduation", null=True, blank=True
-    )
+    graduation_year = IntegerField(verbose_name="Year of Graduation", null=True, blank=True)
 
     REQUIRED_FIELDS = ["name", "graduation_year"]
 
@@ -59,7 +57,7 @@ class MemberRecord(models.Model):
 
 
 class MemberRecordsImport(models.Model):
-    """ Represents a membership record from the DUSA exports"""
+    """Represents a membership record from the DUSA exports"""
 
     members = ManyToManyField(MemberRecord)
     import_dt = models.DateTimeField(_("import time"), default=timezone.now)

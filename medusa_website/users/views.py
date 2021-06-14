@@ -28,9 +28,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         return User.objects.get(email=self.request.user.email)
 
     def form_valid(self, form):
-        messages.add_message(
-            self.request, messages.INFO, _("User details successfully updated")
-        )
+        messages.add_message(self.request, messages.INFO, _("User details successfully updated"))
         return super().form_valid(form)
 
 

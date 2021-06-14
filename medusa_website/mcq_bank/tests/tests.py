@@ -41,18 +41,10 @@ class TestQuiz(TestCase):
     def setUp(self):
         self.c1 = Category.objects.new_category(category="elderberries")
 
-        self.quiz1 = Quiz.objects.create(
-            id=1, title="test quiz 1", description="d1", url="tq1"
-        )
-        self.quiz2 = Quiz.objects.create(
-            id=2, title="test quiz 2", description="d2", url="t q2"
-        )
-        self.quiz3 = Quiz.objects.create(
-            id=3, title="test quiz 3", description="d3", url="t   q3"
-        )
-        self.quiz4 = Quiz.objects.create(
-            id=4, title="test quiz 4", description="d4", url="T-!£$%^&*Q4"
-        )
+        self.quiz1 = Quiz.objects.create(id=1, title="test quiz 1", description="d1", url="tq1")
+        self.quiz2 = Quiz.objects.create(id=2, title="test quiz 2", description="d2", url="t q2")
+        self.quiz3 = Quiz.objects.create(id=3, title="test quiz 3", description="d3", url="t   q3")
+        self.quiz4 = Quiz.objects.create(id=4, title="test quiz 4", description="d4", url="T-!£$%^&*Q4")
 
         self.question1 = MCQuestion.objects.create(id=1, content="squawk")
         self.question1.quiz.add(self.quiz1)
@@ -109,15 +101,11 @@ class TestProgress(TestCase):
     def setUp(self):
         self.c1 = Category.objects.new_category(category="elderberries")
 
-        self.quiz1 = Quiz.objects.create(
-            id=1, title="test quiz 1", description="d1", url="tq1"
-        )
+        self.quiz1 = Quiz.objects.create(id=1, title="test quiz 1", description="d1", url="tq1")
 
         self.question1 = MCQuestion.objects.create(content="squawk", category=self.c1)
 
-        self.user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
-        )
+        self.user = User.objects.create_user(username="jacob", email="jacob@jacob.com", password="top_secret")
 
         self.p1 = Progress.objects.new_progress(self.user)
 
@@ -185,27 +173,19 @@ class TestSitting(TestCase):
         self.question1 = MCQuestion.objects.create(id=1, content="squawk")
         self.question1.quiz.add(self.quiz1)
 
-        self.answer1 = Answer.objects.create(
-            id=123, question=self.question1, content="bing", correct=False
-        )
+        self.answer1 = Answer.objects.create(id=123, question=self.question1, content="bing", correct=False)
 
         self.question2 = MCQuestion.objects.create(id=2, content="squeek")
         self.question2.quiz.add(self.quiz1)
 
-        self.answer2 = Answer.objects.create(
-            id=456, question=self.question2, content="bong", correct=True
-        )
+        self.answer2 = Answer.objects.create(id=456, question=self.question2, content="bong", correct=True)
 
-        self.user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
-        )
+        self.user = User.objects.create_user(username="jacob", email="jacob@jacob.com", password="top_secret")
 
         self.sitting = Sitting.objects.new_sitting(self.user, self.quiz1)
 
     def test_max_questions_subsetting(self):
-        quiz2 = Quiz.objects.create(
-            id=2, title="test quiz 2", description="d2", url="tq2", max_questions=1
-        )
+        quiz2 = Quiz.objects.create(id=2, title="test quiz 2", description="d2", url="tq2", max_questions=1)
         self.question1.quiz.add(quiz2)
         self.question2.quiz.add(quiz2)
         sub_sitting = Sitting.objects.new_sitting(self.user, quiz2)
@@ -316,9 +296,7 @@ class TestNonQuestionViews(TestCase):
             category=self.c1,
             single_attempt=True,
         )
-        self.quiz2 = Quiz.objects.create(
-            id=2, title="test quiz 2", description="d2", url="t q2"
-        )
+        self.quiz2 = Quiz.objects.create(id=2, title="test quiz 2", description="d2", url="t q2")
 
     def test_index(self):
         # unit
@@ -331,9 +309,7 @@ class TestNonQuestionViews(TestCase):
         self.assertTemplateUsed("quiz_list.html")
 
     def test_index_with_drafts(self):
-        self.quiz3 = Quiz.objects.create(
-            id=3, title="test quiz 3", description="draft", url="draft", draft=True
-        )
+        self.quiz3 = Quiz.objects.create(id=3, title="test quiz 3", description="draft", url="draft", draft=True)
 
         view = QuizListView()
         self.assertEqual(view.get_queryset().count(), 2)
@@ -366,9 +342,7 @@ class TestNonQuestionViews(TestCase):
         self.assertTemplateNotUsed(response, "progress.html")
 
     def test_progress_user(self):
-        user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
-        )
+        user = User.objects.create_user(username="jacob", email="jacob@jacob.com", password="top_secret")
         question1 = MCQuestion.objects.create(content="squawk", category=self.c1)
 
         self.client.login(username="jacob", password="top_secret")
@@ -420,15 +394,9 @@ class TestQuestionMarking(TestCase):
 
     def setUp(self):
         self.c1 = Category.objects.new_category(category="elderberries")
-        self.student = User.objects.create_user(
-            username="luke", email="luke@rebels.com", password="top_secret"
-        )
-        self.teacher = User.objects.create_user(
-            username="yoda", email="yoda@jedis.com", password="use_d@_force"
-        )
-        self.teacher.user_permissions.add(
-            Permission.objects.get(codename="view_sittings")
-        )
+        self.student = User.objects.create_user(username="luke", email="luke@rebels.com", password="top_secret")
+        self.teacher = User.objects.create_user(username="yoda", email="yoda@jedis.com", password="use_d@_force")
+        self.teacher.user_permissions.add(Permission.objects.get(codename="view_sittings"))
 
         self.quiz1 = Quiz.objects.create(
             id=1,
@@ -453,9 +421,7 @@ class TestQuestionMarking(TestCase):
         self.question2 = MCQuestion.objects.create(id=2, content="shriek")
         self.question2.quiz.add(self.quiz2)
 
-        self.answer1 = Answer.objects.create(
-            id=123, question=self.question1, content="bing", correct=False
-        )
+        self.answer1 = Answer.objects.create(id=123, question=self.question1, content="bing", correct=False)
 
         sitting1 = Sitting.objects.new_sitting(self.student, self.quiz1)
         sitting2 = Sitting.objects.new_sitting(self.student, self.quiz2)
@@ -494,9 +460,7 @@ class TestQuestionMarking(TestCase):
         self.assertContains(response, "luke")
 
     def test_paper_marking_list_view_filter_user(self):
-        new_student = User.objects.create_user(
-            username="chewy", email="chewy@rebels.com", password="maaaawwwww"
-        )
+        new_student = User.objects.create_user(username="chewy", email="chewy@rebels.com", password="maaaawwwww")
         chewy_sitting = Sitting.objects.new_sitting(new_student, self.quiz1)
         chewy_sitting.complete = True
         chewy_sitting.save()
@@ -556,9 +520,7 @@ class TestQuestionViewsAnon(TestCase):
     def setUp(self):
         self.c1 = Category.objects.new_category(category="elderberries")
 
-        self.quiz1 = Quiz.objects.create(
-            id=1, title="test quiz 1", description="d1", url="tq1", category=self.c1
-        )
+        self.quiz1 = Quiz.objects.create(id=1, title="test quiz 1", description="d1", url="tq1", category=self.c1)
 
         self.question1 = MCQuestion.objects.create(id=1, content="squawk")
         self.question1.quiz.add(self.quiz1)
@@ -566,13 +528,9 @@ class TestQuestionViewsAnon(TestCase):
         self.question2 = MCQuestion.objects.create(id=2, content="squeek")
         self.question2.quiz.add(self.quiz1)
 
-        self.answer1 = Answer.objects.create(
-            id=123, question=self.question1, content="bing", correct=False
-        )
+        self.answer1 = Answer.objects.create(id=123, question=self.question1, content="bing", correct=False)
 
-        self.answer2 = Answer.objects.create(
-            id=456, question=self.question2, content="bong", correct=True
-        )
+        self.answer2 = Answer.objects.create(id=456, question=self.question2, content="bong", correct=True)
 
     def test_quiz_take_anon_view_only(self):
         found = resolve("/tq1/take/")
@@ -656,9 +614,7 @@ class TestQuestionViewsAnon(TestCase):
         self.assertEqual(response.context["possible"], 2)
         self.assertEqual(response.context["previous"]["previous_answer"], "456")
         self.assertEqual(response.context["previous"]["previous_outcome"], True)
-        self.assertEqual(
-            response.context["previous"]["previous_question"], second_question
-        )
+        self.assertEqual(response.context["previous"]["previous_question"], second_question)
         self.assertTemplateUsed("result.html")
 
         # quiz restarts
@@ -717,13 +673,9 @@ class TestQuestionViewsUser(TestCase):
             exam_paper=True,
         )
 
-        self.user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
-        )
+        self.user = User.objects.create_user(username="jacob", email="jacob@jacob.com", password="top_secret")
 
-        self.quiz_writer = User.objects.create_user(
-            username="writer", email="writer@x.com", password="secret_top"
-        )
+        self.quiz_writer = User.objects.create_user(username="writer", email="writer@x.com", password="secret_top")
 
         self.question1 = MCQuestion.objects.create(id=1, content="squawk")
         self.question1.quiz.add(self.quiz1)
@@ -735,13 +687,9 @@ class TestQuestionViewsUser(TestCase):
         self.question3 = TF_Question.objects.create(id=3, content="oink", correct=True)
         self.question3.quiz.add(self.quiz2)
 
-        self.answer1 = Answer.objects.create(
-            id=123, question=self.question1, content="bing", correct=False
-        )
+        self.answer1 = Answer.objects.create(id=123, question=self.question1, content="bing", correct=False)
 
-        self.answer2 = Answer.objects.create(
-            id=456, question=self.question2, content="bong", correct=True
-        )
+        self.answer2 = Answer.objects.create(id=456, question=self.question2, content="bong", correct=True)
 
     def test_quiz_take_user_view_only(self):
         sittings_before = Sitting.objects.count()
@@ -784,9 +732,7 @@ class TestQuestionViewsUser(TestCase):
 
         next_question = Sitting.objects.get(quiz=self.quiz1).get_first_question()
 
-        response = self.client.post(
-            "/tq1/take/", {"answers": "123", "question_id": next_question.id}
-        )
+        response = self.client.post("/tq1/take/", {"answers": "123", "question_id": next_question.id})
 
         sitting = Sitting.objects.get(quiz=self.quiz1)
         progress_count = Progress.objects.count()
@@ -848,9 +794,7 @@ class TestQuestionViewsUser(TestCase):
         self.assertTemplateUsed("single_complete.html")
 
     def test_normal_user_cannot_view_draft_quiz(self):
-        Quiz.objects.create(
-            id=10, title="draft quiz", description="draft", url="draft", draft=True
-        )
+        Quiz.objects.create(id=10, title="draft quiz", description="draft", url="draft", draft=True)
 
         self.client.login(username="writer", password="secret_top")
 
@@ -859,9 +803,7 @@ class TestQuestionViewsUser(TestCase):
         self.assertEqual(response_without_perm.status_code, 403)
 
         # load with permission
-        self.quiz_writer.user_permissions.add(
-            Permission.objects.get(codename="change_quiz")
-        )
+        self.quiz_writer.user_permissions.add(Permission.objects.get(codename="change_quiz"))
         response_with_perm = self.client.get("/draft/")
         self.assertEqual(response_with_perm.status_code, 200)
 
@@ -882,9 +824,7 @@ class TestQuestionViewsUser(TestCase):
         response = self.client.post("/tq3/take/")
         self.assertContains(response, "<textarea")
 
-        response = self.client.post(
-            "/tq3/take/", {"answers": "The meaning of life is...", "question_id": 4}
-        )
+        response = self.client.post("/tq3/take/", {"answers": "The meaning of life is...", "question_id": 4})
         self.assertContains(response, "result")
 
     def test_user_progress(self):
@@ -901,33 +841,23 @@ class TestTemplateTags(TestCase):
     def setUp(self):
         self.question1 = MCQuestion.objects.create(id=1, content="squawk")
 
-        self.answer1 = Answer.objects.create(
-            id=123, question=self.question1, content="bing", correct=False
-        )
+        self.answer1 = Answer.objects.create(id=123, question=self.question1, content="bing", correct=False)
 
-        self.answer2 = Answer.objects.create(
-            id=456, question=self.question1, content="bong", correct=True
-        )
+        self.answer2 = Answer.objects.create(id=456, question=self.question1, content="bong", correct=True)
 
         self.question2 = TF_Question.objects.create(id=3, content="oink", correct=True)
-        self.quiz1 = Quiz.objects.create(
-            id=1, title="test quiz 1", description="d1", url="tq1"
-        )
+        self.quiz1 = Quiz.objects.create(id=1, title="test quiz 1", description="d1", url="tq1")
 
         self.question1.quiz.add(self.quiz1)
         self.question2.quiz.add(self.quiz1)
 
-        self.user = User.objects.create_user(
-            username="jacob", email="jacob@jacob.com", password="top_secret"
-        )
+        self.user = User.objects.create_user(username="jacob", email="jacob@jacob.com", password="top_secret")
 
         self.sitting = Sitting.objects.new_sitting(self.user, self.quiz1)
         self.sitting.current_score = 1
 
     def test_correct_answer_all_anon(self):
-        template = Template(
-            "{% load quiz_tags %}" + "{% correct_answer_for_all question %}"
-        )
+        template = Template("{% load quiz_tags %}" + "{% correct_answer_for_all question %}")
 
         context = Context({"question": self.question1})
 
@@ -936,9 +866,7 @@ class TestTemplateTags(TestCase):
         self.assertNotIn("incorrectly", template.render(context))
 
     def test_correct_answer_all_user(self):
-        template = Template(
-            "{% load quiz_tags %}" + "{% correct_answer_for_all question %}"
-        )
+        template = Template("{% load quiz_tags %}" + "{% correct_answer_for_all question %}")
 
         context = Context({"question": self.question1, "incorrect_questions": [1]})
 
@@ -947,9 +875,7 @@ class TestTemplateTags(TestCase):
         self.assertIn("incorrectly", template.render(context))
 
     def test_answer_to_string(self):
-        template = Template(
-            "{% load quiz_tags %}" + "{{ question|answer_choice_to_string:answer }}"
-        )
+        template = Template("{% load quiz_tags %}" + "{{ question|answer_choice_to_string:answer }}")
 
         context = Context(
             {
