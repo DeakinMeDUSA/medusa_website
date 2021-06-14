@@ -3,7 +3,6 @@ from typing import Optional, Union
 from django.db import models
 
 from medusa_website.mcq_bank.models.category import Category
-from medusa_website.mcq_bank.models.quiz import Quiz
 from medusa_website.users.models import User
 
 ANSWER_ORDER_OPTIONS = (("text", "Text"), ("random", "Random"), ("none", "None"))
@@ -47,7 +46,6 @@ class Question(models.Model):
         help_text="The order in which multichoice answer options are displayed to the user",
         verbose_name="Answer Order",
     )
-    quiz = models.ManyToManyField(Quiz, verbose_name="Quiz", blank=True, related_name="questions")
 
     def __str__(self):
         return self.text

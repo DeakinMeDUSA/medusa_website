@@ -12,8 +12,9 @@ from ..serializers import QuestionSerializer
 class QuestionUpdateView(UpdateView, LoginRequiredMixin):
     model = Question
     template_name = "mcq_bank/question_detail.html"
-    form_class = QuestionDetailForm
+    # form_class = QuestionDetailForm
     context_object_name = "question"
+    fields = ["author", "text", "category", "image", "explanation", "answer_order"]
     lookup_field = "id"
     # def get_context_data(self, **kwargs):
     #     context = super(QuestionDetail, self).get_context_data(**kwargs)

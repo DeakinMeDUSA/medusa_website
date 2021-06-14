@@ -1,11 +1,9 @@
 # Register your models here.
 
-from django import forms
 from django.contrib import admin
-from django.contrib.admin.widgets import FilteredSelectMultiple
 from imagekit.admin import AdminThumbnail
 
-from .models import Answer, Category, History, Question, Quiz
+from .models import Answer, Category, History, Question
 
 
 class AnswerInline(admin.TabularInline):
@@ -30,60 +28,44 @@ class QuestionAdmin(admin.ModelAdmin):
         "author",
         "image",
         "admin_thumbnail",
-        "quiz",
         "explanation",
         "answer_order",
     ]
     list_filter = ("category",)
     search_fields = ("text", "explanation")
-    filter_horizontal = ("quiz",)
+    # filter_horizontal = ("quiz",) # Must be many-to-many
 
     inlines = [AnswerInline]
 
 
-class QuizAdminForm(forms.ModelForm):
-    """
-    below is from
-    http://stackoverflow.com/questions/11657682/django-admin-interface-using-horizontal-filter-with-inline-manytomany-field
-    """
-
-    class Meta:
-        model = Quiz
-        exclude = []
-
-    questions = forms.ModelMultipleChoiceField(
-        queryset=Question.objects.all(),
-        required=False,
-        label="Questions",
-        widget=FilteredSelectMultiple(verbose_name="Questions", is_stacked=False),
-    )
-
-    def __init__(self, *args, **kwargs):
-        super(QuizAdminForm, self).__init__(*args, **kwargs)
-        if self.instance.pk:
-            self.fields["questions"].initial = self.instance.questions.all()
-
-    def save(self, commit=True):
-        quiz = super(QuizAdminForm, self).save(commit=False)
-        quiz.save()
-        quiz.questions.set(self.cleaned_data["questions"])
-        self.save_m2m()
-        return quiz
-
-
-@admin.register(Quiz)
-class QuizAdmin(admin.ModelAdmin):
-    form = QuizAdminForm
-
-    list_display = (
-        "title",
-        "category",
-    )
-    list_filter = ("category",)
-    search_fields = (
-        "description",
-        "category",
-    )
+# class QuizAdminForm(forms.ModelForm):
+#     """
+#     below is from
+#     http://stackoverflow.com/questions/11657682/django-admin-interface-using-horizontal-filter-with-inline-manytomany-field
+#     """
+#
+#     class Meta:
+#         model = Quiz
+#         exclude = []
+#
+#     questions = forms.ModelMultipleChoiceField(
+#         queryset=Question.objects.all(),
+#         required=False,
+#         label="Questions",
+#         widget=FilteredSelectMultiple(verbose_name="Questions", is_stacked=False),
+#     )
+#
+#     def __init__(self, *args, **kwargs):
+#         super(QuizAdminForm, self).__init__(*args, **kwargs)
+#         if self.instance.pk:
+#             self.fields["questions"].initial = self.instance.questions.all()
+#
+#     def save(self, commit=True):
+#         quiz = super(QuizAdminForm, self).save(commit=False)
+#         quiz.save()
+#         quiz.questions.set(self.cleaned_data["questions"])
+#         self.save_m2m()
+#         return quiz
 
 
 @admin.register(Category)
