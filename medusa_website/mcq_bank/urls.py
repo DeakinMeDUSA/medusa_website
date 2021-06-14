@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from .views import (
     AnswerCreateView,
@@ -6,12 +6,11 @@ from .views import (
     AnswersListView,
     CategoriesTableView,
     HistoryView,
+    IndexRedirectView,
     QuestionDetailView,
     QuestionListCreateView,
     QuestionRetrieveUpdateDestroyView,
-    QuizDetailView,
     QuizIndexView,
-    QuizListView,
     QuizSessionCreateView,
     QuizSessionDetailView,
     QuizSessionEndOrContinueView,
@@ -24,6 +23,7 @@ from .views import (
 
 app_name = "mcq_bank"
 
+
 urlpatterns = [
     # API Endpoints, to be depreciated
     path("api/questions/", QuestionListCreateView.as_view()),
@@ -34,8 +34,6 @@ urlpatterns = [
     path("api/record/list", RecordHistoryView.as_view()),
     path("api/record/create", RecordCreateView.as_view()),
     # Others
-    path("index/", view=QuizIndexView.as_view(), name="quiz_index"),
-    path("quiz_list/", view=QuizListView.as_view(), name="quiz_list"),
     path(
         "category/", view=CategoriesTableView.as_view(), name="quiz_category_list_all"
     ),
@@ -59,10 +57,6 @@ urlpatterns = [
         view=QuizSessionRunView.as_view(),
         name="quiz_session_run",
     ),
-    #  passes variable 'quiz_name' to quiz_take view
-    path(
-        "quiz/<slug:quiz_name>/", view=QuizDetailView.as_view(), name="quiz_start_page"
-    ),
     path("session/", view=QuizTakeView.as_view(), name="run_session"),
     path(
         "history/<int:id>",
@@ -72,4 +66,9 @@ urlpatterns = [
     path(
         "question/<int:id>", view=QuestionDetailView.as_view(), name="question_detail"
     ),
+    # redirect all others to index
+    re_path("^$", view=QuizIndexView.as_view(), name="quiz_index"),
+    re_path(
+        "^.*$", view=IndexRedirectView.as_view(), name="index_redirect"
+    ),  # redirect all others to index
 ]

@@ -6,7 +6,7 @@ from .question import (
     QuestionListCreateView,
     QuestionRetrieveUpdateDestroyView,
 )
-from .quiz_base import QuizDetailView, QuizIndexView, QuizListView
+from .quiz_base import IndexRedirectView, QuizIndexView
 from .quiz_take import QuizTakeView
 from .record import RecordCreateView, RecordHistoryView
 from .session import (

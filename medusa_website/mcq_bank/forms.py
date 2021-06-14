@@ -17,6 +17,12 @@ class QuestionForm(forms.Form):
         )
 
 
+class QuestionDetailForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+
+
 class QuizSessionContinueOrStopForm(BSModalModelForm):
     class Meta:
         model = QuizSession

@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from rest_framework import generics
 from vanilla import DetailView
 
@@ -6,6 +7,7 @@ from medusa_website.mcq_bank.models import Question
 from ..serializers import QuestionSerializer
 
 
+@login_required
 class QuestionDetailView(DetailView):
     model = Question
     template_name = "mcq_bank/question_detail.html"
