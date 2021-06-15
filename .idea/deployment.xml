@@ -9,42 +9,14 @@
           </mappings>
         </serverdata>
       </paths>
-      <paths name="chris.culhane@affinda.com@affinda-gpu2:22 agent">
+      <paths name="chris.culhane@affinda.com@affinda-cpu-01.corp.draftable.com:22 password">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
-      <paths name="chris.culhane@lyaleeta.corp.tonercapital.com:22 agent">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="medusa_website">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="object-detection django on GPU2">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="pypdifum remot">
-        <serverdata>
-          <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="resume django on CPU-01">
+      <paths name="chris.culhane@affinda.com@affinda-cpu-01.corp.draftable.com:22 password (1)">
         <serverdata>
           <mappings>
             <mapping local="$PROJECT_DIR$" web="/" />

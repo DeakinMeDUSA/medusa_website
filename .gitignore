@@ -181,16 +181,9 @@ typings/
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 
-# Custom sensitive
-.idea/deployment.xml
-.idea/sshConfigs.xml
-.idea/webServers.xml
-
-
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
-
 
 # CMake
 cmake-build-debug/
