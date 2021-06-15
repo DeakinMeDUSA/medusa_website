@@ -1,11 +1,14 @@
-from bootstrap_modal_forms.forms import BSModalForm, BSModalModelForm
+from bootstrap_modal_forms.forms import BSModalModelForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Button, ButtonHolder, Div, Layout, Submit
+from crispy_forms.layout import ButtonHolder, Div, Layout, Submit
 from django import forms
 from django.forms.models import ModelForm
 from django.forms.widgets import CheckboxSelectMultiple, RadioSelect
+from django.utils.safestring import mark_safe
+from pagedown.widgets import AdminPagedownWidget
 
-from medusa_website.mcq_bank.models import Category, QuizSession
+from medusa_website.mcq_bank.models import Category, Question, QuizSession
+from medusa_website.users.models import User
 
 
 class QuestionForm(forms.Form):
@@ -15,16 +18,50 @@ class QuestionForm(forms.Form):
         self.fields["answers"] = forms.ChoiceField(choices=choice_list, widget=RadioSelect)
 
 
-class QuestionDetailForm(forms.Form):
+class AuthorNameWidget(forms.Widget):
+    def render(self, name, value, attrs=None, renderer=None):
+        author = User.objects.get(id=value)
+        return mark_safe(author.name) if value is not None else "-"
+
+
+class QuestionDetailForm(ModelForm):
+    class Meta:
+        model = Question
+        fields = ["author", "text", "category", "image", "explanation", "answer_order"]
+
+    author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+
+
+class QuestionUpdateForm(ModelForm):
+    class Meta:
+        model = Question
+        fields = ["author", "text", "category", "image", "explanation", "answer_order"]
+
+    text = forms.CharField(widget=AdminPagedownWidget())
+    explanation = forms.CharField(widget=AdminPagedownWidget())
+
+    def __init__(self, *args, **kwargs):
+        self.editable: bool = kwargs.pop("editable")
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit("update", "Update"))
+        if self.editable is False:
+            self.author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
 
 
 class QuestionCreateForm(forms.Form):
+    class Meta:
+        model = Question
+        fields = ["text", "category", "image", "explanation", "answer_order"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.add_input(Submit("submit", "Submit"))
 
 
 class QuizSessionContinueOrStopForm(BSModalModelForm):

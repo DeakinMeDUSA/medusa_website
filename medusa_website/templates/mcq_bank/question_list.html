@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% load render_table from django_tables2 %}
+
+{% load i18n %}
+
+{% load render_bundle from webpack_loader %}
+
+{% load quiz_tags %}
+
+{% block title %}All Questions{% endblock %}
+{% block description %}All Questions{% endblock %}
+
+{% block content %}
+  <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
+  <h2>Question list</h2>
+  {% render_table question_list_table %}
+
+{% endblock %}
+{% block javascript %}
+  {{ block.super }}
+  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.js" %}></script>
+  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.widgets.js" %}></script>
+
+  <script type="application/javascript">
+    $(function () {
+      $('#question-list-table').tablesorter()
+    })
+
+
+  </script>
+{% endblock javascript %}

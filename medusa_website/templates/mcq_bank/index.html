@@ -4,9 +4,9 @@
 {% block content %}
   <ul>
     <li><a href="{% url "mcq_bank:quiz_session_create" %}">Continue previous session / Create new session</a></li>
-    <li><a href="{% url "mcq_bank:quiz_list" %}">List of created Quizzes</a></li>
-    <li><a href="{% url "mcq_bank:quiz_category_list_all" %}">Categories</a></li>
+    <li><a href="{% url "mcq_bank:category_list" %}">Categories</a></li>
     <li><a href="{% url "mcq_bank:history" %}">Quiz History and Progress</a></li>
+    <li><a href="{% url "mcq_bank:question_list" %}">View all Questions</a></li>
   </ul>
 
   <div class="modal fade" tabindex="-1" role="dialog" id="modal">

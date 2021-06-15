@@ -1,9 +1,11 @@
 import django_tables2 as tables
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from django.utils.decorators import method_decorator
+from django.utils.html import format_html
 from django.views.generic import TemplateView
 
-from medusa_website.mcq_bank.models import History, QuizSession
+from medusa_website.mcq_bank.models import History
 
 
 class CategoryProgressTable(tables.Table):
@@ -12,11 +14,19 @@ class CategoryProgressTable(tables.Table):
             "class": "table tablesorter-metro-dark",  # Sorting is handled by js to avoid refresh
             "id": "category-progress-table",
         }
+        exclude = ("id",)
 
-    category_name = tables.Column(linkify=False, verbose_name="Category", orderable=False)
+    name = tables.Column(verbose_name="Category", orderable=False)
     cat_qs_num = tables.Column(verbose_name="Nº questions total", empty_values=(), orderable=False)
     attempted_num = tables.Column(verbose_name="Nº questions attempted", empty_values=(), orderable=False)
     cat_average_score = tables.Column(verbose_name="Attempts correct avg (%)", empty_values=(), orderable=False)
+
+    def render_name(self, value, record):
+        if value != "OVERALL":
+            cat_url = reverse("mcq_bank:category_detail", kwargs={"id": record["id"]})
+            return format_html(f'<a href="{cat_url}">{value}</a>')
+        else:
+            return format_html(f"<b>{value}</b>")
 
     def render_attempted_num(self, value, record):
         return f"{value} ({record['attempted_percent'] or 0} %)"

@@ -5,13 +5,19 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-  Create new question
+  Update/View question
 {% endblock %}
 
 {% block content %}
   <link href="{% static 'css/forms.css' %}" rel="stylesheet">
 
-  <p class="lead">Create new question</p>
+  {% if editable %}
+    <h3 class="lead">Update question</h3>
+  {% else %}
+    <h3 class="lead">View question</h3>
+    <p><i>Note that because you are not the author of this question, no details can be modified.</i></p>
+
+  {% endif %}
 
   {% crispy form %}
 

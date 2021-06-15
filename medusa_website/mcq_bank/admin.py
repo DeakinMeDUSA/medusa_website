@@ -24,7 +24,6 @@ class QuestionAdmin(admin.ModelAdmin):
     fields = [
         "text",
         "category",
-        "sub_category",
         "author",
         "image",
         "admin_thumbnail",
@@ -36,6 +35,9 @@ class QuestionAdmin(admin.ModelAdmin):
     # filter_horizontal = ("quiz",) # Must be many-to-many
 
     inlines = [AnswerInline]
+
+    # def __init__(self, *args, **kwargs):
+    #     super(QuestionAdmin, self).__init__(*args, **kwargs)
 
 
 # class QuizAdminForm(forms.ModelForm):

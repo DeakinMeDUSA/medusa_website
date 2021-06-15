@@ -1,6 +1,7 @@
 from typing import Optional, Union
 
 from django.db import models
+from django.urls import reverse
 
 from medusa_website.mcq_bank.models.category import Category
 from medusa_website.users.models import User
@@ -18,6 +19,7 @@ class Question(models.Model):
         max_length=1000,
         blank=False,
         help_text="Enter the question text that you want displayed",
+        verbose_name="Question text",
     )
     author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     image = models.ImageField(null=True, blank=True, verbose_name="Image")
@@ -131,3 +133,10 @@ class Question(models.Model):
         a.correct = True
 
         self.save()
+
+    @property
+    def correct_answers(self):
+        return self.answers.filter(correct=True)
+
+    def get_absolute_url(self):
+        return reverse("mcq_bank:question_update", kwargs={"id": self.id})

@@ -15,7 +15,7 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("mcq_bank:category_detail", kwargs={"category_name": self.category})
+        return reverse("mcq_bank:category_detail", kwargs={"id": self.id})
 
     @classmethod
     def new_category(cls, name):

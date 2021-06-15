@@ -78,6 +78,7 @@ DJANGO_APPS = [
     "django.contrib.admin",
     "django.forms",
     "django_tables2",
+    "pagedown.apps.PagedownConfig",
 ]
 THIRD_PARTY_APPS = [
     "webpack_loader",
@@ -121,7 +122,6 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
-
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -334,3 +334,4 @@ PG_COPY_BACKUP_PATH = Path(ROOT_DIR, "db_backup")
 CRISPY_FAIL_SILENTLY = not DEBUG
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
+PAGEDOWN_IMAGE_UPLOAD_ENABLED = False

@@ -32,12 +32,29 @@ class History(models.Model):
     @property
     def category_progress(self) -> List[Dict[str, Optional[float]]]:
         """
-        Returns a dict in which the key is the category name and the item is a dict of results
+        Returns a dict in which the key is the category name and the item is a dict of results, along with an aggregated "all"
 
         """
-        from medusa_website.mcq_bank.models import Record
+        from medusa_website.mcq_bank.models import Question, Record
 
         cat_progress = []
+
+        all_qs = Question.objects.all()
+        answered_qs = Record.objects.filter(user=self.user)
+        distinct_answers = answered_qs.distinct("question")
+        all_attempted_percent = percent(distinct_answers.count(), all_qs.count())
+        all_correct_q = [r for r in answered_qs if r.is_correct]
+        all_average_score = percent(len(all_correct_q), answered_qs.count())
+        cat_progress.append(
+            {
+                "id": 0,
+                "name": "OVERALL",
+                "cat_qs_num": all_qs.count(),
+                "attempted_num": distinct_answers.count(),
+                "attempted_percent": all_attempted_percent,
+                "cat_average_score": all_average_score,
+            }
+        )
 
         for cat in Category.objects.all():
             all_cat_qs = cat.questions.all()
@@ -48,7 +65,8 @@ class History(models.Model):
             cat_average_score = percent(len(correct_q), answered.count())
             cat_progress.append(
                 {
-                    "category_name": cat.name,
+                    "id": cat.id,
+                    "name": cat.name,
                     "cat_qs_num": all_cat_qs.count(),
                     "attempted_num": distinct_answers.count(),
                     "attempted_percent": cat_attempted_percent,

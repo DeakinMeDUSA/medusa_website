@@ -10,7 +10,7 @@
       <ul>
         {% for question in questions %}
           <li>
-            <a href="{% url 'mcq_bank:question' id=question.id %}">
+            <a href="{% url 'mcq_bank:question_update' id=question.id %}">
               {{ question.id }}
             </a>
           </li>
