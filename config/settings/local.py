@@ -8,7 +8,7 @@ DEBUG = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "medusa.pythonanywhere.com"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "medusa.pythonanywhere.com", "172.105.190.146"]
 SECURE_SSL_REDIRECT = False
 ROOT_URLCONF = "config.urls"
 
