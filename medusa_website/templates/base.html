@@ -61,10 +61,10 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'empty_test' %}">Empty Test</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'mcq_bank:quiz_index' %}">{% trans "MCQ Bank" %}</a>
-        </li>
         {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'mcq_bank:quiz_index' %}">{% trans "MCQ Bank" %}</a>
+          </li>
           <li class="nav-item">
             {# URL provided by django-allauth/account/urls.py #}
             <a class="nav-link" href="{% url 'users:detail' request.user.email %}">{% trans "My Profile" %}</a>
