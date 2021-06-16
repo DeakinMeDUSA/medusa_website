@@ -20,7 +20,7 @@ if READ_DOT_ENV_FILE:
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env.bool("DJANGO_DEBUG", False)
+DEBUG = env.bool("DJANGO_DEBUG", default=False)
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -49,7 +49,8 @@ DATABASES = {
         "NAME": "medusa_website",
         "ENGINE": "django.db.backends.postgresql",
         "DATABASE_URL": "postgres://localhost/medusa_website",
-        "USER": "postgres",
+        "USER": env("DATABASE_USER", default="postgres"),
+        "PASSWORD": env("DATABASE_PASSWORD", default=None),
         'HOST': 'localhost',
 
     }
