@@ -50,6 +50,8 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "DATABASE_URL": "postgres://localhost/medusa_website",
         "USER": "postgres",
+        'HOST': 'localhost',
+
     }
     # "default": {
     #     "NAME": ROOT_DIR / "db.sqlite3",
