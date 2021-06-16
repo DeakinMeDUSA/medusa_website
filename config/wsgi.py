@@ -44,7 +44,7 @@ from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-path = '/home/medusa/medusa_website'
+path = '/home/medusa_it/medusa_website'
 if path not in sys.path:
     sys.path.append(path)
 
