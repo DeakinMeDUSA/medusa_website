@@ -40,9 +40,10 @@ framework.
 import os
 import sys
 import environ
+from pathlib import Path
 
-# assuming your django settings file is at '/home/medusa/mysite/mysite/settings.py'
-# and your manage.py is is at '/home/medusa/mysite/manage.py'
+ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent
+
 path = '/home/medusa/medusa_website'
 if path not in sys.path:
     sys.path.append(path)
@@ -50,7 +51,7 @@ if path not in sys.path:
 os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings.production'
 
 env = environ.Env()
-env.read_env(str(path + "/.env"))
+env.read_env(str(ROOT_DIR / ".env"))
 
 # then:
 from django.core.wsgi import get_wsgi_application
