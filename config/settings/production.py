@@ -126,7 +126,9 @@ LOGGING = {
         },
         'logfile': {
             'class': 'logging.FileHandler',
-            'filename': 'django.log',
+            'filename': 'server.log',
+            "level": "DEBUG",
+            "formatter": "verbose",
         },
     },
     "root": {"level": "INFO", "handlers": ["console"]},
