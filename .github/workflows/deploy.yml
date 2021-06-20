@@ -5,10 +5,10 @@ on:
   pull_request:
     branches: [ $default-branch ]
 jobs:
-  deploy:
+  deploy_ssh:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy via SSH
+      - name: Deploy via SSH script
         uses: garygrossgarten/github-action-ssh@release
         with:
           command: ls -a
