@@ -49,7 +49,7 @@ if path not in sys.path:
     sys.path.append(path)
 
 # TODO Get this working with production config
-os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings.local'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings.production'
 
 env = environ.Env()
 env.read_env(str(ROOT_DIR / ".env"))

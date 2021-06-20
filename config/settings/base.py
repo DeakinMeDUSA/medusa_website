@@ -82,6 +82,7 @@ DJANGO_APPS = [
     "django.forms",
     "django_tables2",
     "pagedown.apps.PagedownConfig",
+    "django_extensions",
 ]
 THIRD_PARTY_APPS = [
     "webpack_loader",
@@ -179,6 +180,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # MEDIA
 # ------------------------------------------------------------------------------
