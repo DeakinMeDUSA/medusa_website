@@ -128,7 +128,17 @@
           crossorigin="anonymous"></script>
   {#  <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>#}
   <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-
+  <script
+          src="https://browser.sentry-cdn.com/6.7.1/bundle.min.js"
+          integrity="sha384-+GoWV2WnDUGsSmipBvyBrWuhW8hPa/D21fH+j3NoZxDf9RgDryqh4Ug4L+7E1nxM"
+          crossorigin="anonymous"
+  ></script>
+  <script>
+    Sentry.init({ dsn: "https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588" });
+    Sentry.showReportDialog({
+      eventId: "{{ event_id }}",
+    });
+  </script>
 
   <!-- Your stuff: Third-party javascript libraries go here -->
 
