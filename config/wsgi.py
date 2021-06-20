@@ -48,7 +48,8 @@ path = '/home/medusa_it/medusa_website'
 if path not in sys.path:
     sys.path.append(path)
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings.production'
+# TODO Get this working with production config
+os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings.local'
 
 env = environ.Env()
 env.read_env(str(ROOT_DIR / ".env"))
