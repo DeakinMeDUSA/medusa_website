@@ -1,0 +1,8 @@
+-r requirements.txt
+
+# Production stuff
+gunicorn>=20.1.0
+hiredis>=2.0.0
+psycopg2>=2.8.6
+redis>=3.5.3  # https://github.com/andymccurdy/redis-py
+whitenoise>=5.2.0  # https://github.com/evansd/whitenoise

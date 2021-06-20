@@ -10,7 +10,7 @@ git pull && git reset --hard origin/main
 echo
 
 printf 'Updating Python dependencies ...'
-pip install -r requirements.txt
+pip install -r requirements_prod.txt
 echo
 
 #printf 'Updating Node.js dependencies ...'
