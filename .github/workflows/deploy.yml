@@ -1,9 +1,6 @@
 name: Deploy
 on:
-  push:
-    branches: [ $default-branch ]
-  pull_request:
-    branches: [ $default-branch ]
+  [ push,  pull_request ]
 jobs:
   deploy_ssh:
     runs-on: ubuntu-latest
@@ -14,7 +11,7 @@ jobs:
           command: ls -a
           host: ${{ secrets.SSH_HOST }}
           username: medusa_it
-#          password: ${{ secrets.PASSPHRASE }}
+          #          password: ${{ secrets.PASSPHRASE }}
           privateKey: ${{ secrets.SSH_PRIVATE_KEY}}
         env:
           CI: true
