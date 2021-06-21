@@ -56,7 +56,7 @@ class MemberRecord(models.Model):
 class MemberRecordsImport(models.Model):
     """Represents a membership record from the DUSA exports"""
 
-    members = ManyToManyField(MemberRecord, blank=True, null=True, related_name="member_record_imports")
+    members = ManyToManyField(MemberRecord, blank=True, related_name="member_record_imports")
     import_dt = models.DateTimeField(_("import time"), auto_now_add=True)
     file = models.FileField(upload_to="dusa_reports/%Y", null=True, blank=True)
 
