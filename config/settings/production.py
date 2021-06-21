@@ -1,12 +1,11 @@
 import logging
 
-from .base import *  # noqa
-from .base import env
-
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
 
+from .base import *  # noqa
+from .base import env
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -14,7 +13,6 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "medusa.pythonanywhere.com", "172.105.190.146"]
-
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -44,6 +42,19 @@ CACHES = {
 #         "LOCATION": "",
 #     }
 # }
+
+# https://docs.djangoproject.com/en/3.2/topics/cache/#the-per-site-cache
+MIDDLEWARE = MIDDLEWARE + [
+    'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+]
+
+# https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-CACHE_MIDDLEWARE_ALIAS
+CACHE_MIDDLEWARE_ALIAS = "default"
+CACHE_MIDDLEWARE_KEY_PREFIX = ""
+CACHE_MIDDLEWARE_SECONDS = 60 # in seconds
+
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
@@ -67,6 +78,9 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool("DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS
 SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
 # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)
+
+# https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-CSRF_COOKIE_AGE
+CSRF_COOKIE_AGE = None
 
 # STATIC
 # ------------------------
