@@ -53,7 +53,7 @@ MIDDLEWARE = MIDDLEWARE + [
 # https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-CACHE_MIDDLEWARE_ALIAS
 CACHE_MIDDLEWARE_ALIAS = "default"
 CACHE_MIDDLEWARE_KEY_PREFIX = ""
-CACHE_MIDDLEWARE_SECONDS = 60 # in seconds
+CACHE_MIDDLEWARE_SECONDS = 60  # in seconds
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
@@ -187,3 +187,4 @@ sentry_sdk.init(
 # Your stuff...
 # ------------------------------------------------------------------------------
 SECURE_SSL_REDIRECT = False
+DEBUG = True
