@@ -18,3 +18,7 @@ Check the Nginx access logs by typing: `sudo less /var/log/nginx/access.log`
 Check the Nginx error logs by typing: `sudo less /var/log/nginx/error.log`
 Check the Gunicorn application logs by typing: `sudo journalctl -u gunicorn`
 Check the Gunicorn socket logs by typing:` sudo journalctl -u gunicorn.socket`
+
+# When updating domain:
+`sudo rsubl /etc/nginx/sites-available/medusa_website`
+`sudo systemctl reload nginx`
