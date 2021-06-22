@@ -188,5 +188,4 @@ sentry_sdk.init(
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-SECURE_SSL_REDIRECT = False
 DEBUG = True
