@@ -17,13 +17,11 @@ class Answer(models.Model):
 
     text = models.CharField(
         max_length=1000,
-        blank=False,
         help_text="Enter the answer text that you want displayed",
         verbose_name="Text",
     )
 
     correct = models.BooleanField(
-        blank=False,
         default=False,
         help_text="Is this a correct answer?",
         verbose_name="Correct",

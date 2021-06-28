@@ -45,6 +45,7 @@ urlpatterns = [
     ),
     path("question/<int:id>", view=QuestionUpdateView.as_view(), name="question_update"),
     path("question/create", view=QuestionCreateView.as_view(), name="question_create"),
+
     path("question/", view=QuestionListView.as_view(), name="question_list"),
     # redirect all others to index
     re_path("^$", view=QuizIndexView.as_view(), name="quiz_index"),

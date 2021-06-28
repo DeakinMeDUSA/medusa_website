@@ -134,10 +134,10 @@
           crossorigin="anonymous"
   ></script>
   <script>
-    Sentry.init({ dsn: "https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588" });
+    Sentry.init({ dsn: 'https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588' })
     Sentry.showReportDialog({
       eventId: "{{ event_id }}",
-    });
+    })
   </script>
 
   <!-- Your stuff: Third-party javascript libraries go here -->
@@ -146,7 +146,6 @@
   <!-- place project specific Javascript in this file -->
 
   <script src="{% static 'js/project.js' %}"></script>
-
   {#  {% endcompress js %}#}
 {% endblock javascript %}
 </body>

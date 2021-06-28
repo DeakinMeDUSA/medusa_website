@@ -1,12 +1,11 @@
 from typing import Optional, Union
 
 from django.db import models
+from django.db.models import QuerySet
 from django.urls import reverse
 
 from medusa_website.mcq_bank.models.category import Category
 from medusa_website.users.models import User
-
-ANSWER_ORDER_OPTIONS = (("text", "Text"), ("random", "Random"), ("none", "None"))
 
 
 class Question(models.Model):
@@ -20,9 +19,11 @@ class Question(models.Model):
         blank=False,
         help_text="Enter the question text that you want displayed",
         verbose_name="Question text",
+        unique=True,
     )
     author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    image = models.ImageField(null=True, blank=True, verbose_name="Image")
+    image = models.ImageField(null=True, blank=True, verbose_name="Image",
+                              help_text="Upload an image supporting the question")
 
     category = models.ForeignKey(
         Category,
@@ -35,18 +36,14 @@ class Question(models.Model):
 
     explanation = models.TextField(
         max_length=2000,
-        blank=True,
         help_text="Explanation to be shown after the question has been answered",
         verbose_name="Explanation",
     )
 
-    answer_order = models.CharField(
-        max_length=30,
-        null=True,
-        blank=True,
-        choices=ANSWER_ORDER_OPTIONS,
-        help_text="The order in which multichoice answer options are displayed to the user",
-        verbose_name="Answer Order",
+    randomise_answer_order = models.BooleanField(
+        default=True,
+        help_text="If True (default), answers will be displayed in a random order each time",
+        verbose_name="Randomise answer order?",
     )
 
     def __str__(self):
@@ -86,14 +83,11 @@ class Question(models.Model):
         answer = Answer.objects.get(id=guess)
         return answer.correct
 
-    def order_answers(self, queryset):
-        if self.answer_order == "content":
-            return queryset.order_by("content")
-        if self.answer_order == "random":
+    def order_answers(self, queryset) -> QuerySet:
+        if self.randomise_answer_order:
             return queryset.order_by("?")
-        if self.answer_order == "none":
-            return queryset.order_by()
-        return queryset
+        else:
+            return queryset
 
     def get_answers(self):
         return self.order_answers(self.answers.all())
@@ -140,3 +134,18 @@ class Question(models.Model):
 
     def get_absolute_url(self):
         return reverse("mcq_bank:question_update", kwargs={"id": self.id})
+
+    def is_answered(self, user: User) -> bool:
+        return self in user.history.answered_questions()
+
+    @classmethod
+    def question_list_for_user(cls, user=User, questions: Optional[QuerySet] = None):
+        """ For use in the question_list view"""
+        question_list = []
+        from medusa_website.mcq_bank.models import History
+        history, created = History.objects.get_or_create(user=user)  # force init of history
+
+        all_questions = questions or Question.objects.all()
+        for q in all_questions:
+            q.answered = q.is_answered(user=user)
+        return all_questions

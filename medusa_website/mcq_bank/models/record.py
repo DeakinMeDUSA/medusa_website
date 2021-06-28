@@ -14,8 +14,8 @@ class Record(models.Model):
         null=True,
         related_name="records",
     )
-    answer = models.ForeignKey(Answer, on_delete=models.SET_NULL, blank=True, null=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    answer = models.ForeignKey(Answer, on_delete=models.SET_NULL, blank=True, null=True, related_name="records")
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name="records")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     @property

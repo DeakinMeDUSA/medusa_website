@@ -28,7 +28,7 @@ class QuestionAdmin(admin.ModelAdmin):
         "image",
         "admin_thumbnail",
         "explanation",
-        "answer_order",
+        "randomise_answer_order",
     ]
     list_filter = ("category",)
     search_fields = ("text", "explanation")

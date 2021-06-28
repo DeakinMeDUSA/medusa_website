@@ -17,7 +17,7 @@ class History(models.Model):
 
     """
 
-    user = models.OneToOneField(User, verbose_name="User", on_delete=models.CASCADE)
+    user = models.OneToOneField(User, verbose_name="User", on_delete=models.PROTECT)
 
     score = models.CharField(
         max_length=1024,
@@ -113,8 +113,8 @@ class History(models.Model):
     def quiz_sessions(self) -> QuerySet["QuizSession"]:
         return self.user.quiz_sessions.all()
 
-    @classmethod
-    def get_create_for_user(cls, user: User) -> "History":
-        new_progress = cls(user=user)
-        new_progress.save()
-        return new_progress
+    def answered_questions(self, questions: Optional[QuerySet] = None):
+        from medusa_website.mcq_bank.models import Question, Record
+        questions = questions or Question.objects.all()
+        records = Record.objects.filter(user=self.user).distinct("question")
+        return questions.filter(records__in=records)

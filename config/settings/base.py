@@ -83,6 +83,9 @@ DJANGO_APPS = [
     "django_tables2",
     "pagedown.apps.PagedownConfig",
     "django_extensions",
+    "bootstrap3",
+    'django_filters',
+    "extra_views",
 ]
 THIRD_PARTY_APPS = [
     "webpack_loader",

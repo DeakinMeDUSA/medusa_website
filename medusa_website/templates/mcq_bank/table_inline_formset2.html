@@ -1,0 +1,34 @@
+{% load crispy_forms_tags %}
+{% load crispy_forms_utils %}
+{% load crispy_forms_field %}
+{% specialspaceless %}
+  {% if formset_tag %}
+  {% endif %}
+  {% if formset_method|lower == 'post' and not disable_csrf %}
+    {% csrf_token %}
+  {% endif %}
+  {{ formset.management_form|crispy }}
+
+  {% if formset.readonly and not formset.queryset.exists %}
+  {% else %}
+    {% for field in formset.forms.0 %}
+      {% if field.label and not field.is_hidden %}
+        {{ field.label|safe }}{% if field.field.required and not field|is_checkbox %}*{% endif %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  {% for field in formset.empty_form %}
+    {% include 'bootstrap3/field.html' with tag="td" form_show_labels=False %}
+  {% endfor %}
+  {% for form in formset %}
+    {% if form_show_errors and not form.is_extra %}
+      {% include "bootstrap3/errors.html" %}
+    {% endif %}
+    {% for field in form %}
+      {% include 'bootstrap3/field.html' with tag="td" form_show_labels=False %}
+    {% endfor %}
+  {% endfor %} {% include "bootstrap3/inputs.html" %}
+  {% if formset_tag %}
+
+  {% endif %}
+{% endspecialspaceless %}
