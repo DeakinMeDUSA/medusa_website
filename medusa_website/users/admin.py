@@ -39,7 +39,7 @@ class UserAdmin(cuUserAdmin):
     #     return obj.all_emails()
 
 
-@admin.action(description='Import users from memberlist')
+@admin.action(description="Import users from memberlist")
 def import_users(modeladmin, request, queryset: QuerySet[MemberRecordsImport]):
     for obj in queryset:
         if obj.file:

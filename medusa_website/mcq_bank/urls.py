@@ -1,7 +1,6 @@
 from django.urls import path, re_path
 
 from .views import (
-    CategoriesTableView,
     HistoryView,
     IndexRedirectView,
     QuestionCreateView,
@@ -13,18 +12,11 @@ from .views import (
     QuizSessionEndOrContinueView,
     QuizSessionRunView,
     QuizTakeView,
-    ViewQuestionsByCategoryView,
 )
 
 app_name = "mcq_bank"
 
 urlpatterns = [
-    path("category/", view=CategoriesTableView.as_view(), name="category_list"),
-    path(
-        "category/<int:id>",
-        view=ViewQuestionsByCategoryView.as_view(),
-        name="category_detail",
-    ),
     path("history/", view=HistoryView.as_view(), name="history"),
     path("quiz/create/", view=QuizSessionCreateView.as_view(), name="quiz_session_create"),
     path(
@@ -45,7 +37,6 @@ urlpatterns = [
     ),
     path("question/<int:id>", view=QuestionUpdateView.as_view(), name="question_update"),
     path("question/create", view=QuestionCreateView.as_view(), name="question_create"),
-
     path("question/", view=QuestionListView.as_view(), name="question_list"),
     # redirect all others to index
     re_path("^$", view=QuizIndexView.as_view(), name="quiz_index"),

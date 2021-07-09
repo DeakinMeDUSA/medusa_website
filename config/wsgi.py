@@ -44,16 +44,17 @@ from pathlib import Path
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent
 
-path = '/home/medusa_it/medusa_website'
+path = "/home/medusa_it/medusa_website"
 if path not in sys.path:
     sys.path.append(path)
 
 # TODO Get this working with production config
-os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings.production'
+os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings.production"
 
 env = environ.Env()
 env.read_env(str(ROOT_DIR / ".env"))
 
 # then:
 from django.core.wsgi import get_wsgi_application
+
 application = get_wsgi_application()

@@ -115,6 +115,7 @@ class History(models.Model):
 
     def answered_questions(self, questions: Optional[QuerySet] = None):
         from medusa_website.mcq_bank.models import Question, Record
+
         questions = questions or Question.objects.all()
         records = Record.objects.filter(user=self.user).distinct("question")
         return questions.filter(records__in=records)

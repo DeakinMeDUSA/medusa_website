@@ -23,7 +23,7 @@ class CategoryProgressTable(tables.Table):
 
     def render_name(self, value, record):
         if value != "OVERALL":
-            cat_url = reverse("mcq_bank:category_detail", kwargs={"id": record["id"]})
+            cat_url = f'{reverse("mcq_bank:question_list")}?category={record["id"]}'
             return format_html(f'<a href="{cat_url}">{value}</a>')
         else:
             return format_html(f"<b>{value}</b>")
@@ -53,8 +53,9 @@ class SessionHistoryTable(tables.Table):
     def render_correct_answers(self, value, record):
         return f"{value} ({record['correct_answers_percent'] or 0} %)"
 
-    # def render_cat_average_score(self, value, record):
-    #     return f"{value or 0} %"
+    def render_id(self, value, record):
+        session_url = reverse("mcq_bank:quiz_session_detail", kwargs={"id": record["id"]})
+        return format_html(f'<a href="{session_url}">{value}</a>')
 
 
 class HistoryView(TemplateView):

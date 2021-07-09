@@ -14,7 +14,6 @@
   <p>{% trans "Started" %}: {{ quiz_session.started }}</p>
   <p>{% trans "Completed" %}: {{ quiz_session.finished }}</p>
   <p>{% trans "Score" %}: {{ quiz_session.percent_correct }}%</p>
-  <a href="{% url 'mcq_bank:run_session' %}">Start quiz</a>
 
   {#  <table class="table table-bordered table-striped">#}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>

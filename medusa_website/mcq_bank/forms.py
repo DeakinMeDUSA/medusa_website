@@ -6,7 +6,8 @@ from django import forms
 from django.forms.models import ModelForm
 from django.forms.widgets import CheckboxSelectMultiple, RadioSelect
 from django.utils.safestring import mark_safe
-from pagedown.widgets import AdminPagedownWidget
+from martor.fields import MartorFormField
+from martor.widgets import AdminMartorWidget
 
 from medusa_website.mcq_bank.models import Category, Question, QuizSession, Answer
 from medusa_website.users.models import User
@@ -42,21 +43,22 @@ class QuestionUpdateForm(ModelForm):
         model = Question
         fields = ["author", "text", "category", "image", "explanation", "randomise_answer_order"]
 
-    text = forms.CharField(widget=AdminPagedownWidget())
-    explanation = forms.CharField(widget=AdminPagedownWidget())
+    # text = forms.CharField(widget=AdminPagedownWidget())
+    # explanation = forms.CharField(widget=AdminPagedownWidget())
 
     def __init__(self, *args, **kwargs):
         self.editable: bool = kwargs.pop("editable")
+        super().__init__(*args, **kwargs)
+
         self.helper = FormHelper()
         self.helper.add_input(Submit("update", "Update"))
         if self.editable is False:
             self.author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
 
-        self.helper.form_id = 'id-question_update'
-        self.helper.form_class = 'blueForms'
-        self.helper.form_method = 'post'
-        self.helper.form_action = 'question_update'
-        super().__init__(*args, **kwargs)
+        self.helper.form_id = "id-question_update"
+        self.helper.form_class = "blueForms"
+        self.helper.form_method = "post"
+        self.helper.form_action = "question_update"
 
 
 class QuestionCreateForm(ModelForm):
@@ -64,25 +66,21 @@ class QuestionCreateForm(ModelForm):
         model = Question
         fields = ["text", "category", "image", "explanation", "randomise_answer_order"]
 
-    text = forms.CharField(widget=AdminPagedownWidget())
-    explanation = forms.CharField(widget=AdminPagedownWidget())
+    explanation = forms.CharField(widget=AdminMartorWidget())
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.form_class = 'blueForms'
-        self.helper.form_tag = False
 
+        # self.helper.form_class = "blueForms"
+        self.helper.form_tag = False
+        self.helper.label_class = "font-weight-bold .text-warning"
 
 class AnswerCreateForm(ModelForm):
     class Meta:
         model = Answer
         fields = ["text", "correct", "explanation"]
-        help_texts = {
-            'text': None,
-            'correct': None,
-            "explanation": None
-        }
+        help_texts = {"text": None, "correct": None, "explanation": None}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -95,7 +93,7 @@ class AnswerCreateForm(ModelForm):
 class AnswerCreateFormSetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.template = 'mcq_bank/table_inline_formset.html'
+        self.template = "mcq_bank/table_inline_formset.html"
         self.form_tag = False
         self.form_group_wrapper_class = "answer-table"
 

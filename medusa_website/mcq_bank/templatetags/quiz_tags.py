@@ -30,8 +30,3 @@ def answer_choice_to_string(question, answer):
 @register.simple_tag
 def quiz_session_answer_for_question(quiz_session: QuizSession, question: Question) -> Answer:
     return quiz_session.user_answer_for_question(question)
-
-
-@register.filter
-def markdownify(text):
-    return markdown.markdown(text)

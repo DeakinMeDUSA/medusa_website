@@ -15,11 +15,12 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("mcq_bank:category_detail", kwargs={"id": self.id})
+        # Manually add url param as its handled by the filter, reverse() with the param doesn't work
+        return f'{reverse("mcq_bank:question_list")}?category={self.id}'
 
     @classmethod
     def new_category(cls, name):
-        new_category = cls(name=re.sub("\s+", "-", name).lower())
+        new_category = cls(name=re.sub("\s+", "-", name).capitalize())
 
         new_category.save()
         return new_category

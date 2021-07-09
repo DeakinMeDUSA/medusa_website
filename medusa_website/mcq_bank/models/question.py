@@ -3,6 +3,7 @@ from typing import Optional, Union
 from django.db import models
 from django.db.models import QuerySet
 from django.urls import reverse
+from martor.models import MartorField
 
 from medusa_website.mcq_bank.models.category import Category
 from medusa_website.users.models import User
@@ -22,19 +23,18 @@ class Question(models.Model):
         unique=True,
     )
     author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
-    image = models.ImageField(null=True, blank=True, verbose_name="Image",
-                              help_text="Upload an image supporting the question")
+    image = models.ImageField(
+        null=True, blank=True, verbose_name="Image", help_text="Upload an image supporting the question"
+    )
 
     category = models.ForeignKey(
         Category,
         verbose_name="Category",
-        blank=True,
-        null=True,
         on_delete=models.CASCADE,
         related_name="questions",
     )
 
-    explanation = models.TextField(
+    explanation = MartorField(
         max_length=2000,
         help_text="Explanation to be shown after the question has been answered",
         verbose_name="Explanation",
@@ -140,9 +140,10 @@ class Question(models.Model):
 
     @classmethod
     def question_list_for_user(cls, user=User, questions: Optional[QuerySet] = None):
-        """ For use in the question_list view"""
+        """For use in the question_list view"""
         question_list = []
         from medusa_website.mcq_bank.models import History
+
         history, created = History.objects.get_or_create(user=user)  # force init of history
 
         all_questions = questions or Question.objects.all()

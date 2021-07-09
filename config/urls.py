@@ -1,10 +1,12 @@
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
+from medusa_website.mcq_bank.views.markdown_uploader import markdown_uploader
 from medusa_website.users import utils
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
@@ -23,6 +25,8 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # Your stuff: custom urls includes go here
     path("mcq_bank/", include("medusa_website.mcq_bank.urls", namespace="mcq_bank")),
     path("ping/", utils.ping),
+    path("martor/", include("martor.urls")),
+    url(r"^api/uploader/$", markdown_uploader, name="markdown_uploader_page"),
 ]
 
 if settings.DEBUG:

@@ -3,6 +3,7 @@ from typing import Optional
 
 from django.db import models
 from django.db.models import QuerySet
+from django.urls import reverse
 from django.utils.timezone import now
 
 from medusa_website.mcq_bank.models.answer import Answer
@@ -176,3 +177,6 @@ class QuizSession(models.Model):
             randomise_order=randomise_order,
             include_answered=include_answered,
         )
+
+    def get_absolute_url(self):
+        return reverse("mcq_bank:quiz_session_detail", kwargs={"id": self.id})

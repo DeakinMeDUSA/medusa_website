@@ -1,6 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
+import time
 from pathlib import Path
 
 import environ
@@ -51,8 +52,7 @@ DATABASES = {
         "DATABASE_URL": "postgres://localhost/medusa_website",
         "USER": env("DATABASE_USER", default="postgres"),
         "PASSWORD": env("DATABASE_PASSWORD", default=None),
-        'HOST': 'localhost',
-
+        "HOST": "localhost",
     }
     # "default": {
     #     "NAME": ROOT_DIR / "db.sqlite3",
@@ -81,11 +81,11 @@ DJANGO_APPS = [
     "django.contrib.admin",
     "django.forms",
     "django_tables2",
-    "pagedown.apps.PagedownConfig",
     "django_extensions",
     "bootstrap3",
-    'django_filters',
+    "django_filters",
     "extra_views",
+    "martor",
 ]
 THIRD_PARTY_APPS = [
     "webpack_loader",
@@ -163,12 +163,13 @@ MIDDLEWARE = [
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "medusa_website.utils.custom_middleware.SimpleMiddleware"
 ]
 
 # STATIC
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR / "static")
+STATIC_ROOT = Path(ROOT_DIR / "static")
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
@@ -240,7 +241,7 @@ FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
 SESSION_COOKIE_HTTPONLY = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
@@ -343,3 +344,45 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 
 DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
 PAGEDOWN_IMAGE_UPLOAD_ENABLED = False
+
+# MARTOR CONFIG
+# Input: string boolean, `true/false`
+MARTOR_ENABLE_CONFIGS = {
+    "emoji": "true",  # to enable/disable emoji icons.
+    "imgur": "false",  # to enable/disable imgur/custom uploader.
+    "mention": "false",  # to enable/disable mention
+    "jquery": "true",  # to include/revoke jquery (require for admin default django)
+    "living": "true",  # to enable/disable live updates in preview
+    "spellcheck": "false",  # to enable/disable spellcheck in form textareas
+    "hljs": "true",  # to enable/disable hljs highlighting in preview
+}
+# To show the toolbar buttons
+MARTOR_TOOLBAR_BUTTONS = [
+    "bold",
+    "italic",
+    "horizontal",
+    "heading",
+    # "pre-code",
+    "blockquote",
+    "unordered-list",
+    "ordered-list",
+    "link",
+    "image-link",
+    "image-upload",
+    "emoji",
+    # "direct-mention",
+    "toggle-maximize",
+    "help",
+]
+# Upload to locale storage
+MARTOR_UPLOAD_PATH = STATIC_ROOT / f'images/uploads/{time.strftime("%Y/%m/%d/")}'
+MARTOR_UPLOAD_URL = "/api/uploader/"  # change to local uploader
+MARTOR_ENABLE_LABEL = True
+# Maximum Upload Image in bytes
+MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
+
+# If you need to use your own themed "bootstrap" or "semantic ui" dependency
+# replace the values with the file in your static files dir
+# MARTOR_ALTERNATIVE_JS_FILE_THEME = None  # "semantic-themed/semantic.min.js"   # default None
+# MARTOR_ALTERNATIVE_CSS_FILE_THEME = None  # "semantic-themed/semantic.min.css" # default None
+# MARTOR_ALTERNATIVE_JQUERY_JS_FILE = None  # "jquery/dist/jquery.min.js"        # default None

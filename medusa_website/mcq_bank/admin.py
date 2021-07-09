@@ -1,7 +1,10 @@
 # Register your models here.
 
 from django.contrib import admin
+from django.db.models import TextField, CharField
 from imagekit.admin import AdminThumbnail
+from martor.models import MartorField
+from martor.widgets import AdminMartorWidget
 
 from .models import Answer, Category, History, Question
 

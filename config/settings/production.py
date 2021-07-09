@@ -13,8 +13,16 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "medusa.pythonanywhere.com", "172.105.190.146",
-                 "www.cculhane.com", "cculhane.com", "medusa.org.au"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "0.0.0.0",
+    "127.0.0.1",
+    "medusa.pythonanywhere.com",
+    "172.105.190.146",
+    "www.cculhane.com",
+    "cculhane.com",
+    "medusa.org.au",
+]
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -47,9 +55,9 @@ CACHES = {
 
 # https://docs.djangoproject.com/en/3.2/topics/cache/#the-per-site-cache
 MIDDLEWARE = MIDDLEWARE + [
-    'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    "django.middleware.cache.UpdateCacheMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 # https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-CACHE_MIDDLEWARE_ALIAS
@@ -142,17 +150,17 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "verbose",
         },
-        'logfile': {
-            'class': 'logging.FileHandler',
-            'filename': 'server.log',
+        "logfile": {
+            "class": "logging.FileHandler",
+            "filename": "server.log",
             "level": "DEBUG",
             "formatter": "verbose",
         },
     },
     "root": {"level": "INFO", "handlers": ["console"]},
     "loggers": {
-        'django': {
-            'handlers': ['logfile'],
+        "django": {
+            "handlers": ["logfile"],
         },
         "django.db.backends": {
             "level": "ERROR",
@@ -184,7 +192,6 @@ sentry_sdk.init(
     integrations=integrations,
     environment=env("SENTRY_ENVIRONMENT", default="production"),
     traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=1.0),
-
 )
 
 # Your stuff...

@@ -9,7 +9,6 @@ from medusa_website.mcq_bank.forms import (
     QuizSessionCreateForm,
 )
 from medusa_website.mcq_bank.models import QuizSession
-from medusa_website.mcq_bank.views import QuizTakeView
 
 
 class QuizSessionListView(ListView, LoginRequiredMixin):

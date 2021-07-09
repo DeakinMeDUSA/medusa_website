@@ -15,7 +15,10 @@ from vanilla import ListView, UpdateView
 from medusa_website.mcq_bank.forms import (
     QuestionCreateForm,
     QuestionDetailForm,
-    QuestionUpdateForm, AnswerCreateFormSetHelper, AnswerCreateForm, )
+    QuestionUpdateForm,
+    AnswerCreateFormSetHelper,
+    AnswerCreateForm,
+)
 from medusa_website.mcq_bank.models import Question, Answer
 from medusa_website.users.models import User
 
@@ -64,15 +67,20 @@ class AnswerInline(InlineFormSetFactory):
     model = Answer
     form_class = AnswerCreateForm
     # fields = ["question", "text", "correct", "explanation"]
-    factory_kwargs = {'extra': 4, 'max_num': 10,
-                      'can_order': False, 'can_delete': False}
+    factory_kwargs = {"extra": 4, "max_num": 10, "can_order": False, "can_delete": False}
+
+    # TODO fix Question_create javascript to add answers again
 
 
 #     template_name = "mcq_bank/question_create.html"
 class QuestionCreateView(CreateWithInlinesView, LoginRequiredMixin, NamedFormsetsMixin, SuccessMessageMixin):
     model = Question
-    inlines = [AnswerInline, ]
-    inlines_names = ['answer_formset', ]
+    inlines = [
+        AnswerInline,
+    ]
+    inlines_names = [
+        "answer_formset",
+    ]
 
     # fields = ["text", "category", "image", "explanation", "randomise_answer_order"]
     template_name = "mcq_bank/question_create.html"
@@ -135,13 +143,13 @@ class QuestionCreateView(CreateWithInlinesView, LoginRequiredMixin, NamedFormset
         return self.object.get_absolute_url()
 
     def get_success_message(self, cleaned_data, inlines):
-        return f'Question with id {self.object.pk} successfully created'
+        return f"Question with id {self.object.pk} successfully created"
 
 
 class QuestionListFilter(FilterSet):
     class Meta:
         model = Question
-        fields = ['category', 'author']
+        fields = ["category", "author"]
 
 
 class QuestionListTable(tables.Table):
@@ -214,6 +222,7 @@ class QuestionListView(ListView, LoginRequiredMixin, tables.SingleTableMixin, Fi
         filtered_questions: QuerySet[Question] = context["filter"].qs
         answered_filter = self.parse_answered_filter(self.request.GET.get("answered"))
         print(f"answered_filter = {answered_filter} | request.GET.answered = {self.request.GET.get('answered')}")
+        print(f"request.GET = {self.request.GET}")
         annotated_questions = Question.question_list_for_user(user=self.request.user, questions=filtered_questions)
         if answered_filter is not None:
             annotated_questions = [q for q in annotated_questions if q.answered == answered_filter]
