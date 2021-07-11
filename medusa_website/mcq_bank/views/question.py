@@ -1,35 +1,141 @@
-from pprint import pprint
-from typing import Optional
+import logging
+from typing import Optional, Tuple, List
 
 import django_tables2 as tables
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ImproperlyConfigured
 from django.db.models import QuerySet
-from django.http import HttpResponseRedirect
+from django.forms import Form, ModelForm
+from django.http import HttpResponseRedirect, HttpRequest
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.html import format_html
 from django_filters import FilterSet
 from django_filters.views import FilterView
-from extra_views import InlineFormSetFactory, CreateWithInlinesView, NamedFormsetsMixin, SuccessMessageMixin
-from vanilla import ListView, UpdateView
+from vanilla import ListView, UpdateView, CreateView
 
 from medusa_website.mcq_bank.forms import (
     QuestionCreateForm,
     QuestionDetailForm,
     QuestionUpdateForm,
-    AnswerCreateFormSetHelper,
-    AnswerCreateForm,
+    AnswerFormSetHelper,
+    AnswerCreateFormSet, AnswerUpdateFormSet,
 )
-from medusa_website.mcq_bank.models import Question, Answer
+from medusa_website.mcq_bank.models import Question
 from medusa_website.users.models import User
+
+logger = logging.getLogger(__name__)
+
+
+# TODO fix Question_create javascript to add answers again
+
+
+def validate_answer_formset(answer_formset: AnswerCreateFormSet) -> Tuple[bool, AnswerCreateFormSet, List[Form]]:
+    # Check at least two answers provided
+    complete_answer_forms = []
+    incomplete_answer_forms = []
+    invalid_answer_forms = []
+    answer_forms = [ansform for ansform in answer_formset.forms if ansform not in answer_formset.deleted_forms]
+    for answer_form in answer_forms:
+        if answer_form.is_valid():
+            if answer_form.instance.text and len(answer_form.instance.text) > 0:
+                complete_answer_forms.append(answer_form)
+            else:
+                incomplete_answer_forms.append(answer_form)
+        else:
+            invalid_answer_forms.append(answer_form)
+    answer_texts = set([ansform.instance.text for ansform in complete_answer_forms])
+
+    if len(invalid_answer_forms) > 0:
+        return False, answer_formset, complete_answer_forms
+    elif len(complete_answer_forms) < 2:
+        for answer_form in incomplete_answer_forms:
+            answer_form.add_error(field="text", error="Two or more answers must be specified")
+        return False, answer_formset, complete_answer_forms
+    elif len(complete_answer_forms) > 10:
+        for answer_form in complete_answer_forms[9:]:
+            answer_form.add_error(field="text", error="A maximum of 10 answers can be specified")
+        return False, answer_formset, complete_answer_forms
+    elif len([ansform for ansform in complete_answer_forms if ansform.instance.correct]) != 1:
+        for answer_form in complete_answer_forms:
+            answer_form.add_error(field="text", error="There must be exactly one correct answer specified")
+        return False, answer_formset, complete_answer_forms
+    elif len(answer_texts) != len(complete_answer_forms):
+        for answer_form in complete_answer_forms:
+            answer_form.add_error(field="text", error="All answers must be unique for a particular question!")
+        return False, answer_formset, complete_answer_forms
+    else:
+        return True, answer_formset, complete_answer_forms
+
+
+def validate_question_form(form: ModelForm, request: HttpRequest):
+    initial_author = Question.objects.get(id=form.instance.id).author
+    has_permission = request.user.is_staff or request.user.is_superuser
+    if initial_author != form.instance.author and not has_permission:
+        form.add_error(field="author", error="Cannot modify question author unless you are a staff or admin!")
+        logger.warning(f"User {initial_author} attempt to change user on question {form.instance}, form was rejected.")
+        return False, form
+    else:
+        return True, form
 
 
 class QuestionUpdateView(UpdateView, LoginRequiredMixin):
     model = Question
     template_name = "mcq_bank/question_update.html"
-    form_class = QuestionDetailForm
+    form_class = QuestionUpdateForm
     context_object_name = "question"
     lookup_field = "id"
+    queryset = Question.objects.all()
     success_url = reverse_lazy("mcq_bank:question_list")
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form(instance=self.object)
+
+        author_change_permission = request.user.is_staff or request.user.is_superuser
+        if author_change_permission is False:
+            form.fields["author"].disabled = True
+
+        context = self.get_context_data(form=form)
+        return self.render_to_response(context)
+
+    def post(self, request, *args, **kwargs):
+        new_question = self.get_object()
+        form = self.get_form(
+            data=request.POST,
+            files=request.FILES,
+            instance=new_question,
+        )
+        if form.is_valid():
+            new_question: Question = form.save(commit=False)
+            form_validated = True
+        else:
+            form_validated = False
+
+        # parent_model, request, instance, view_kwargs = None, view = None
+        answer_formset = AnswerUpdateFormSet(data=self.request.POST, files=self.request.FILES, instance=new_question)
+
+        if form_validated:  # Validate formset and save
+            return self.formset_valid(form, answer_formset)
+        else:
+            return self.form_invalid(form)
+
+    def get_object(self, queryset=None):
+        """
+        Returns the object the view is displaying.
+        """
+        queryset = self.get_queryset()
+        lookup_url_kwarg = self.lookup_field
+
+        try:
+            lookup = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
+        except KeyError:
+            msg = "Lookup field '%s' was not provided in view kwargs to '%s'"
+            raise ImproperlyConfigured(
+                msg % (lookup_url_kwarg, self.__class__.__name__)
+            )
+
+        return get_object_or_404(queryset, **lookup)
 
     def get_template_names(self):
         editable = self.editable(self.request.user, self.get_object())
@@ -39,111 +145,99 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
             self.template_name = "mcq_bank/question_view.html"
         return super(QuestionUpdateView, self).get_template_names()
 
-    def get_form(self, data=None, files=None, **kwargs):
+    def get_form_class(self):
         editable = self.editable(self.request.user, self.get_object())
         if self.request.method == "GET" and editable is False:
-            return QuestionDetailForm(data, files, **kwargs)  # Just view the question
+            return QuestionDetailForm
         else:
-            return QuestionUpdateForm(data, files, editable=editable, **kwargs)
+            return QuestionUpdateForm
 
     def get_context_data(self, **kwargs):
-        context = super(QuestionUpdateView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["editable"] = self.editable(self.request.user, question=self.get_object())
-        context["question_update_form"] = self.get_form(**kwargs)
+        context["question"] = context.get("question") or self.get_object()
+
+        context["answer_formset_helper"] = AnswerFormSetHelper()
+        if context.get("answer_formset") is None:
+            if self.request.POST:
+                context["answer_formset"] = AnswerUpdateFormSet(data=self.request.POST, instance=context["question"],
+                                                                files=self.request.FILES)
+                # queryset=context["question"].answers.all())
+            else:
+                context["answer_formset"] = AnswerUpdateFormSet(instance=context["question"],
+                                                                queryset=context["question"].answers.all())
         return context
 
     def form_valid(self, form):
         if isinstance(form.cleaned_data["author"], User) is False:
             print(f"Author came in as {form.cleaned_data['author']}, resetting to prior value: {form.instance.user}")
             form.cleaned_data["author"] = form.instance.author
-        return super(QuestionUpdateView, self).form_valid(form)
+        return super().form_valid(form)
+
+    def formset_valid(self, form, answer_formset):
+        is_valid, answer_formset_with_errors, complete_answer_forms = validate_answer_formset(answer_formset)
+        if is_valid is False:
+            return self.render_to_response(self.get_context_data(form=form, answer_formset=answer_formset_with_errors))
+
+        for to_delete in answer_formset.deleted_forms:
+            logger.info(f"Deleting model: {to_delete.instance}")
+            to_delete.instance.delete()
+        form.save()
+        for ansforms in complete_answer_forms:
+            ansforms.save()
+        return HttpResponseRedirect(self.get_success_url())
 
     @staticmethod
     def editable(user, question):
         return user.is_staff or question.author == user
 
 
-class AnswerInline(InlineFormSetFactory):
-    model = Answer
-    form_class = AnswerCreateForm
-    # fields = ["question", "text", "correct", "explanation"]
-    factory_kwargs = {"extra": 4, "max_num": 10, "can_order": False, "can_delete": False}
-
-    # TODO fix Question_create javascript to add answers again
-
-
-#     template_name = "mcq_bank/question_create.html"
-class QuestionCreateView(CreateWithInlinesView, LoginRequiredMixin, NamedFormsetsMixin, SuccessMessageMixin):
+class QuestionCreateView(CreateView, LoginRequiredMixin):
     model = Question
-    inlines = [
-        AnswerInline,
-    ]
-    inlines_names = [
-        "answer_formset",
-    ]
 
     # fields = ["text", "category", "image", "explanation", "randomise_answer_order"]
     template_name = "mcq_bank/question_create.html"
     form_class = QuestionCreateForm
+    lookup_field = "id"
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form(
+            data=request.POST,
+            files=request.FILES,
+        )
+        if form.is_valid():
+            new_question: Question = form.save(commit=False)
+        else:
+            return self.form_invalid(form)
+
+        # parent_model, request, instance, view_kwargs = None, view = None
+        answer_formset = AnswerCreateFormSet(data=self.request.POST, files=self.request.FILES, instance=new_question)
+
+        return self.formset_valid(form, answer_formset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # formset = modelformset_factory(Answer, form=AnswerCreateForm, extra=2)
-        context["answer_formset_helper"] = AnswerCreateFormSetHelper()
-        # context["formset"] = formset
-        pprint(context)
+        if self.request.POST:
+            context["question"] = kwargs["form"].instance
+            context["answer_formset"] = kwargs.get("answer_formset") or AnswerCreateFormSet(instance=context["question"])
+        else:
+            context["answer_formset"] = AnswerCreateFormSet()
+
+        context["answer_formset_helper"] = AnswerFormSetHelper()
 
         return context
 
-    def forms_valid(self, form: QuestionCreateForm, inlines):
-        answer_formset = inlines[0]
-        # Check at least two answers provided
-        complete_answers = []
-        complete_answer_forms = []
-        incomplete_answer_forms = []
-        answer_form: AnswerCreateForm
-        for answer_form in answer_formset.forms:
-            temp_a: Answer = answer_form.save(commit=False)
-            if temp_a.text and len(temp_a.text) > 0:
-                complete_answers.append(temp_a)
-                complete_answer_forms.append(answer_form)
-            else:
-                incomplete_answer_forms.append(answer_form)
-        answer_texts = set([ans.text for ans in complete_answers])
+    def formset_valid(self, form: QuestionCreateForm, answer_formset):
+        is_valid, answer_formset_with_errors, complete_answer_forms = validate_answer_formset(answer_formset)
+        if is_valid is False:
+            return self.render_to_response(self.get_context_data(form=form, answer_formset=answer_formset_with_errors))
 
-        if len(complete_answers) < 2:
-            for answer_form in incomplete_answer_forms:
-                answer_form.add_error(field="text", error="Two or more answers must be specified")
-            return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
-        elif len(complete_answers) > 10:
-            for answer_form in complete_answer_forms[9:]:
-                answer_form.add_error(field="text", error="A maximum of 10 answers can be specified")
-            return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
-        elif len([ans for ans in complete_answers if ans.correct]) != 1:
-            for answer_form in complete_answer_forms:
-                answer_form.add_error(field="text", error="There must be exactly one correct answer specified")
-            return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
-        elif len(answer_texts) != len(complete_answers):
-            for answer_form in complete_answer_forms:
-                answer_form.add_error(field="text", error="All answers must be unique for a particular question!")
-            return self.render_to_response(self.get_context_data(form=form, inlines=inlines))
-
-        else:
-            question = form.save(commit=False)
-            question.author = self.request.user
-            question.save()
-            for ans in complete_answers:
-                ans.save()
-            question.answers.set(complete_answers)
-            question.save()
-            self.object = question
-            return HttpResponseRedirect(self.get_success_url())
-
-    def get_success_url(self):
-        return self.object.get_absolute_url()
-
-    def get_success_message(self, cleaned_data, inlines):
-        return f"Question with id {self.object.pk} successfully created"
+        question = form.save(commit=False)
+        question.author = self.request.user
+        question.save()
+        for ansforms in complete_answer_forms:
+            ansforms.save()
+        return HttpResponseRedirect(question.get_absolute_url())
 
 
 class QuestionListFilter(FilterSet):

@@ -11,7 +11,7 @@
 {% block content %}
   <link href="{% static 'css/forms.css' %}" rel="stylesheet">
 
-    <h3 class="lead">Update question</h3>
+    <h3 class="lead">Viewing question (id: {{ question.id }})</h3>
     <p><i>Note that because you are not the author of this question, no details can be modified.</i></p>
 
   {% crispy form %}

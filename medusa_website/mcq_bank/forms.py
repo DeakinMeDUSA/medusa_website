@@ -1,12 +1,12 @@
+import markdown
 from bootstrap_modal_forms.forms import BSModalModelForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div
+from crispy_forms.layout import Div, Field
 from crispy_forms.layout import Layout, ButtonHolder, Submit
 from django import forms
-from django.forms.models import ModelForm
+from django.forms.models import ModelForm, inlineformset_factory
 from django.forms.widgets import CheckboxSelectMultiple, RadioSelect
 from django.utils.safestring import mark_safe
-from martor.fields import MartorFormField
 from martor.widgets import AdminMartorWidget
 
 from medusa_website.mcq_bank.models import Category, Question, QuizSession, Answer
@@ -22,8 +22,20 @@ class QuestionForm(forms.Form):
 
 class AuthorNameWidget(forms.Widget):
     def render(self, name, value, attrs=None, renderer=None):
-        author = User.objects.get(id=value)
-        return mark_safe(author.name) if value is not None else "-"
+        if value:
+            author = User.objects.get(id=value)
+            return mark_safe(f"<b>{author.name}</b>") if value is not None else "-"
+        else:
+            return mark_safe("-")
+
+
+class RenderMarkdownWidget(forms.Widget):
+    def render(self, name, value, attrs=None, renderer=None):
+        if value:
+            html = markdown.markdown(value)
+            return mark_safe(html)
+        else:
+            return mark_safe("None")
 
 
 class QuestionDetailForm(ModelForm):
@@ -32,10 +44,20 @@ class QuestionDetailForm(ModelForm):
         fields = ["author", "text", "category", "image", "explanation", "randomise_answer_order"]
 
     author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
+    explanation = forms.CharField(label="Explanation", max_length=500, disabled=True, widget=RenderMarkdownWidget)
+    image = forms.ImageField(label="image", disabled=True)
 
     def __init__(self, *args, **kwargs):
-        self.helper = FormHelper()
         super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('author', readonly=True),
+            Field("text", readonly=True),
+            Field("category", readonly=True),
+            Field("image", readonly=True),
+            Field("explanation", readonly=True),
+            Field("randomise_answer_order", readonly=True)
+        )
 
 
 class QuestionUpdateForm(ModelForm):
@@ -45,20 +67,15 @@ class QuestionUpdateForm(ModelForm):
 
     # text = forms.CharField(widget=AdminPagedownWidget())
     # explanation = forms.CharField(widget=AdminPagedownWidget())
+    # author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
 
     def __init__(self, *args, **kwargs):
-        self.editable: bool = kwargs.pop("editable")
+        if kwargs.get("id"):
+            self.id = kwargs.pop("id")
         super().__init__(*args, **kwargs)
 
-        self.helper = FormHelper()
-        self.helper.add_input(Submit("update", "Update"))
-        if self.editable is False:
-            self.author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
-
+        self.helper = FormHelper(self)
         self.helper.form_id = "id-question_update"
-        self.helper.form_class = "blueForms"
-        self.helper.form_method = "post"
-        self.helper.form_action = "question_update"
 
 
 class QuestionCreateForm(ModelForm):
@@ -76,21 +93,26 @@ class QuestionCreateForm(ModelForm):
         self.helper.form_tag = False
         self.helper.label_class = "font-weight-bold .text-warning"
 
-class AnswerCreateForm(ModelForm):
+
+class AnswerInlineForm(ModelForm):
     class Meta:
         model = Answer
         fields = ["text", "correct", "explanation"]
         help_texts = {"text": None, "correct": None, "explanation": None}
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
-        # self.helper = FormHelper(self)
-        # self.helper.label_class = "col-lg-2"
-        # self.helper.field_class = "col-lg-8"
+AnswerCreateFormSet = inlineformset_factory(
+    Question, Answer, fields=["text", "correct", "explanation"], extra=4, max_num=10,
+    can_delete=False
+)
+
+AnswerUpdateFormSet = inlineformset_factory(
+    Question, Answer, fields=["text", "correct", "explanation"], extra=0, max_num=10,
+    can_delete=True
+)
 
 
-class AnswerCreateFormSetHelper(FormHelper):
+class AnswerFormSetHelper(FormHelper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.template = "mcq_bank/table_inline_formset.html"
