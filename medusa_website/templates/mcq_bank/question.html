@@ -7,78 +7,89 @@
 {% block description %} {{ quiz.title }} - {{ quiz.description }} {% endblock %}
 
 {% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-8">
 
-  {% if previous.answers %}
+        {% if previous.answers %}
 
-    <p class="muted"><small>The previous question:</small></p>
-    <p>{{ previous.previous_question }}</p>
+          <p class="muted"><small>The previous question:</small></p>
+          <p>{{ previous.previous_question }}</p>
 
-    {% if previous.previous_outcome %}
-      <div class="alert alert-success">
-    {% else %}
-      <div class="alert alert-warning">
-    {% endif %}
-  <p><small>
-    Your answer was </small>
-    <strong>
-      {{ previous.previous_outcome|yesno:"correct,incorrect" }}
-    </strong>
-  </p>
+          {% if previous.previous_outcome %}
+            <div class="alert alert-success">
+          {% else %}
+            <div class="alert alert-warning">
+          {% endif %}
+        <p><small>
+          Your answer was </small>
+          <strong>
+            {{ previous.previous_outcome|yesno:"correct,incorrect" }}
+          </strong>
+        </p>
 
-  </div>
+        </div>
 
-    {% include 'mcq_bank/correct_answer.html' %}
+          {% include 'mcq_bank/correct_answer.html' %}
 
-    <p><strong>Explanation:</strong></p>
-    <div class="well " style="background-color: #fcf8e3;">
-      <p>{{ previous.previous_question.explanation_as_html }}</p>
-    </div>
+          <p><strong>Explanation:</strong></p>
+          <div class="well " style="background-color: #fcf8e3;">
+            <p>{{ previous.previous_question.explanation_as_html }}</p>
+          </div>
 
-    <hr>
+          <hr>
 
-  {% endif %}
+        {% endif %}
 
-  <br/>
+        <br/>
 
-  {% if question %}
+        {% if question %}
 
-    {% if progress %}
-      <div style="float: right;">
-        Question {{ progress.0|add:1 }} of {{ progress.1 }}
+          {% if progress %}
+            <div style="float: right;">
+              Question {{ progress.0|add:1 }} of {{ progress.1 }}
+            </div>
+          {% endif %}
+
+          <p>
+            <small class="muted">Question category:</small>
+            <strong>{{ question.category }}</strong>
+          </p>
+
+          <p class="lead">{{ question.text }}</p>
+
+          {% if question.image %}
+            <a href=""
+               onclick="window.open('{{ question.image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
+              <img src="{{ question.image.url }}" alt="{{ question.text }}"
+                   style="max-width: 30vw; max-height: 50vh; padding: 10px"/>
+            </a>
+          {% endif %}
+
+          <form action="" method="POST">{% csrf_token %}
+            <input type=hidden name="question_id" value="{{ question.id }}">
+
+            <ul class="list-group">
+
+              {% for answer in form.answers %}
+                <li class="list-group-item">
+                  {{ answer }}
+                </li>
+              {% endfor %}
+
+            </ul>
+            <input type="submit" class="btn btn-large btn-block btn-warning" value=Submit>
+          </form>
+
+        {% endif %}
+
+        <hr>
+        </div>
+        <div class="col-4">
+          {% include "mcq_bank/reference_ranges.html" %}
+
+        </div>
       </div>
-    {% endif %}
-
-    <p>
-      <small class="muted">Question category:</small>
-      <strong>{{ question.category }}</strong>
-    </p>
-
-    <p class="lead">{{ question.text }}</p>
-
-    {% if question.image %}
-      <a href="" onclick="window.open('{{ question.image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
-        <img src="{{ question.image.url }}" alt="{{ question.text }}" style="max-width: 50vw; max-height: 50vh"/>
-      </a>
-    {% endif %}
-
-    <form action="" method="POST">{% csrf_token %}
-      <input type=hidden name="question_id" value="{{ question.id }}">
-
-      <ul class="list-group">
-
-        {% for answer in form.answers %}
-          <li class="list-group-item">
-            {{ answer }}
-          </li>
-        {% endfor %}
-
-      </ul>
-      <input type="submit" class="btn btn-large btn-block btn-warning" value=Submit>
-    </form>
-
-  {% endif %}
-
-  <hr>
-
-
+    </div>
+  </div>
 {% endblock %}
