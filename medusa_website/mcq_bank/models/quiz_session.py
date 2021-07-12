@@ -155,7 +155,6 @@ class QuizSession(models.Model):
         if selected_qs.count() < 1:
             raise RuntimeError("Cannot create Quiz Session without any questions!")
 
-        print(f"filter_questions - questions : {questions.all()}")
 
         session = cls(user=user)
         session.save()
