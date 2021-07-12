@@ -9,7 +9,8 @@ from django.forms import Form
 from django.forms.models import ModelForm, inlineformset_factory
 from django.forms.widgets import CheckboxSelectMultiple, RadioSelect
 from django.utils.safestring import mark_safe
-from martor.widgets import AdminMartorWidget
+from martor.fields import MartorFormField
+from martor.widgets import AdminMartorWidget, MartorWidget
 
 from medusa_website.mcq_bank.models import Category, Question, QuizSession, Answer
 from medusa_website.users.models import User
@@ -96,7 +97,7 @@ class QuestionUpdateForm(ModelForm):
         fields = ["author", "text", "category", "image", "explanation", "randomise_answer_order"]
 
     # text = forms.CharField(widget=AdminPagedownWidget())
-    # explanation = forms.CharField(widget=AdminPagedownWidget())
+    # explanation = MartorFormField()
     # author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
 
     def __init__(self, *args, **kwargs):
@@ -113,7 +114,7 @@ class QuestionCreateForm(ModelForm):
         model = Question
         fields = ["text", "category", "image", "explanation", "randomise_answer_order"]
 
-    explanation = forms.CharField(widget=AdminMartorWidget())
+    # explanation = forms.CharField(widget=AdminMartorWidget())
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
