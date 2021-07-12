@@ -176,7 +176,6 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     str(APPS_DIR / "static"),
     # str(ROOT_DIR / "node_modules"),
-    str(FRONTEND_DIR / "build/static"),
     str(ROOT_DIR / "assets"),
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
@@ -378,7 +377,7 @@ MARTOR_TOOLBAR_BUTTONS = [
 MARTOR_UPLOAD_PATH = STATIC_ROOT / f'images/uploads/{time.strftime("%Y/%m/%d/")}'
 MARTOR_UPLOAD_URL = "/api/uploader/"  # change to local uploader
 MARTOR_ENABLE_LABEL = True
-# Maximum Upload Image in bytes 
+# Maximum Upload Image in bytes
 MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
 
 # If you need to use your own themed "bootstrap" or "semantic ui" dependency
