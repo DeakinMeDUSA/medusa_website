@@ -37,7 +37,7 @@ class QuizSession(models.Model):
     user = models.ForeignKey(
         User,
         verbose_name="User",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         blank=False,
         related_name="quiz_sessions",
     )

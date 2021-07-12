@@ -24,7 +24,7 @@ class Question(models.Model):
         verbose_name="Question text",
         unique=True,
     )
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    author = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
     image = models.ImageField(
         null=True, blank=True, verbose_name="Image", help_text="Upload an image supporting the question"
     )
@@ -32,7 +32,7 @@ class Question(models.Model):
     category = models.ForeignKey(
         Category,
         verbose_name="Category",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="questions",
     )
 
@@ -49,10 +49,10 @@ class Question(models.Model):
     )
 
     is_flagged = models.BooleanField(default=False, help_text="If True, has been flagged by a user")
-    flagged_by = models.ForeignKey(User, related_name="flagged_questions", on_delete=models.CASCADE, blank=True, null=True)
+    flagged_by = models.ForeignKey(User, related_name="flagged_questions", on_delete=models.PROTECT, blank=True, null=True)
 
     is_reviewed = models.BooleanField(default=False, help_text="If True, has been reviewed by a staff or admin")
-    reviewed_by = models.ForeignKey(User, related_name="reviewed_questions", on_delete=models.CASCADE, blank=True, null=True)
+    reviewed_by = models.ForeignKey(User, related_name="reviewed_questions", on_delete=models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return self.text

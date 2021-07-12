@@ -11,7 +11,7 @@ class Answer(models.Model):
     question = models.ForeignKey(
         Question,
         verbose_name="Question",
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="answers",
     )
 
