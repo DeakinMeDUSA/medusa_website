@@ -282,7 +282,7 @@ class QuestionListTable(tables.Table):
             "id": "question-list-table",
         }
         model = Question
-        exclude = ("randomise_answer_order",)
+        exclude = ("randomise_answer_order", "flagged_by", "is_reviewed", "reviewed_by")
         sequence = ("id", "author", "category", "answered", "text", "answer", "explanation", "image")
 
     id = tables.Column(linkify=False, accessor="id", orderable=False)
@@ -293,6 +293,7 @@ class QuestionListTable(tables.Table):
     answer = tables.Column(linkify=False, orderable=False, empty_values=(), verbose_name="Answer")
     explanation = tables.Column(linkify=False, orderable=False)
     image = tables.Column(linkify=False, orderable=False)
+    is_flagged = tables.Column(linkify=False, orderable=False)
     filterset_class = QuestionListFilter
 
     # def __init__(self, *args, **kwargs):
@@ -349,8 +350,6 @@ class QuestionListView(ListView, LoginRequiredMixin, tables.SingleTableMixin, Fi
         context["filter"] = QuestionListFilter(self.request.GET, queryset=all_questions)
         filtered_questions: QuerySet[Question] = context["filter"].qs
         answered_filter = self.parse_answered_filter(self.request.GET.get("answered"))
-        print(f"answered_filter = {answered_filter} | request.GET.answered = {self.request.GET.get('answered')}")
-        print(f"request.GET = {self.request.GET}")
         annotated_questions = Question.question_list_for_user(user=self.request.user, questions=filtered_questions)
         if answered_filter is not None:
             annotated_questions = [q for q in annotated_questions if q.answered == answered_filter]
