@@ -10,10 +10,16 @@
 {% block content %}
   <h2>Quiz Session ID: {{ quiz_session.id }}</h2>
   <hr>
-  <p>User: {{ quiz_session.user }}</p>
-  <p>Started: {{ quiz_session.started }}</p>
-  <p>Completed: {{ quiz_session.finished }}</p>
-  <p>Score: {{ quiz_session.percent_correct }}%</p>
+
+  {% if is_current %}
+    <a class="btn btn-primary" href="{% url "mcq_bank:run_session" %}">Start questions</a>
+  {% else %}
+    <p>User: {{ quiz_session.user }}</p>
+    <p>Started: {{ quiz_session.started }}</p>
+    <p>Completed: {{ quiz_session.finished }}</p>
+    <p>Score: {{ quiz_session.percent_correct }}%</p>
+
+  {% endif %}
 
   {#  <table class="table table-bordered table-striped">#}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
@@ -40,10 +46,12 @@
         <td>{{ answer.text }}</td>
         <td>{{ answer.question.category }}</td>
         <td>
-          {% if answer.correct %}
+          {% if answer.correct is True %}
             <p>Correct</p>
+          {% elif answer.correct is False %}
+            <p style="color: #470006">Incorrect</p>
           {% else %}
-            <p>Incorrect</p>
+            <p style="color: grey">Unanswered</p>
           {% endif %}
         </td>
         <td>

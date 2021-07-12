@@ -25,6 +25,7 @@ class QuizSessionDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(QuizSessionDetailView, self).get_context_data(**kwargs)
+        context["is_current"] = context["quiz_session"].is_current
         context["questions"] = context["quiz_session"].questions.all()
         context["answers"] = context["quiz_session"].answers.all()
         print(context)
@@ -46,12 +47,17 @@ class QuizSessionEndOrContinueView(BSModalFormView, LoginRequiredMixin):
 
     def get(self, request, *args, **kwargs):
         self.user = self.request.user
-        return super(QuizSessionEndOrContinueView, self).get(request, *args, **kwargs)
+        context = self.get_context_data()
+        if context.get("current_session"):
+            return self.render_to_response(context)
+        else:
+            return HttpResponseRedirect(reverse("mcq_bank:quiz_session_create"))
 
     def get_context_data(self, *args, **kwargs):
         context = super(QuizSessionEndOrContinueView, self).get_context_data(**kwargs)
         current_session = QuizSession.get_current(user=self.user)
         progress = current_session.progress if current_session else (0, 0)
+        context["current_session"] = current_session
         context["questions_answered"] = progress[0]
         context["questions_total"] = progress[1]
         context["percent_complete"] = round(100 * progress[0] / progress[1], 2) if progress[1] > 0 else 0
@@ -67,7 +73,10 @@ class QuizSessionEndOrContinueView(BSModalFormView, LoginRequiredMixin):
         current_session = QuizSession.get_current(user=self.request.user)
         if request.POST["choice"] == "start_over":
             print("Finishing current session and creating new one")
-            current_session.mark_quiz_complete()
+            try:
+                current_session.mark_quiz_complete()
+            except AttributeError:
+                pass
             return HttpResponseRedirect(reverse("mcq_bank:quiz_session_create"))
 
         elif request.POST["choice"] == "continue":
@@ -93,7 +102,7 @@ class QuizSessionCreateFromQuestionsView(CreateView, LoginRequiredMixin):
             new_session = QuizSession.create_from_questions(user=form.cleaned_data["user"],
                                                             questions=form.cleaned_data["questions"], max_n=10000,
                                                             randomise_order=True, include_answered=True, save=True)
-            return HttpResponseRedirect(reverse("mcq_bank:run_session"))
+            return HttpResponseRedirect(reverse("mcq_bank:quiz_session_detail", kwargs={"id": new_session.id}))
         else:
             return self.form_invalid(form)
 
@@ -114,41 +123,30 @@ class QuizSessionCreateView(CreateView, LoginRequiredMixin):
     #     return QuizSessionCreateForm(data, files, user=user, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        self.user = request.user
-        self.session = QuizSession.get_current(user=self.user)
-        print(f"self.user = {self.user}")
         return super(QuizSessionCreateView, self).get(request, *args, **kwargs)
 
-    def get_form_class(self):
-        if self.session is not None:
-            return QuizSessionContinueOrStopForm
-        else:
-            return QuizSessionCreateForm
-
     def post(self, request, *args, **kwargs):
-        self.session = QuizSession.get_current(user=request.user)
-        form = self.get_form_class()(request.POST)
-        if form.is_valid():
-            print(form.cleaned_data)
-            user = request.user
-            max_questions = int(form.cleaned_data["max_num_questions"])
-            categories = form.cleaned_data["categories"]
-            include_answered = form.cleaned_data["include_answered"]
-            randomise_order = form.cleaned_data["randomise_order"]
-            quiz_session = QuizSession.create_from_categories(
-                user=user,
-                categories=categories,
-                max_n=max_questions,
-                include_answered=include_answered,
-                randomise_order=randomise_order,
-            )
 
+        form = self.get_form(data=request.POST, files=request.FILES)
+        if QuizSession.get_current(user=request.user) is not None:
+            form.add_error("There is a current session already in pregress!")
+            return self.form_invalid(form)
+        elif form.is_valid():
+            quiz_session = QuizSession.create_from_categories(
+                user=self.request.user,
+                categories=form.cleaned_data["categories"],
+                max_n=int(form.cleaned_data["max_num_questions"]),
+                randomise_order=form.cleaned_data["randomise_order"],
+                include_answered=form.cleaned_data["include_answered"]
+            )
             # return HttpResponseRedirect(reverse("mcq_bank:quiz_session_run", kwargs={"id": quiz_session.id}))
             return HttpResponseRedirect(reverse("mcq_bank:quiz_session_detail", kwargs={"id": quiz_session.id}))
+        else:
+            return self.form_invalid(form)
 
     def get_context_data(self, *args, **kwargs):
         context = super(QuizSessionCreateView, self).get_context_data(**kwargs)
-        context["current_session"] = QuizSession.get_current(user=self.user)
+        context["has_current_session"] = True if QuizSession.get_current(user=self.request.user) is not None else False
         print(context)
         return context
 

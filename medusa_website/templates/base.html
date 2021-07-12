@@ -63,25 +63,25 @@
         </li>
         {% if request.user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'mcq_bank:quiz_index' %}">{% trans "MCQ Bank" %}</a>
+            <a class="nav-link" href="{% url 'mcq_bank:quiz_index' %}">MCQ Bank</a>
           </li>
           <li class="nav-item">
             {# URL provided by django-allauth/account/urls.py #}
-            <a class="nav-link" href="{% url 'users:detail' request.user.email %}">{% trans "My Profile" %}</a>
+            <a class="nav-link" href="{% url 'users:detail' request.user.email %}">My Profile</a>
           </li>
           <li class="nav-item">
             {# URL provided by django-allauth/account/urls.py #}
-            <a class="nav-link" href="{% url 'account_logout' %}">{% trans "Sign Out" %}</a>
+            <a class="nav-link" href="{% url 'account_logout' %}">Sign Out</a>
           </li>
 
         {% else %}
           <li class="nav-item">
             {# URL provided by django-allauth/account/urls.py #}
-            <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% trans "Sign Up" %}</a>
+            <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
           </li>
           <li class="nav-item">
             {# URL provided by django-allauth/account/urls.py #}
-            <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% trans "Sign In" %}</a>
+            <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">Sign In</a>
           </li>
         {% endif %}
       </ul>
@@ -96,7 +96,7 @@
     {% for message in messages %}
       <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-                aria-hidden="true">&times;</span></button>
+          aria-hidden="true">&times;</span></button>
       </div>
     {% endfor %}
   {% endif %}
@@ -129,9 +129,9 @@
   {#  <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>#}
   <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
   <script
-          src="https://browser.sentry-cdn.com/6.7.1/bundle.min.js"
-          integrity="sha384-+GoWV2WnDUGsSmipBvyBrWuhW8hPa/D21fH+j3NoZxDf9RgDryqh4Ug4L+7E1nxM"
-          crossorigin="anonymous"
+    src="https://browser.sentry-cdn.com/6.7.1/bundle.min.js"
+    integrity="sha384-+GoWV2WnDUGsSmipBvyBrWuhW8hPa/D21fH+j3NoZxDf9RgDryqh4Ug4L+7E1nxM"
+    crossorigin="anonymous"
   ></script>
   <script>
     Sentry.init({ dsn: 'https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588' })

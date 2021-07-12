@@ -7,7 +7,7 @@ from medusa_website.users.models import MemberRecord
 
 class MedusaMemberValidator:
     message = _(
-        "The supplied email was not found on member list supplied by DUSA, updated weekly."
+        "The supplied email was not found on member list supplied by DUSA, which is updated weekly."
         "If you believe this to be an error, please contact it@medusa.org.au"
     )
     code = "invalid"

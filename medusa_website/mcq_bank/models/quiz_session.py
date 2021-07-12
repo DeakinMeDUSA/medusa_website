@@ -120,6 +120,10 @@ class QuizSession(models.Model):
         except QuizSession.DoesNotExist:
             return None
 
+    @property
+    def is_current(self):
+        return not self.complete
+
     @classmethod
     def check_no_current_session(cls, user: User):
         if cls.get_current(user=user) is not None:
