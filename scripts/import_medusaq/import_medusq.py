@@ -1,3 +1,15 @@
+import logging
+import os
+import sys
+
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
+import django
+
+sys.path.append('I:/GitHub/medusa_website')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
+django.setup()
+logger = logging.getLogger(__name__)
+
 # %%
 import csv
 from pathlib import Path
@@ -45,10 +57,7 @@ for raw_q in questions_raw:
                         explanation=explanation,
                         is_flagged=parse_tf(raw_q["isflagged"])
                         )
-    try:
-        question.save()
-    except IntegrityError:
-        continue
+    question.save()
     correct_answer = Answer(text=raw_q["correctanswer"].strip(), correct=True, question=question)
     correct_answer.save()
     other_answers = [Answer(text=ans.strip(), correct=False, question=question
