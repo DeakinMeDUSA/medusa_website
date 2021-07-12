@@ -17,8 +17,7 @@ class Question(models.Model):
         verbose_name_plural = "Questions"
         ordering = ["category"]
 
-    text = models.CharField(
-        max_length=1000,
+    text = models.TextField(
         blank=False,
         help_text="Enter the question text that you want displayed",
         verbose_name="Question text",
@@ -37,7 +36,6 @@ class Question(models.Model):
     )
 
     explanation = MartorField(
-        max_length=2000,
         help_text="Explanation to be shown after the question has been answered",
         verbose_name="Explanation",
     )

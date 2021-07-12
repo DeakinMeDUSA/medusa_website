@@ -15,8 +15,7 @@ class Answer(models.Model):
         related_name="answers",
     )
 
-    text = models.CharField(
-        max_length=1000,
+    text = models.TextField(
         help_text="Enter the answer text that you want displayed",
         verbose_name="Text",
     )
@@ -26,8 +25,7 @@ class Answer(models.Model):
         help_text="Is this a correct answer?",
         verbose_name="Correct",
     )
-    explanation = models.CharField(
-        max_length=1000,
+    explanation = models.TextField(
         null=True,
         blank=True,
         help_text="Extra explanation for this answer",
