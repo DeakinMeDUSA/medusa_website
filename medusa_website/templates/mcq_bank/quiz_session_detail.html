@@ -4,16 +4,16 @@
 
 {% load quiz_tags %}
 {% block title %}
-  {% trans "Quiz session of" %} {{ quiz_session.id }} {% trans "for" %} {{ quiz_session.user }}
+  Quiz session of {{ quiz_session.id }} for {{ quiz_session.user }}
 {% endblock %}
 
 {% block content %}
-  <h2>{% trans "Quiz Session ID" %}: {{ quiz_session.id }}</h2>
+  <h2>Quiz Session ID: {{ quiz_session.id }}</h2>
   <hr>
-  <p>{% trans "User" %}: {{ quiz_session.user }}</p>
-  <p>{% trans "Started" %}: {{ quiz_session.started }}</p>
-  <p>{% trans "Completed" %}: {{ quiz_session.finished }}</p>
-  <p>{% trans "Score" %}: {{ quiz_session.percent_correct }}%</p>
+  <p>User: {{ quiz_session.user }}</p>
+  <p>Started: {{ quiz_session.started }}</p>
+  <p>Completed: {{ quiz_session.finished }}</p>
+  <p>Score: {{ quiz_session.percent_correct }}%</p>
 
   {#  <table class="table table-bordered table-striped">#}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
@@ -22,8 +22,8 @@
 
     <thead>
     <tr>
-      <th>{% trans "Question" %}</th>
-      <th>{% trans "Your answer" %}</th>
+      <th>Question</th>
+      <th>Your answer</th>
       <th>Category</th>
       <th>Correct?</th>
       <th>Review Question</th>
@@ -41,13 +41,13 @@
         <td>{{ answer.question.category }}</td>
         <td>
           {% if answer.correct %}
-            <p>{% trans "Correct" %}</p>
+            <p>Correct</p>
           {% else %}
-            <p>{% trans "Incorrect" %}</p>
+            <p>Incorrect</p>
           {% endif %}
         </td>
         <td>
-          <a href="{% url 'mcq_bank:question_update' question.id %}">
+          <a href="{% url 'mcq_bank:question_detail' question.id %}">
             View Question {{ question.id }}
           </a>
         </td>

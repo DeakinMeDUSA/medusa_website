@@ -135,6 +135,7 @@ class QuizSession(models.Model):
         max_n=20,
         randomise_order=True,
         include_answered=False,
+        save=True
     ) -> "QuizSession":
         cls.check_no_current_session(user=user)
 

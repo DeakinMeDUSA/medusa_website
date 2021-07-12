@@ -10,7 +10,7 @@
 
   {% if previous.answers %}
 
-    <p class="muted"><small>{% trans "The previous question" %}:</small></p>
+    <p class="muted"><small>The previous question:</small></p>
     <p>{{ previous.previous_question }}</p>
 
     {% if previous.previous_outcome %}
@@ -19,7 +19,7 @@
       <div class="alert alert-warning">
     {% endif %}
   <p><small>
-    {% trans "Your answer was" %} </small>
+    Your answer was </small>
     <strong>
       {{ previous.previous_outcome|yesno:"correct,incorrect" }}
     </strong>
@@ -29,9 +29,9 @@
 
     {% include 'mcq_bank/correct_answer.html' %}
 
-    <p><strong>{% trans "Explanation" %}:</strong></p>
+    <p><strong>Explanation:</strong></p>
     <div class="well " style="background-color: #fcf8e3;">
-      <p>{{ previous.previous_question.explanation }}</p>
+      <p>{{ previous.previous_question.explanation_as_html }}</p>
     </div>
 
     <hr>
@@ -44,19 +44,21 @@
 
     {% if progress %}
       <div style="float: right;">
-        {% trans "Question" %} {{ progress.0|add:1 }} {% trans "of" %} {{ progress.1 }}
+        Question {{ progress.0|add:1 }} of {{ progress.1 }}
       </div>
     {% endif %}
 
     <p>
-      <small class="muted">{% trans "Question category" %}:</small>
+      <small class="muted">Question category:</small>
       <strong>{{ question.category }}</strong>
     </p>
 
     <p class="lead">{{ question.text }}</p>
 
     {% if question.image %}
-      <img src="{{ question.image.url }}" alt="{{ question.text }}"/>
+      <a href="" onclick="window.open('{{ question.image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
+        <img src="{{ question.image.url }}" alt="{{ question.text }}" style="max-width: 50vw; max-height: 50vh"/>
+      </a>
     {% endif %}
 
     <form action="" method="POST">{% csrf_token %}
@@ -71,7 +73,7 @@
         {% endfor %}
 
       </ul>
-      <input type="submit" class="btn btn-large btn-block btn-warning" value={% trans "Submit" %}>
+      <input type="submit" class="btn btn-large btn-block btn-warning" value=Submit>
     </form>
 
   {% endif %}

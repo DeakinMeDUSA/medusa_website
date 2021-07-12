@@ -5,23 +5,23 @@ import django_tables2 as tables
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import QuerySet
-from django.forms import Form, ModelForm
-from django.http import HttpResponseRedirect, HttpRequest
+from django.forms import Form
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse
 from django.utils.html import format_html
 from django_filters import FilterSet
 from django_filters.views import FilterView
-from vanilla import ListView, UpdateView, CreateView
+from vanilla import ListView, UpdateView, CreateView, DetailView
 
 from medusa_website.mcq_bank.forms import (
     QuestionCreateForm,
     QuestionDetailForm,
     QuestionUpdateForm,
     AnswerFormSetHelper,
-    AnswerCreateFormSet, AnswerUpdateFormSet,
+    AnswerCreateFormSet, AnswerUpdateFormSet, AnswerDetailFormSet, QuizSessionCreateFromQuestionsForm,
 )
-from medusa_website.mcq_bank.models import Question
+from medusa_website.mcq_bank.models import Question, QuizSession
 from medusa_website.users.models import User
 
 logger = logging.getLogger(__name__)
@@ -68,15 +68,49 @@ def validate_answer_formset(answer_formset: AnswerCreateFormSet) -> Tuple[bool, 
         return True, answer_formset, complete_answer_forms
 
 
-def validate_question_form(form: ModelForm, request: HttpRequest):
-    initial_author = Question.objects.get(id=form.instance.id).author
-    has_permission = request.user.is_staff or request.user.is_superuser
-    if initial_author != form.instance.author and not has_permission:
-        form.add_error(field="author", error="Cannot modify question author unless you are a staff or admin!")
-        logger.warning(f"User {initial_author} attempt to change user on question {form.instance}, form was rejected.")
-        return False, form
-    else:
-        return True, form
+def editable(user: User, question: Question):
+    return user.is_staff or question.author == user
+
+
+class QuestionDetailView(DetailView, LoginRequiredMixin):
+    model = Question
+    template_name = "mcq_bank/question_detail.html"
+    form_class = QuestionDetailForm
+    context_object_name = "question"
+    lookup_field = "id"
+    queryset = Question.objects.all()
+
+    #
+    def get(self, request, *args, **kwargs):
+
+        self.object = self.get_object()
+        form = self.get_form(instance=self.object)
+
+        author_change_permission = request.user.is_staff or request.user.is_superuser
+        if author_change_permission is False:
+            form.fields["author"].disabled = True
+
+        context = self.get_context_data(form=form)
+        return self.render_to_response(context)
+
+    def get_object(self, queryset=None):
+        """
+        Returns the object the view is displaying.
+        """
+        question = Question.objects.get(id=self.kwargs["id"])
+        self.object = question
+        return question
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context["question"].refresh_from_db()
+        context["editable"] = editable(self.request.user, question=context["question"])
+        context["answer_formset_helper"] = AnswerFormSetHelper()
+        if context.get("answer_formset") is None:
+            context["answer_formset"] = kwargs.get("answer_formset") or AnswerDetailFormSet(
+                instance=context["question"])
+
+        return context
 
 
 class QuestionUpdateView(UpdateView, LoginRequiredMixin):
@@ -86,7 +120,6 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
     context_object_name = "question"
     lookup_field = "id"
     queryset = Question.objects.all()
-    success_url = reverse_lazy("mcq_bank:question_list")
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -100,25 +133,25 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
-        new_question = self.get_object()
+        question_old = self.get_object()
+        self.object = question_old
+        orig_author = question_old.author
         form = self.get_form(
             data=request.POST,
             files=request.FILES,
-            instance=new_question,
+            instance=question_old,
         )
         if form.is_valid():
-            new_question: Question = form.save(commit=False)
-            form_validated = True
-        else:
-            form_validated = False
-
-        # parent_model, request, instance, view_kwargs = None, view = None
-        answer_formset = AnswerUpdateFormSet(data=self.request.POST, files=self.request.FILES, instance=new_question)
-
-        if form_validated:  # Validate formset and save
-            return self.formset_valid(form, answer_formset)
+            updated_question: Question = form.save(commit=False)
+            updated_question.author = form.instance.author or orig_author
         else:
             return self.form_invalid(form)
+
+        # parent_model, request, instance, view_kwargs = None, view = None
+        answer_formset = AnswerUpdateFormSet(data=self.request.POST, files=self.request.FILES,
+                                             instance=updated_question)
+
+        return self.formset_valid(form, answer_formset)
 
     def get_object(self, queryset=None):
         """
@@ -138,23 +171,21 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
         return get_object_or_404(queryset, **lookup)
 
     def get_template_names(self):
-        editable = self.editable(self.request.user, self.get_object())
-        if editable:
+        if editable(self.request.user, self.get_object()):
             self.template_name = "mcq_bank/question_update.html"
         else:
-            self.template_name = "mcq_bank/question_view.html"
+            self.template_name = "mcq_bank/question_detail.html"
         return super(QuestionUpdateView, self).get_template_names()
 
     def get_form_class(self):
-        editable = self.editable(self.request.user, self.get_object())
-        if self.request.method == "GET" and editable is False:
+        if self.request.method == "GET" and editable(self.request.user, self.get_object()) is False:
             return QuestionDetailForm
         else:
             return QuestionUpdateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["editable"] = self.editable(self.request.user, question=self.get_object())
+        context["editable"] = editable(self.request.user, question=self.get_object())
         context["question"] = context.get("question") or self.get_object()
 
         context["answer_formset_helper"] = AnswerFormSetHelper()
@@ -168,7 +199,7 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
                                                                 queryset=context["question"].answers.all())
         return context
 
-    def form_valid(self, form):
+    def fix_missing_author(self, form):
         if isinstance(form.cleaned_data["author"], User) is False:
             print(f"Author came in as {form.cleaned_data['author']}, resetting to prior value: {form.instance.user}")
             form.cleaned_data["author"] = form.instance.author
@@ -185,11 +216,8 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
         form.save()
         for ansforms in complete_answer_forms:
             ansforms.save()
+        self.object = form.instance
         return HttpResponseRedirect(self.get_success_url())
-
-    @staticmethod
-    def editable(user, question):
-        return user.is_staff or question.author == user
 
 
 class QuestionCreateView(CreateView, LoginRequiredMixin):
@@ -219,7 +247,8 @@ class QuestionCreateView(CreateView, LoginRequiredMixin):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
             context["question"] = kwargs["form"].instance
-            context["answer_formset"] = kwargs.get("answer_formset") or AnswerCreateFormSet(instance=context["question"])
+            context["answer_formset"] = kwargs.get("answer_formset") or AnswerCreateFormSet(
+                instance=context["question"])
         else:
             context["answer_formset"] = AnswerCreateFormSet()
 
@@ -256,7 +285,7 @@ class QuestionListTable(tables.Table):
         exclude = ("randomise_answer_order",)
         sequence = ("id", "author", "category", "answered", "text", "answer", "explanation", "image")
 
-    id = tables.Column(linkify=True, accessor="id", orderable=False)
+    id = tables.Column(linkify=False, accessor="id", orderable=False)
     author = tables.Column(linkify=True, orderable=False)
     category = tables.Column(linkify=True, orderable=False)
     answered = tables.Column(linkify=False, orderable=False, empty_values=())
@@ -283,7 +312,12 @@ class QuestionListTable(tables.Table):
         )
 
     def render_id(self, value, record: Question):
-        return f"View/edit question {value}"
+        if record.editable(user=self.request.user):
+            return format_html(
+                f'<a href="{reverse("mcq_bank:question_update", kwargs={"id": value})}">Edit question {value}</a>')
+        else:
+            return format_html(
+                f'<a href="{reverse("mcq_bank:question_detail", kwargs={"id": value})}">View question {value}</a>')
 
     def render_answered(self, value, record: Question):
         return "Yes" if record.answered else "No"
@@ -321,7 +355,9 @@ class QuestionListView(ListView, LoginRequiredMixin, tables.SingleTableMixin, Fi
         if answered_filter is not None:
             annotated_questions = [q for q in annotated_questions if q.answered == answered_filter]
 
-        context["question_list_table"] = QuestionListTable(annotated_questions)
+        context["question_list_table"] = QuestionListTable(annotated_questions, request=self.request)
+        context["displayed_questions"] = annotated_questions
+        context["quiz_create_form"] = QuizSessionCreateFromQuestionsForm(user=self.request.user, questions=annotated_questions)
         return context
 
     @staticmethod

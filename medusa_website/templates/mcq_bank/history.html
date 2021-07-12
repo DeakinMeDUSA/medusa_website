@@ -8,15 +8,15 @@
 
 {% load quiz_tags %}
 
-{% block title %} {% trans "History Page" %} {% endblock %}
-{% block description %} {% trans "User History Page" %} {% endblock %}
+{% block title %} History Page {% endblock %}
+{% block description %} User History Page {% endblock %}
 
 {% block content %}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
-  <h2>{% trans "Category Progress" %}</h2>
+  <h2>Category Progress</h2>
   {% render_table category_progress_table %}
 
-  <h2>{% trans "Session History" %}</h2>
+  <h2>Session History</h2>
   {% render_table session_history_table %}
 
 {% endblock %}

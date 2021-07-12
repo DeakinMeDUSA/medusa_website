@@ -6,7 +6,7 @@ from vanilla import CreateView, DetailView, ListView
 
 from medusa_website.mcq_bank.forms import (
     QuizSessionContinueOrStopForm,
-    QuizSessionCreateForm,
+    QuizSessionCreateForm, QuizSessionCreateFromQuestionsForm,
 )
 from medusa_website.mcq_bank.models import QuizSession
 
@@ -77,6 +77,31 @@ class QuizSessionEndOrContinueView(BSModalFormView, LoginRequiredMixin):
             raise RuntimeError(f"Form choice {request.POST['choice']} is invalid!")
 
 
+class QuizSessionCreateFromQuestionsView(CreateView, LoginRequiredMixin):
+    model = QuizSession
+    template_name = "mcq_bank/quiz_session_create.html"
+    context_object_name = "quiz_session"
+    lookup_field = "id"
+    form_class = QuizSessionCreateFromQuestionsForm
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            current_session = QuizSession.get_current(user=form.cleaned_data["user"])
+            if current_session:
+                current_session.mark_quiz_complete()
+            new_session = QuizSession.create_from_questions(user=form.cleaned_data["user"],
+                                                            questions=form.cleaned_data["questions"], max_n=10000,
+                                                            randomise_order=True, include_answered=True, save=True)
+            return HttpResponseRedirect(reverse("mcq_bank:run_session"))
+        else:
+            return self.form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(QuizSessionCreateFromQuestionsView, self).get_context_data(**kwargs)
+        return context
+
+
 class QuizSessionCreateView(CreateView, LoginRequiredMixin):
     model = QuizSession
     template_name = "mcq_bank/quiz_session_create.html"
@@ -142,7 +167,6 @@ class QuizSessionRunView(DetailView):
         context["answers"] = context["quiz_session"].answers.all()
         print(context)
         return context
-
 
 #
 # class QuizSessionView(FormView):

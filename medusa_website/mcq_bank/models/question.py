@@ -1,8 +1,10 @@
 from typing import Optional, Union
 
+import markdown
 from django.db import models
 from django.db.models import QuerySet
 from django.urls import reverse
+from django.utils.safestring import mark_safe
 from martor.models import MartorField
 
 from medusa_website.mcq_bank.models.category import Category
@@ -133,7 +135,7 @@ class Question(models.Model):
         return self.answers.filter(correct=True)
 
     def get_absolute_url(self):
-        return reverse("mcq_bank:question_update", kwargs={"id": self.id})
+        return reverse("mcq_bank:question_detail", kwargs={"id": self.id})
 
     def is_answered(self, user: User) -> bool:
         return self in user.history.answered_questions()
@@ -150,3 +152,14 @@ class Question(models.Model):
         for q in all_questions:
             q.answered = q.is_answered(user=user)
         return all_questions
+
+    @property
+    def explanation_as_html(self):
+        if self.explanation:
+            html = markdown.markdown(self.explanation)
+            return mark_safe(html)
+        else:
+            return mark_safe("None")
+
+    def editable(self, user: User):
+        return user.is_staff or user.is_superuser or (user == self.author)

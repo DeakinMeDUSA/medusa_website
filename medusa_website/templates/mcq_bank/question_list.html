@@ -38,12 +38,12 @@
         </div>
       </div>
       <div class="row" style="margin-top: 10px; margin-bottom: 10px">
-        <div class="form-group col-4">
+        <div class="form-group col-8">
           <div class="row">
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
               <a class="btn btn-secondary" href="{% url 'mcq_bank:question_list' %}">Reset filter(s)</a>
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-4">
               {% bootstrap_button 'Apply filter(s)' button_type="submit" button_class="btn-primary" %}
             </div>
           </div>
@@ -52,10 +52,24 @@
     </div>
   </form>
 
-
-
+  <form action="{% url 'mcq_bank:quiz_session_create_from_questions' %}" method="post" class="form">
+    {% csrf_token %}
+    <div hidden>
+      {{ quiz_create_form.user | as_crispy_field }}
+      {{ quiz_create_form.questions| as_crispy_field }}
+    </div>
+    <div class="form-group col-4">
+      <div class="row" style="margin-top: 10px; margin-bottom: 10px">
+        <div class="form-group col-md-offset">
+          <input type="submit" class="btn btn-primary" value="New quiz from displayed questions" style="margin-left: 10px">
+        </div>
+      </div>
+    </div>
+  </form>
 
   {% render_table question_list_table %}
+
+
 
 {% endblock %}
 {% block javascript %}

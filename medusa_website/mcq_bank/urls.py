@@ -13,12 +13,16 @@ from .views import (
     QuizSessionRunView,
     QuizTakeView,
 )
+from .views.question import QuestionDetailView
+from .views.session import QuizSessionCreateFromQuestionsView
 
 app_name = "mcq_bank"
 
 urlpatterns = [
     path("history/", view=HistoryView.as_view(), name="history"),
+    path("quiz/create_from_questions/", view=QuizSessionCreateFromQuestionsView.as_view(), name="quiz_session_create_from_questions"),
     path("quiz/create/", view=QuizSessionCreateView.as_view(), name="quiz_session_create"),
+
     path(
         "quiz/check_create/",
         view=QuizSessionEndOrContinueView.as_view(),
@@ -35,10 +39,14 @@ urlpatterns = [
         view=QuizSessionDetailView.as_view(),
         name="quiz_session_detail",
     ),
-    path("question/<int:id>", view=QuestionUpdateView.as_view(), name="question_update"),
+    path("question/detail/<int:id>", view=QuestionDetailView.as_view(), name="question_detail"),
+    path("question/update/<int:id>", view=QuestionUpdateView.as_view(), name="question_update"),
     path("question/create", view=QuestionCreateView.as_view(), name="question_create"),
-    path("question/", view=QuestionListView.as_view(), name="question_list"),
+    path("question/list", view=QuestionListView.as_view(), name="question_list"),
     # redirect all others to index
     re_path("^$", view=QuizIndexView.as_view(), name="quiz_index"),
     re_path("^.*$", view=IndexRedirectView.as_view(), name="index_redirect"),  # redirect all others to index
 ]
+
+
+    # TODO link detail view to use a modified UPdateView to keep things DRY
