@@ -9,13 +9,13 @@ class Record(models.Model):
 
     question = models.ForeignKey(
         Question,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         blank=True,
         null=True,
         related_name="records",
     )
-    answer = models.ForeignKey(Answer, on_delete=models.SET_NULL, blank=True, null=True, related_name="records")
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True, related_name="records")
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE, blank=True, null=True, related_name="records")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, related_name="records")
     timestamp = models.DateTimeField(auto_now_add=True)
 
     @property
