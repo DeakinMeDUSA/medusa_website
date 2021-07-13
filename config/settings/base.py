@@ -80,12 +80,7 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
-    "django_tables2",
-    "django_extensions",
-    "bootstrap3",
-    "django_filters",
-    "extra_views",
-    "martor",
+
 ]
 THIRD_PARTY_APPS = [
     "webpack_loader",
@@ -101,6 +96,13 @@ THIRD_PARTY_APPS = [
     "pg_copy",
     "bootstrap_modal_forms",
     "widget_tweaks",
+    "django_tables2",
+    "django_extensions",
+    "bootstrap3",
+    "django_filters",
+    "extra_views",
+    "martor",
+    "gmailapi_backend",
 ]
 
 LOCAL_APPS = [
@@ -175,7 +177,6 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
     str(APPS_DIR / "static"),
-    # str(ROOT_DIR / "node_modules"),
     str(ROOT_DIR / "assets"),
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
@@ -249,9 +250,16 @@ X_FRAME_OPTIONS = "DENY"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env("DJANGO_EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
+EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
+GMAIL_API_CLIENT_ID = env("GMAIL_API_CLIENT_ID", default=None)
+GMAIL_API_CLIENT_SECRET = env("GMAIL_API_CLIENT_SECRET", default=None)
+GMAIL_API_REFRESH_TOKEN = env("GMAIL_API_REFRESH_TOKEN", default=None)
+DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="website@medusa.org.au>")
+# https://docs.djangoproject.com/en/dev/ref/settings/#server-email
+SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
+EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[MeDUSA Website]")
 
 # ADMIN
 # ------------------------------------------------------------------------------
@@ -299,7 +307,7 @@ ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
 ACCOUNT_USERNAME_VALIDATORS = "medusa_website.users.validators.CustomEmailValidator"
 
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "none"  # TODO Setup email provider and set back to mandatory
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # TODO Setup email provider and set back to mandatory
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "medusa_website.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html

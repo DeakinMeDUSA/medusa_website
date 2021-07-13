@@ -25,6 +25,10 @@ django-bootstrap3>=15.0.0
 django-filter>=2.4.0
 django-extra-views>=0.14.0
 
+# Email
+google-api-python-client>=2.0.2
+google-auth>=1.28.0
+
 # Testing
 pytest>=6.2.4
 factory-boy>=3.2.0
