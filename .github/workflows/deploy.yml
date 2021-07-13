@@ -8,7 +8,7 @@ jobs:
       - name: Deploy via SSH script
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: source ~/medusa_website/post_commit.sh
+          command: source ~/medusa_website/post_commit_nostatic.sh
           host: ${{ secrets.SSH_HOST }}
           username: medusa_it
           privateKey: ${{ secrets.SSH_PRIVATE_KEY}}
