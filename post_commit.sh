@@ -6,9 +6,8 @@ source ~/.virtualenvs/medusa_website/bin/activate
 echo
 
 printf 'Fetching changes from Git ...'
-git checkout main
+git fetch --all
 git reset --hard origin/main
-git pull
 echo
 
 printf 'Updating Python dependencies ...'
