@@ -330,6 +330,7 @@ PIPELINE = {
     "PIPELINE_COLLECTOR_ENABLED": True,
     "CSS_COMPRESSOR": "pipeline.compressors.yuglify.YuglifyCompressor",
     "JS_COMPRESSOR": "pipeline.compressors.yuglify.YuglifyCompressor",
+    "YUGLIFY_BINARY": env("YUGLIFY_BINARY", default=None),
     "JAVASCRIPT": {
         "js_core": {  # The order matters!
             "source_filenames": (

@@ -72,5 +72,4 @@ INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 # Your stuff...
 # ------------------------------------------------------------------------------
 CRISPY_FAIL_SILENTLY = False
-PIPELINE["YUGLIFY_BINARY"] = str(Path(ROOT_DIR, "node_modules/.bin/yuglify.cmd"))
 PIPELINE["SHOW_ERRORS_INLINE"] = False  # Will raise exceptions instead
