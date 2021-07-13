@@ -73,3 +73,6 @@ INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 # ------------------------------------------------------------------------------
 CRISPY_FAIL_SILENTLY = False
 PIPELINE["SHOW_ERRORS_INLINE"] = False  # Will raise exceptions instead
+PIPELINE["PIPELINE_ENABLED"] = False
+PIPELINE["PIPELINE_COLLECTOR_ENABLED"] = False
+# STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'

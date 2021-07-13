@@ -337,7 +337,6 @@ PIPELINE = {
                 "modules/core/jquery-3.5.1.min.js",
                 "modules/core/popper.min.js",
                 "modules/core/bootstrap-4.0.0.min.js",
-                "modules/core/sentry-6.7.1.min.js",
             ),
             "output_filename": "pipeline/js/core.js",
         },

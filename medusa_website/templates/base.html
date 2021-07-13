@@ -1,6 +1,5 @@
-{% load pipeline %}
 {% load static i18n %}
-{#{% load compress %}#}
+{% load pipeline %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +12,7 @@
   <meta name="author" content="Chris Culhane">
 
 
-  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
+  <link rel="icon" href="{% static 'images/favicon.ico' %}">
 
   {% block css %}
     {% stylesheet "css_core" %}
@@ -103,6 +102,8 @@
 {% block javascript %}
   <!-- Bootstrap JS and its dependencies-->
   {% javascript "js_core" %}
+  <!--Sentry js needs to be loaded without compression to retain the 'Sentry' global var -->
+  <script type="text/javascript" src="{% static 'modules/core/sentry-6.9.0.min.js' %}"></script>
   <script>
     Sentry.init({ dsn: 'https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588' })
     Sentry.showReportDialog({
