@@ -1,6 +1,7 @@
 from typing import Optional
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView
@@ -11,7 +12,7 @@ from ...users.models import User
 from ..forms import QuestionForm
 
 
-class QuizTakeView(FormView):
+class QuizTakeView(FormView, LoginRequiredMixin):
     form_class = QuestionForm
     template_name = "mcq_bank/question.html"
     result_template_name = "mcq_bank/result.html"

@@ -1,5 +1,6 @@
 import django_tables2 as tables
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.utils.html import format_html
@@ -58,7 +59,7 @@ class SessionHistoryTable(tables.Table):
         return format_html(f'<a href="{session_url}">{value}</a>')
 
 
-class HistoryView(TemplateView):
+class HistoryView(TemplateView, LoginRequiredMixin):
     template_name = "mcq_bank/history.html"
 
     @method_decorator(login_required)

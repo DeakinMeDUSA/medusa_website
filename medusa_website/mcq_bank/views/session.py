@@ -18,7 +18,7 @@ class QuizSessionListView(ListView, LoginRequiredMixin):
     context_object_name = "quiz_sessions"
 
 
-class QuizSessionDetailView(DetailView):
+class QuizSessionDetailView(DetailView, LoginRequiredMixin):
     model = QuizSession
     template_name = "mcq_bank/quiz_session_detail.html"
     context_object_name = "quiz_session"
@@ -157,7 +157,7 @@ class QuizSessionCreateView(CreateView, LoginRequiredMixin):
         return context
 
 
-class QuizSessionRunView(DetailView):
+class QuizSessionRunView(DetailView, LoginRequiredMixin):
     model = QuizSession
     template_name = "mcq_bank/quiz_session_run.html"
     context_object_name = "quiz_session"

@@ -4,12 +4,12 @@ from vanilla import CreateView, ListView, UpdateView
 from medusa_website.mcq_bank.models import Answer
 
 
-class AnswerUpdateView(UpdateView):
+class AnswerUpdateView(UpdateView, LoginRequiredMixin):
     queryset = Answer.objects.all()
     lookup_url_kwarg = "id"
 
 
-class AnswersListView(ListView):
+class AnswersListView(ListView, LoginRequiredMixin):
     def get_queryset(self):
         queryset = Answer.objects.all()
         question_id = self.request.query_params.get("question_id", None)
