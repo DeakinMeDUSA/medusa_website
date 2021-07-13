@@ -1,12 +1,9 @@
 # Register your models here.
 
 from django.contrib import admin
-from django.db.models import TextField, CharField
 from imagekit.admin import AdminThumbnail
-from martor.models import MartorField
-from martor.widgets import AdminMartorWidget
 
-from .models import Answer, Category, History, Question
+from .models import Answer, Category, History, Question, Record
 
 
 class AnswerInline(admin.TabularInline):
@@ -76,6 +73,11 @@ class QuestionAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     search_fields = ("category",)
+
+
+@admin.register(Record)
+class RecordAdmin(admin.ModelAdmin):
+    search_fields = ("user",)
 
 
 @admin.register(History)
