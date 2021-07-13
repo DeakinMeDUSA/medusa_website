@@ -11,8 +11,8 @@
 // }
 //
 // document.body.appendChild(component())
-$(document).ready(function() {
-  $(function () {
-  $('#progress-table').tablesorter()
-})
-})
+// $(document).ready(function() {
+//   $(function () {
+//   $('#progress-table').tablesorter()
+// })
+// })
