@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\scripts\import_medusaq\McqData_cleaned.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
       </map>
     </option>
   </component>

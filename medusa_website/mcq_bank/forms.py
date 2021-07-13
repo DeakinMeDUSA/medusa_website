@@ -46,7 +46,6 @@ class RenderMarkdownWidget(forms.Widget):
 
 
 class ImageDisplayWidget(forms.Widget):
-
     def __init__(self, max_width="50vw", max_height="50vh", *args, **kwargs):
         self.max_width = max_width
         self.max_height = max_height
@@ -69,8 +68,9 @@ class QuestionDetailForm(ModelForm):
         fields = ["author", "text", "category", "image", "explanation", "randomise_answer_order"]
 
     author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
-    explanation = forms.CharField(label="Explanation", max_length=500, disabled=True,
-                                  widget=RenderMarkdownWidget(css_class="form-control"))
+    explanation = forms.CharField(
+        label="Explanation", max_length=500, disabled=True, widget=RenderMarkdownWidget(css_class="form-control")
+    )
 
     image = forms.ImageField(label="Image", disabled=True, widget=ImageDisplayWidget)
 
@@ -82,12 +82,12 @@ class QuestionDetailForm(ModelForm):
             field.help_text = None
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Field('author', readonly=True),
+            Field("author", readonly=True),
             Field("text", readonly=True),
             Field("category", readonly=True),
             Field("image", readonly=True),
             Field("explanation", readonly=True),
-            Field("randomise_answer_order", readonly=True)
+            Field("randomise_answer_order", readonly=True),
         )
 
 
@@ -140,18 +140,15 @@ class AnswerInlineReadonlyForm(AnswerInlineForm):
 
 
 AnswerDetailFormSet = inlineformset_factory(
-    Question, Answer, form=AnswerInlineReadonlyForm, extra=0, max_num=10,
-    can_delete=False
+    Question, Answer, form=AnswerInlineReadonlyForm, extra=0, max_num=10, can_delete=False
 )
 
 AnswerCreateFormSet = inlineformset_factory(
-    Question, Answer, form=AnswerInlineForm, extra=4, max_num=10,
-    can_delete=False
+    Question, Answer, form=AnswerInlineForm, extra=4, max_num=10, can_delete=False
 )
 
 AnswerUpdateFormSet = inlineformset_factory(
-    Question, Answer, form=AnswerInlineForm, extra=0, max_num=10,
-    can_delete=True
+    Question, Answer, form=AnswerInlineForm, extra=0, max_num=10, can_delete=True
 )
 
 

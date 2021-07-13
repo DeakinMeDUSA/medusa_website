@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load pipeline %}
 {% load crispy_forms_filters %}
 {% load static %}
 {% load render_table from django_tables2 %}
@@ -7,12 +8,18 @@
 
 {% load i18n %}
 
-{% load render_bundle from webpack_loader %}
-
 {% load quiz_tags %}
 
-{% block title %}All Questions{% endblock %}
-{% block description %}All Questions{% endblock %}
+{% block title %}
+  All Questions
+{% endblock %}
+{% block description %}
+  All Questions
+{% endblock %}
+{% block css %}
+   {{ block.super }}
+   {% stylesheet "css_tablesorter" %}
+{% endblock %}
 
 {% block content %}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
@@ -61,7 +68,8 @@
     <div class="form-group col-4">
       <div class="row" style="margin-top: 10px; margin-bottom: 10px">
         <div class="form-group col-md-offset">
-          <input type="submit" class="btn btn-primary" value="New quiz from displayed questions" style="margin-left: 10px">
+          <input type="submit" class="btn btn-primary" value="New quiz from displayed questions"
+                 style="margin-left: 10px">
         </div>
       </div>
     </div>
@@ -74,9 +82,8 @@
 {% endblock %}
 {% block javascript %}
   {{ block.super }}
-  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.js" %}></script>
-  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.widgets.js" %}></script>
 
+  {% javascript "js_tablesorter" %}
   <script type="application/javascript">
     $(function () {
       $('#question-list-table').tablesorter()

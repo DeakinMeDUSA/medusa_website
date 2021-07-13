@@ -19,7 +19,10 @@ from medusa_website.mcq_bank.forms import (
     QuestionDetailForm,
     QuestionUpdateForm,
     AnswerFormSetHelper,
-    AnswerCreateFormSet, AnswerUpdateFormSet, AnswerDetailFormSet, QuizSessionCreateFromQuestionsForm,
+    AnswerCreateFormSet,
+    AnswerUpdateFormSet,
+    AnswerDetailFormSet,
+    QuizSessionCreateFromQuestionsForm,
 )
 from medusa_website.mcq_bank.models import Question, QuizSession
 from medusa_website.users.models import User
@@ -108,7 +111,8 @@ class QuestionDetailView(DetailView, LoginRequiredMixin):
         context["answer_formset_helper"] = AnswerFormSetHelper()
         if context.get("answer_formset") is None:
             context["answer_formset"] = kwargs.get("answer_formset") or AnswerDetailFormSet(
-                instance=context["question"])
+                instance=context["question"]
+            )
 
         return context
 
@@ -148,8 +152,9 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
             return self.form_invalid(form)
 
         # parent_model, request, instance, view_kwargs = None, view = None
-        answer_formset = AnswerUpdateFormSet(data=self.request.POST, files=self.request.FILES,
-                                             instance=updated_question)
+        answer_formset = AnswerUpdateFormSet(
+            data=self.request.POST, files=self.request.FILES, instance=updated_question
+        )
 
         return self.formset_valid(form, answer_formset)
 
@@ -164,9 +169,7 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
             lookup = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
         except KeyError:
             msg = "Lookup field '%s' was not provided in view kwargs to '%s'"
-            raise ImproperlyConfigured(
-                msg % (lookup_url_kwarg, self.__class__.__name__)
-            )
+            raise ImproperlyConfigured(msg % (lookup_url_kwarg, self.__class__.__name__))
 
         return get_object_or_404(queryset, **lookup)
 
@@ -191,12 +194,14 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
         context["answer_formset_helper"] = AnswerFormSetHelper()
         if context.get("answer_formset") is None:
             if self.request.POST:
-                context["answer_formset"] = AnswerUpdateFormSet(data=self.request.POST, instance=context["question"],
-                                                                files=self.request.FILES)
+                context["answer_formset"] = AnswerUpdateFormSet(
+                    data=self.request.POST, instance=context["question"], files=self.request.FILES
+                )
                 # queryset=context["question"].answers.all())
             else:
-                context["answer_formset"] = AnswerUpdateFormSet(instance=context["question"],
-                                                                queryset=context["question"].answers.all())
+                context["answer_formset"] = AnswerUpdateFormSet(
+                    instance=context["question"], queryset=context["question"].answers.all()
+                )
         return context
 
     def fix_missing_author(self, form):
@@ -248,7 +253,8 @@ class QuestionCreateView(CreateView, LoginRequiredMixin):
         if self.request.POST:
             context["question"] = kwargs["form"].instance
             context["answer_formset"] = kwargs.get("answer_formset") or AnswerCreateFormSet(
-                instance=context["question"])
+                instance=context["question"]
+            )
         else:
             context["answer_formset"] = AnswerCreateFormSet()
 
@@ -315,10 +321,12 @@ class QuestionListTable(tables.Table):
     def render_id(self, value, record: Question):
         if record.editable(user=self.request.user):
             return format_html(
-                f'<a href="{reverse("mcq_bank:question_update", kwargs={"id": value})}">Edit question {value}</a>')
+                f'<a href="{reverse("mcq_bank:question_update", kwargs={"id": value})}">Edit question {value}</a>'
+            )
         else:
             return format_html(
-                f'<a href="{reverse("mcq_bank:question_detail", kwargs={"id": value})}">View question {value}</a>')
+                f'<a href="{reverse("mcq_bank:question_detail", kwargs={"id": value})}">View question {value}</a>'
+            )
 
     def render_answered(self, value, record: Question):
         return "Yes" if record.answered else "No"
@@ -356,7 +364,9 @@ class QuestionListView(ListView, LoginRequiredMixin, tables.SingleTableMixin, Fi
 
         context["question_list_table"] = QuestionListTable(annotated_questions, request=self.request)
         context["displayed_questions"] = annotated_questions
-        context["quiz_create_form"] = QuizSessionCreateFromQuestionsForm(user=self.request.user, questions=annotated_questions)
+        context["quiz_create_form"] = QuizSessionCreateFromQuestionsForm(
+            user=self.request.user, questions=annotated_questions
+        )
         return context
 
     @staticmethod

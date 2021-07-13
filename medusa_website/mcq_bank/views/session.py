@@ -6,7 +6,8 @@ from vanilla import CreateView, DetailView, ListView
 
 from medusa_website.mcq_bank.forms import (
     QuizSessionContinueOrStopForm,
-    QuizSessionCreateForm, QuizSessionCreateFromQuestionsForm,
+    QuizSessionCreateForm,
+    QuizSessionCreateFromQuestionsForm,
 )
 from medusa_website.mcq_bank.models import QuizSession
 
@@ -99,9 +100,14 @@ class QuizSessionCreateFromQuestionsView(CreateView, LoginRequiredMixin):
             current_session = QuizSession.get_current(user=form.cleaned_data["user"])
             if current_session:
                 current_session.mark_quiz_complete()
-            new_session = QuizSession.create_from_questions(user=form.cleaned_data["user"],
-                                                            questions=form.cleaned_data["questions"], max_n=10000,
-                                                            randomise_order=True, include_answered=True, save=True)
+            new_session = QuizSession.create_from_questions(
+                user=form.cleaned_data["user"],
+                questions=form.cleaned_data["questions"],
+                max_n=10000,
+                randomise_order=True,
+                include_answered=True,
+                save=True,
+            )
             return HttpResponseRedirect(reverse("mcq_bank:quiz_session_detail", kwargs={"id": new_session.id}))
         else:
             return self.form_invalid(form)
@@ -137,7 +143,7 @@ class QuizSessionCreateView(CreateView, LoginRequiredMixin):
                 categories=form.cleaned_data["categories"],
                 max_n=int(form.cleaned_data["max_num_questions"]),
                 randomise_order=form.cleaned_data["randomise_order"],
-                include_answered=form.cleaned_data["include_answered"]
+                include_answered=form.cleaned_data["include_answered"],
             )
             # return HttpResponseRedirect(reverse("mcq_bank:quiz_session_run", kwargs={"id": quiz_session.id}))
             return HttpResponseRedirect(reverse("mcq_bank:quiz_session_detail", kwargs={"id": quiz_session.id}))
@@ -165,6 +171,7 @@ class QuizSessionRunView(DetailView):
         context["answers"] = context["quiz_session"].answers.all()
         print(context)
         return context
+
 
 #
 # class QuizSessionView(FormView):

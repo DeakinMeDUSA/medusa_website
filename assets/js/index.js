@@ -1,4 +1,6 @@
-// const tablesorter = require('tablesorter')
+const tablesorter = require('tablesorter')
+var yuglify = require('yuglify');
+
 //
 // $(function () {
 //   $('#progress-table').tablesorter()

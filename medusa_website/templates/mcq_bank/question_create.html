@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load pipeline %}
 {% load crispy_forms_filters %}
 {% load bootstrap3 %}
 {% load crispy_forms_tags %}
@@ -10,9 +11,7 @@
 {% endblock %}
 {% block css %}
   {{ block.super }}
-  <link href="{% static 'plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
-  <link href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
-  <link href="{% static 'css/forms.css' %}" rel="stylesheet">
+  {% stylesheet "css_martor" %}
 
 {% endblock %}
 
@@ -28,7 +27,7 @@
 
     {{ form.text | as_crispy_field }}
 
-    {{ form.explanation | as_crispy_field}}
+    {{ form.explanation | as_crispy_field }}
     <hr>
     <h4>Answers</h4>
     <p>Provide at least two answers, and leave any un-needed answer fields blank.</p>
@@ -47,6 +46,7 @@
 
 {% block javascript %}
   {{ block.super }}
+  {% javascript "js_martor" %}
 
 
   <script type="application/javascript">
@@ -74,16 +74,5 @@
       totalForms.setAttribute('value', `${formNum + 1}`) //Increment the number of total forms in the management form
     }
   </script>
-
-  <script type="text/javascript" src="{% static 'plugins/js/ace.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/mode-markdown.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/ext-language_tools.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/theme-github.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/typo.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/spellcheck.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/resizable.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'plugins/js/emojis.min.js' %}"></script>
-  <script type="text/javascript" src="{% static 'martor/js/martor.bootstrap.min.js' %}"></script>
 
 {% endblock %}

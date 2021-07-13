@@ -1,15 +1,18 @@
 {% extends 'base.html' %}
+{% load pipeline %}
 {% load i18n %}
 {% block title %}{% trans "Past Quiz sessions" %}{% endblock %}
 {% load static %}
-
+{% block css %}
+   {{ block.super }}
+   {% stylesheet "css_tablesorter" %}
+{% endblock %}
 {% block content %}
 
 {% endblock %}
 {% block javascript %}
   {{ block.super }}
-  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.js" %}></script>
-  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.widgets.js" %}></script>
+  {% javascript "js_tablesorter" %}
 
     <script type="application/javascript">
       $(function () {

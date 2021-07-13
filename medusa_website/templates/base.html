@@ -1,3 +1,4 @@
+{% load pipeline %}
 {% load static i18n %}
 {#{% load compress %}#}
 
@@ -11,31 +12,13 @@
   <meta name="description" content="Website for MeDUSA, Deakin University's medical student society">
   <meta name="author" content="Chris Culhane">
 
-  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
-{#    {% compress css %}#}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
-  <![endif]-->
 
   <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
 
   {% block css %}
+    {% stylesheet "css_core" %}
 
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-
-
-
-    <!-- Your stuff: Third-party CSS libraries go here -->
-
-    <!-- This file stores project-specific CSS -->
-
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
   {% endblock %}
-
-  {#  {% endcompress %}#}
-
 
 </head>
 
@@ -118,38 +101,14 @@
 
 <!-- Placed at the end of the document so the pages load faster -->
 {% block javascript %}
-  {#  {% compress js %}#}
   <!-- Bootstrap JS and its dependencies-->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-          integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-          crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-          integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-          crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-          integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-          crossorigin="anonymous"></script>
-  {#  <script src="{% static 'js/jquery.bootstrap.modal.forms.min.js' %}"></script>#}
-  <script src="{% static 'js/jquery.bootstrap.modal.forms.js' %}"></script>
-  <script
-    src="https://browser.sentry-cdn.com/6.7.1/bundle.min.js"
-    integrity="sha384-+GoWV2WnDUGsSmipBvyBrWuhW8hPa/D21fH+j3NoZxDf9RgDryqh4Ug4L+7E1nxM"
-    crossorigin="anonymous"
-  ></script>
+  {% javascript "js_core" %}
   <script>
     Sentry.init({ dsn: 'https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588' })
     Sentry.showReportDialog({
       eventId: "{{ event_id }}",
     })
   </script>
-
-  <!-- Your stuff: Third-party javascript libraries go here -->
-
-
-  <!-- place project specific Javascript in this file -->
-
-  <script src="{% static 'js/project.js' %}"></script>
-  {#  {% endcompress js %}#}
 {% endblock javascript %}
 </body>
 </html>

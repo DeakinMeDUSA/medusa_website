@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load pipeline %}
 {% load crispy_forms_filters %}
 {% load static %}
 {% load i18n %}
@@ -10,9 +11,7 @@
 {% endblock %}
 {% block css %}
   {{ block.super }}
-  <link href="{% static 'plugins/css/ace.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
-  <link href="{% static 'martor/css/martor.bootstrap.min.css' %}" type="text/css" media="all" rel="stylesheet"/>
-  <link href="{% static 'css/forms.css' %}" rel="stylesheet">
+  {% stylesheet "css_martor" %}
 
 {% endblock %}
 
@@ -20,7 +19,7 @@
   <link href="{% static 'css/forms.css' %}" rel="stylesheet">
   <h4>Update Question</h4>
 
-  <form action="{% url 'mcq_bank:question_update' id=question.id%}" method="post">
+  <form action="{% url 'mcq_bank:question_update' id=question.id %}" method="post">
     {% csrf_token %}
     {{ form.author | as_crispy_field }}
     <div class="form-group row">
@@ -29,13 +28,13 @@
     </div>
 
     {{ form.text | as_crispy_field }}
-    {{ form.explanation}}
+    {{ form.explanation }}
     <hr>
     <h4>Answers</h4>
     <p>Provide at least two answers, and leave any un-needed answer fields blank.</p>
     <div class="">{{ form.randomise_answer_order | as_crispy_field }}</div>
 
-{#    {{ answer_formset.management_form }}#}
+    {#    {{ answer_formset.management_form }}#}
     <table>
       {% crispy answer_formset answer_formset_helper %}
     </table>
@@ -50,6 +49,7 @@
 
 {% block javascript %}
   {{ block.super }}
+  {% javascript "js_martor" %}
 
 
   <script type="application/javascript">
@@ -77,15 +77,4 @@
       totalForms.setAttribute('value', `${formNum + 1}`) //Increment the number of total forms in the management form
     }
   </script>
-
-    <script type="text/javascript" src="{% static 'plugins/js/ace.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/js/mode-markdown.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/js/ext-language_tools.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/js/theme-github.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/js/typo.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/js/spellcheck.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/js/highlight.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/js/resizable.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'plugins/js/emojis.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'martor/js/martor.bootstrap.min.js' %}"></script>
 {% endblock %}

@@ -1,12 +1,26 @@
 {% extends "base.html" %}
+{% load static %}
+{% load pipeline %}
+
+{% block css %}
+  {{ block.super }}
+  {% stylesheet "css_juicer" %}
+{% endblock %}
+
 {% block content %}
-  <link href="https://assets.juicer.io/embed.css" media="all" rel="stylesheet" type="text/css"/>
-  <script src="https://assets.juicer.io/embed.js" type="text/javascript"></script>
+
+{#  <link href="https://assets.juicer.io/embed.css" media="all" rel="stylesheet" type="text/css"/>#}
+{#  <script src="https://assets.juicer.io/embed.js" type="text/javascript"></script>#}
 
   <div style="width: 80%">
-    <ul class="juicer-feed" data-feed-id="medusa-deakin"  data-per="20" data-columns="3" data-filter="instagram"
+    <ul class="juicer-feed" data-feed-id="medusa-deakin" data-per="20" data-columns="3" data-filter="instagram"
         data-overlay="true"
     ></ul>
   </div>
 
+{% endblock %}
+
+{% block javascript %}
+   {{ block.super }}
+   {% javascript "js_juicer" %}
 {% endblock %}

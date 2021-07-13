@@ -1,8 +1,15 @@
 {% extends "base.html" %}
-{% block title %}All Quizzes{% endblock %}
 {% load static %}
-
+{% load pipeline %}
 {% load render_table from django_tables2 %}
+
+{% block title %}
+  MCQ Bank
+{% endblock %}
+{% block css %}
+   {{ block.super }}
+   {% stylesheet "css_tablesorter" %}
+{% endblock %}
 {% block content %}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
   <div class="modal fade" tabindex="-1" role="dialog" id="modal">
@@ -18,7 +25,7 @@
       Start new session / Continue old session <i class="fa fa-chevron-right"></i>
     </button>
   {% else %}
-    <a id="start-session" class="btn btn-primary"  href="{% url "mcq_bank:quiz_session_create" %}">
+    <a id="start-session" class="btn btn-primary" href="{% url "mcq_bank:quiz_session_create" %}">
       Start new session <i class="fa fa-chevron-right"></i>
     </a>
   {% endif %}
@@ -40,6 +47,8 @@
 
 {% block javascript %}
   {{ block.super }}
+  {% javascript "js_bootstrap_modal_forms" %}
+  {% javascript "js_tablesorter" %}
   <script type="text/javascript">
     $(document).ready(function () {
 
@@ -49,8 +58,6 @@
     })
 
   </script>
-  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.js" %}></script>
-  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.widgets.js" %}></script>
 
   <script type="application/javascript">
     $(function () {

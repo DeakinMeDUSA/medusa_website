@@ -80,10 +80,9 @@ DJANGO_APPS = [
     # "django.contrib.humanize", # Handy template tags
     "django.contrib.admin",
     "django.forms",
-
 ]
 THIRD_PARTY_APPS = [
-    "webpack_loader",
+    # "webpack_loader",
     "crispy_forms",
     "allauth",
     "allauth.account",
@@ -102,12 +101,12 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "extra_views",
     "martor",
-    "gmailapi_backend",
+    "pipeline",
 ]
 
 LOCAL_APPS = [
     "medusa_website.users.apps.UsersConfig",
-    "medusa_website.mcq_bank.apps.McqBankConfig"
+    "medusa_website.mcq_bank.apps.McqBankConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -165,7 +164,7 @@ MIDDLEWARE = [
     "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    "medusa_website.utils.custom_middleware.SimpleMiddleware"
+    "medusa_website.utils.custom_middleware.SimpleMiddleware",
 ]
 
 # STATIC
@@ -183,8 +182,10 @@ STATICFILES_DIRS = [
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "pipeline.finders.PipelineFinder",
 ]
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
 
 # MEDIA
 # ------------------------------------------------------------------------------
@@ -250,7 +251,7 @@ X_FRAME_OPTIONS = "DENY"
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = 'gmailapi_backend.mail.GmailBackend'
+EMAIL_BACKEND = "gmailapi_backend.mail.GmailBackend"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 GMAIL_API_CLIENT_ID = env("GMAIL_API_CLIENT_ID", default=None)
@@ -322,28 +323,79 @@ APPEND_SLASH = True
 CORS_ORIGIN_WHITELIST = ("http://localhost:3000",)
 CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
 
-WEBPACK_LOADER = {
-    "DEFAULT": {
-        "CACHE": not DEBUG,
-        "BUNDLE_DIR_NAME": "webpack_bundles/",  # must end with slash
-        "STATS_FILE": (ROOT_DIR / "webpack-stats.json").as_posix(),
-        "TIMEOUT": None,
-        "IGNORE": [r".+\.hot-update.js", r".+\.map"],
-        "LOADER_CLASS": "webpack_loader.loader.WebpackLoader",
+# JAVASCRIPT LOADING
+# https://django-pipeline.readthedocs.io/en/latest/configuration.html
+PIPELINE = {
+    # "PIPELINE_ENABLED": False,
+    "PIPELINE_COLLECTOR_ENABLED": True,
+    "CSS_COMPRESSOR": "pipeline.compressors.yuglify.YuglifyCompressor",
+    "JS_COMPRESSOR": "pipeline.compressors.yuglify.YuglifyCompressor",
+    "JAVASCRIPT": {
+        "js_core": {  # The order matters!
+            "source_filenames": (
+                "modules/core/jquery-3.5.1.min.js",
+                "modules/core/popper.min.js",
+                "modules/core/bootstrap-4.0.0.min.js",
+                "modules/core/sentry-6.7.1.min.js",
+            ),
+            "output_filename": "pipeline/js/core.js",
+        },
+        "js_bootstrap_modal_forms": {
+            "source_filenames": ("modules/bootstrap-modal-forms/*.js",),
+            "output_filename": "pipeline/js/bootstrap-modal-forms.js",
+        },
+        "js_stats": {
+            "source_filenames": ("js/project.js", "js/index.js"),
+            "output_filename": "pipeline/js/stats.js",
+        },
+        "js_tablesorter": {
+            "source_filenames": ("modules/tablesorter/dist/js/jquery.tablesorter.combined.js",),
+            "output_filename": "pipeline/js/tablesorter.js",
+        },
+        "js_juicer": {
+            "source_filenames": ("modules/juicer/js/*.js",),
+            "output_filename": "pipeline/js/juicer.js",
+        },
+        "js_martor": {
+            "source_filenames": ("modules/martor/js/*.js",),
+            "output_filename": "pipeline/js/martor.js",
+        },
     },
-}
-REST_FRAMEWORK = {
-    # "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
-    ),
+    "STYLESHEETS": {
+        "css_core": {
+            "source_filenames": ("modules/core/*.css", "sass/*.scss"),
+            "output_filename": "pipeline/css/core.css",
+        },
+        "css_tablesorter": {
+            "source_filenames": ("modules/tablesorter/dist/css/scss/*.scss",),
+            "output_filename": "pipeline/css/tablesorter.css",
+        },
+        "css_juicer": {
+            "source_filenames": ("modules/juicer/css/*.css",),
+            "output_filename": "pipeline/css/juicer.css",
+        },
+        "css_martor": {
+            "source_filenames": ("modules/martor/css/*.css",),
+            "output_filename": "pipeline/css/martor.css",
+        },
+    },
+    "COMPILERS": ("libsasscompiler.LibSassCompiler",),
 }
 
-# JWT_AUTH = {
-#     "JWT_RESPONSE_PAYLOAD_HANDLER": "medusa_website.users.utils.my_jwt_response_handler"
+# https://github.com/sonic182/libsasscompiler
+
+# WEBPACK_LOADER = {
+#     "DEFAULT": {
+#         "CACHE": not DEBUG,
+#         "BUNDLE_DIR_NAME": "webpack_bundles/",  # must end with slash
+#         "STATS_FILE": (ROOT_DIR / "webpack-stats.json").as_posix(),
+#         "TIMEOUT": None,
+#         "IGNORE": [r".+\.hot-update.js", r".+\.map"],
+#         "LOADER_CLASS": "webpack_loader.loader.WebpackLoader",
+#     },
 # }
-MEMBERLIST_XLSX = Path(MEDIA_ROOT, "users", "Club Weekly Membership Report Schedule.xlsx")
+
+MEMBERLIST_XLSX = Path(MEDIA_ROOT, "users", "Club Weekly Membership Report Shedule.xlsx")
 MEMBERLIST_CSV = Path(MEDIA_ROOT, "users", "memberlist.csv")
 PG_COPY_BACKUP_PATH = Path(ROOT_DIR, "db_backup")
 
@@ -359,7 +411,7 @@ MARTOR_ENABLE_CONFIGS = {
     "imgur": "false",  # to enable/disable imgur/custom uploader.
     "mention": "false",  # to enable/disable mention
     "jquery": "false",  # to include/revoke jquery (require for admin default django)
-    "living": "false",  # to enable/disable live updates in preview
+    "living": "true",  # to enable/disable live updates in preview
     "spellcheck": "false",  # to enable/disable spellcheck in form textareas
     "hljs": "true",  # to enable/disable hljs highlighting in preview
 }

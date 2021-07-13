@@ -1,15 +1,21 @@
 {% extends "base.html" %}
 {% load static %}
+{% load pipeline %}
 {% load render_table from django_tables2 %}
-
 {% load i18n %}
-
-{% load render_bundle from webpack_loader %}
-
 {% load quiz_tags %}
 
-{% block title %} History Page {% endblock %}
-{% block description %} User History Page {% endblock %}
+{% block title %}
+  History Page
+{% endblock %}
+{% block description %}
+  User History Page
+{% endblock %}
+
+{% block css %}
+  {{ block.super }}
+  {% stylesheet "css_tablesorter" %}
+{% endblock %}
 
 {% block content %}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
@@ -22,9 +28,7 @@
 {% endblock %}
 {% block javascript %}
   {{ block.super }}
-  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.js" %}></script>
-  <script src={% static "modules/tablesorter/dist/js/jquery.tablesorter.widgets.js" %}></script>
-
+  {% javascript "js_tablesorter" %}
   <script type="application/javascript">
     $(function () {
       $('#category-progress-table').tablesorter()

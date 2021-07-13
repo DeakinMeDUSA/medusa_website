@@ -1,10 +1,11 @@
 import logging
 
-from .base import *  # noqa
-from .base import env
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
+
+from .base import *  # noqa
+from .base import env
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -13,7 +14,7 @@ DEBUG = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", "medusa.pythonanywhere.com", "172.105.190.146"]
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 SECURE_SSL_REDIRECT = False
 
 # CACHES
@@ -34,7 +35,7 @@ CACHES = {
 # WhiteNoise
 # ------------------------------------------------------------------------------
 # http://whitenoise.evans.io/en/latest/django.html#using-whitenoise-in-development
-INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
+# INSTALLED_APPS = ["whitenoise.runserver_nostatic"] + INSTALLED_APPS  # noqa F405
 
 
 # django-debug-toolbar
@@ -50,7 +51,6 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
-
 
 # Sentry
 # ------------------------------------------------------------------------------
@@ -72,3 +72,5 @@ INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 # Your stuff...
 # ------------------------------------------------------------------------------
 CRISPY_FAIL_SILENTLY = False
+PIPELINE["YUGLIFY_BINARY"] = str(Path(ROOT_DIR, "node_modules/.bin/yuglify.cmd"))
+PIPELINE["SHOW_ERRORS_INLINE"] = False  # Will raise exceptions instead

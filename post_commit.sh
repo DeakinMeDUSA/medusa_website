@@ -13,9 +13,9 @@ printf 'Updating Python dependencies ...'
 pip install -r requirements_prod.txt
 echo
 
-#printf 'Updating Node.js dependencies ...'
-#npm install
-#echo
+printf 'Updating Node.js dependencies ...'
+npm install
+echo
 
 printf 'Collecting static files ...'
 python manage.py collectstatic --noinput

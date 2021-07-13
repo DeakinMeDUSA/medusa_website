@@ -199,3 +199,6 @@ sentry_sdk.init(
 # Your stuff...
 # ------------------------------------------------------------------------------
 DEBUG = False
+
+PIPELINE["SHOW_ERRORS_INLINE"] = (True,)
+PIPELINE["YUGLIFY_BINARY"] = str(Path(ROOT_DIR, "node_modules/.bin/yuglify"))

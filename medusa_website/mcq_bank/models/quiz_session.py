@@ -133,13 +133,7 @@ class QuizSession(models.Model):
 
     @classmethod
     def create_from_questions(
-        cls,
-        user: User,
-        questions: QuerySet,
-        max_n=20,
-        randomise_order=True,
-        include_answered=False,
-        save=True
+        cls, user: User, questions: QuerySet, max_n=20, randomise_order=True, include_answered=False, save=True
     ) -> "QuizSession":
         cls.check_no_current_session(user=user)
 
@@ -154,7 +148,6 @@ class QuizSession(models.Model):
 
         if selected_qs.count() < 1:
             raise RuntimeError("Cannot create Quiz Session without any questions!")
-
 
         session = cls(user=user)
         session.save()

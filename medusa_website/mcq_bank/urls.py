@@ -20,9 +20,12 @@ app_name = "mcq_bank"
 
 urlpatterns = [
     path("history/", view=HistoryView.as_view(), name="history"),
-    path("quiz/create_from_questions/", view=QuizSessionCreateFromQuestionsView.as_view(), name="quiz_session_create_from_questions"),
+    path(
+        "quiz/create_from_questions/",
+        view=QuizSessionCreateFromQuestionsView.as_view(),
+        name="quiz_session_create_from_questions",
+    ),
     path("quiz/create/", view=QuizSessionCreateView.as_view(), name="quiz_session_create"),
-
     path(
         "quiz/check_create/",
         view=QuizSessionEndOrContinueView.as_view(),
@@ -49,4 +52,4 @@ urlpatterns = [
 ]
 
 
-    # TODO link detail view to use a modified UPdateView to keep things DRY
+# TODO link detail view to use a modified UPdateView to keep things DRY

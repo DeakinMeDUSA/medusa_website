@@ -1,8 +1,8 @@
-
 class SimpleMiddleware:
     """
     Fixes live preview of markdown, see https://github.com/agusmakmun/django-markdown-editor/issues/120
     """
+
     def __init__(self, get_response):
         self.get_response = get_response
         # One-time configuration and initialization.

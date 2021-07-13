@@ -7,7 +7,7 @@ from django.db import IntegrityError
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 import django
 
-sys.path.append('I:/GitHub/medusa_website')
+sys.path.append("I:/GitHub/medusa_website")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 django.setup()
 logger = logging.getLogger(__name__)
@@ -17,6 +17,7 @@ import csv
 from pathlib import Path
 
 from medusa_website.mcq_bank.models import Question, Answer, Category
+
 # IMPORT_FILE = Path(r"I:\GitHub\medusa_website\scripts\import_medusaq\McqData20201017034440.csv")
 from medusa_website.users.models import User
 from bs4 import UnicodeDammit
@@ -57,19 +58,17 @@ for raw_q in questions_raw:
     explanation = raw_q["correctanswerexplanation"].strip()
     category, _created = Category.objects.get_or_create(name=raw_q["topics"])
     text = raw_q["text"].strip()
-    question = Question(text=text,
-                        author=None,
-                        category=category,
-                        explanation=explanation,
-                        is_flagged=parse_tf(raw_q["isflagged"])
-                        )
+    question = Question(
+        text=text, author=None, category=category, explanation=explanation, is_flagged=parse_tf(raw_q["isflagged"])
+    )
     try:
         question.save()
     except IntegrityError:
         continue
     correct_answer = Answer(text=raw_q["correctanswer"].strip(), correct=True, question=question)
     correct_answer.save()
-    other_answers = [Answer(text=ans.strip(), correct=False, question=question
-                            ) for ans in raw_q["incorrectanswers"].split(";;")]
+    other_answers = [
+        Answer(text=ans.strip(), correct=False, question=question) for ans in raw_q["incorrectanswers"].split(";;")
+    ]
     for a in other_answers:
         a.save()
