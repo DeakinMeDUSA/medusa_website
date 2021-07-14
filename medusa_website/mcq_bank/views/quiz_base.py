@@ -5,13 +5,13 @@ from medusa_website.mcq_bank.models import History, QuizSession
 from medusa_website.mcq_bank.views.history import CategoryProgressTable
 
 
-class IndexRedirectView(RedirectView, LoginRequiredMixin):
+class IndexRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
     query_string = False
     pattern_name = "mcq_bank:quiz_index"
 
 
-class QuizIndexView(TemplateView, LoginRequiredMixin):
+class QuizIndexView(LoginRequiredMixin, TemplateView):
     template_name = "mcq_bank/index.html"
 
     def get_context_data(self, **kwargs):

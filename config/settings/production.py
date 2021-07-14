@@ -17,7 +17,6 @@ ALLOWED_HOSTS = [
     "localhost",
     "0.0.0.0",
     "127.0.0.1",
-    "medusa.pythonanywhere.com",
     "172.105.190.146",
     "www.cculhane.com",
     "cculhane.com",
@@ -173,7 +172,7 @@ LOGGING = {
         "sentry_sdk": {"level": "ERROR", "handlers": ["console"], "propagate": False},
         "django.security.DisallowedHost": {
             "level": "ERROR",
-            "handlers": ["console"],
+            "handlers": ["null"],
             "propagate": False,
         },
     },

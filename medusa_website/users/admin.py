@@ -31,7 +31,7 @@ class UserAdmin(cuUserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    list_display = ["email", "name", "is_superuser", "is_staff"]
+    list_display = ["email", "name", "last_login", "date_joined", "is_superuser", "is_staff"]
     search_fields = ["email", "name"]
     readonly_fields = ["all_emails"]
     #

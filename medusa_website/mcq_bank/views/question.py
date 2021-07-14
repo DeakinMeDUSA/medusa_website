@@ -24,7 +24,7 @@ from medusa_website.mcq_bank.forms import (
     AnswerDetailFormSet,
     QuizSessionCreateFromQuestionsForm,
 )
-from medusa_website.mcq_bank.models import Question, QuizSession
+from medusa_website.mcq_bank.models import Question
 from medusa_website.users.models import User
 
 logger = logging.getLogger(__name__)
@@ -75,7 +75,7 @@ def editable(user: User, question: Question):
     return user.is_staff or question.author == user
 
 
-class QuestionDetailView(DetailView, LoginRequiredMixin):
+class QuestionDetailView(LoginRequiredMixin, DetailView):
     model = Question
     template_name = "mcq_bank/question_detail.html"
     form_class = QuestionDetailForm
@@ -117,7 +117,7 @@ class QuestionDetailView(DetailView, LoginRequiredMixin):
         return context
 
 
-class QuestionUpdateView(UpdateView, LoginRequiredMixin):
+class QuestionUpdateView(LoginRequiredMixin, UpdateView):
     model = Question
     template_name = "mcq_bank/question_update.html"
     form_class = QuestionUpdateForm
@@ -225,7 +225,7 @@ class QuestionUpdateView(UpdateView, LoginRequiredMixin):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class QuestionCreateView(CreateView, LoginRequiredMixin):
+class QuestionCreateView(LoginRequiredMixin, CreateView):
     model = Question
 
     # fields = ["text", "category", "image", "explanation", "randomise_answer_order"]
@@ -344,7 +344,7 @@ class QuestionListTable(tables.Table):
     #     return f"{value or 0} %"
 
 
-class QuestionListView(ListView, LoginRequiredMixin, tables.SingleTableMixin, FilterView):
+class QuestionListView(LoginRequiredMixin, ListView, tables.SingleTableMixin, FilterView):
     model = Question
     template_name = "mcq_bank/question_list.html"
     # form_class = QuestionCreateForm

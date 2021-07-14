@@ -12,7 +12,7 @@ from ...users.models import User
 from ..forms import QuestionForm
 
 
-class QuizTakeView(FormView, LoginRequiredMixin):
+class QuizTakeView(LoginRequiredMixin, FormView):
     form_class = QuestionForm
     template_name = "mcq_bank/question.html"
     result_template_name = "mcq_bank/result.html"

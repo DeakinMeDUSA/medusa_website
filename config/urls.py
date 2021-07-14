@@ -7,10 +7,11 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
 from medusa_website.mcq_bank.views.markdown_uploader import markdown_uploader
+from medusa_website.pages.views import HomeView
 from medusa_website.users import utils
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
-    path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    path("", HomeView.as_view(), name="home"),
     path("about/", TemplateView.as_view(template_name="pages/about.html"), name="about"),
     path(
         "empty_test/",
