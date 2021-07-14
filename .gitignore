@@ -343,3 +343,4 @@ db/
 /db_backup
 db.sqlite3
 server.log
+temp/

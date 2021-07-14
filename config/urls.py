@@ -12,6 +12,7 @@ from medusa_website.users import utils
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path("", HomeView.as_view(), name="home"),
+    path("site/", include("medusa_website.site.urls", namespace="site")),
     path("about/", AboutView.as_view, name="about"),
     path(
         "empty_test/",

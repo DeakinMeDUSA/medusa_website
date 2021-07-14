@@ -43,6 +43,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'empty_test' %}">Empty Test</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'site' %}">New frontend demo</a>
+        </li>
         {% if request.user.is_authenticated %}
           <li class="nav-item">
             <a class="nav-link" href="{% url 'mcq_bank:quiz_index' %}">MCQ Bank</a>

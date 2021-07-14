@@ -45,6 +45,7 @@
         <option value="$MODULE_DIR$/medusa_website/templates/mcq_bank" />
         <option value="$MODULE_DIR$/medusa_website/templates/pages" />
         <option value="$MODULE_DIR$/medusa_website/templates/users" />
+        <option value="$MODULE_DIR$/medusa_website/templates/site" />
       </list>
     </option>
   </component>

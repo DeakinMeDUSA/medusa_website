@@ -59,7 +59,7 @@ class SessionHistoryTable(tables.Table):
         return format_html(f'<a href="{session_url}">{value}</a>')
 
 
-class HistoryView(LoginRequiredMixin, TemplateView ):
+class HistoryView(LoginRequiredMixin, TemplateView):
     template_name = "mcq_bank/history.html"
 
     @method_decorator(login_required)
