@@ -353,7 +353,7 @@ PIPELINE = {
             "output_filename": "pipeline/js/tablesorter.js",
         },
         "js_juicer": {
-            "source_filenames": ("modules/juicer/js/*.js",),
+            "source_filenames": ("modules/juicer/*.js",),
             "output_filename": "pipeline/js/juicer.js",
         },
         "js_martor": {
@@ -371,7 +371,7 @@ PIPELINE = {
             "output_filename": "pipeline/css/tablesorter.css",
         },
         "css_juicer": {
-            "source_filenames": ("modules/juicer/css/*.css",),
+            "source_filenames": ("modules/juicer/*.css",),
             "output_filename": "pipeline/css/juicer.css",
         },
         "css_martor": {

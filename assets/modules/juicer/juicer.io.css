@@ -1606,7 +1606,7 @@
 }
 
 .juicer-feed h1.referral a:after {
-  background: url("static/images/juicer-logo-without-text.svg") no-repeat;
+  background: url("https://www.cculhane.com/static/images/juicer-logo-without-text.svg") no-repeat;
   content: '';
   display: inline-block;
   height: 15px;
