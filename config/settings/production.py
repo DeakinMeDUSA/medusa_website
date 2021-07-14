@@ -172,7 +172,7 @@ LOGGING = {
         "sentry_sdk": {"level": "ERROR", "handlers": ["console"], "propagate": False},
         "django.security.DisallowedHost": {
             "level": "ERROR",
-            "handlers": ["null"],
+            "handlers": ["console"],
             "propagate": False,
         },
     },
