@@ -22,8 +22,8 @@ printf 'Running migrations ...'
 python manage.py migrate
 
 printf 'Restarting application ...'
-sudo systemctl restart gunicorn.socket gunicorn.service
-sudo systemctl daemon-reload
+# sudo systemctl restart gunicorn.socket gunicorn.service
+# sudo systemctl daemon-reload
 sudo systemctl restart gunicorn
-sudo systemctl reload nginx
+# sudo systemctl reload nginx
 echo
