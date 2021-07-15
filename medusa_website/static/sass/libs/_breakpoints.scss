@@ -4,6 +4,8 @@
 
 /// Breakpoints.
 /// @var {list}
+// Pre-define to fix depreciation warnings
+$breakpoints: null;
 $breakpoints: () !global;
 
 // Mixins.

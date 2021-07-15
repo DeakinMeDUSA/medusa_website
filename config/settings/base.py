@@ -78,6 +78,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
+    "djangocms_admin_style",  # https://github.com/django-cms/djangocms-admin-style
     "django.contrib.admin",
     "django.forms",
 ]
