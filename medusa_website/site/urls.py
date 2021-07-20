@@ -1,7 +1,7 @@
 from django.urls import path
 from vanilla import TemplateView
 
-from medusa_website.site.views import AboutView
+from medusa_website.site.views import AboutView, ContactView
 
 app_name = "site"
 urlpatterns = [
@@ -11,6 +11,7 @@ urlpatterns = [
     path("generic/", view=TemplateView.as_view(template_name="site/generic.html"), name="generic"),
     path("sponsors/", view=TemplateView.as_view(template_name="site/sponsors.html"), name="sponsors"),
     path("about/", view=AboutView.as_view(), name="about"),
+    path("contact/", view=ContactView.as_view(), name="contact"),
 
 ]
 

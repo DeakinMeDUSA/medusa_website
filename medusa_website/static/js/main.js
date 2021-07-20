@@ -243,15 +243,51 @@
     })
 
   }
-
+  $('.hidden').hide()
   // Ensure only one collapsible is shown at once
-  $('.toggle').click(function () {
-    const divToggleId = $(this).attr("data-target")
+  $('.org-chart-btn').click(function () {
+    // Get the associated div for this button
+    const divToggleId = $(this).attr('data-target')
     // console.log(`divToggleId = ${divToggleId}`)
-    //Hide all open collapsibles
-    $('.collapse').fadeOut( "slow", "linear" )
-    $(divToggleId).fadeIn( "slow", "linear" )
+    // Get the div where we are going to put the new div
+    var resultDiv = $('.subcommittee-result')
+    var toggleDiv = $(divToggleId)
+
+    var addAndShowResult = function (){
+      resultDiv.removeClass('empty')
+      resultDiv[0].replaceChildren(toggleDiv.clone()[0]) // Make sure to clone so we keep the original DOM
+      resultDiv.show()
+      resultDiv.children().animate({ opacity: 'toggle', height: 'toggle' }, '500')
+    }
+
+    if (resultDiv.hasClass('empty')) {
+      //  We can skip the hiding animation
+      addAndShowResult()
+    } else {
+      resultDiv.animate({ opacity: ['toggle', 'swing'], height: ['toggle', 'swing'] }, '250', function () {
+
+        if (resultDiv.children()[0] === toggleDiv[0]) {
+          // console.log("If equal we want to hide the current result and leave empty")
+          resultDiv.empty()
+          resultDiv.addClass('empty')
+
+        } else {
+          addAndShowResult()
+        }
+      })
+    }
+
   })
+
+  $('.js-captcha-refresh').click(function(){
+      $form = $(this).parents('form');
+
+      $.getJSON($(this).data('url'), {}, function(json) {
+          // This should update your captcha image src and captcha hidden input
+      });
+
+      return false;
+  });
 
 
 })(jQuery)

@@ -12,13 +12,13 @@
 {% block content %}
 
   <!-- Post -->
-  <section class="post">
+  <section class="">
     <header class="major">
       <h1>About Us</h1>
       <p>MeDUSA is your medical society that represents you!</p>
     </header>
     <div class="image main">
-      <img alt="" src="{% static "images/pic01.jpg" %}"/>
+      <img alt="" src="{% static "images/site/building_ka.jpg" %}"/>
     </div>
     <p>
       First established in 2008 by it's founding president Caroline Bate, MeDUSA aims to support all Deakin medical
@@ -54,42 +54,42 @@
       can further your understanding of the functioning of MeDUSA as an organisation.</p>
 
   </section>
-  <section>
+  <section class="">
     <h2>Committee Structure</h2>
     <!-- Commitee Structure buttons -->
     <!-- Three rows, with first row just containing executive committee, the others with two buttons each -->
     <div class="container">
       <div class="align-center">
-        <button class="toggle org-chart-btn" data-toggle="collapse" data-target=".collapse.executive-committee"
+        <button class="org-chart-btn" data-target=".subcommittee-container.executive-committee"
                 style="font-size: large;">Executive Committee
         </button>
       </div>
       {#      </div>#}
       <div class="org-chart-structure row ">
         <div class="org-chart-structure col col-lg-auto">
-          <button class="toggle org-chart-btn" data-toggle="collapse" data-target=".collapse.general-committee"
-          >General Committee
+          <button class="org-chart-btn" data-target=".subcommittee-container.general-committee">General Committee
           </button>
         </div>
         <div class="org-chart-structure col col-lg-auto">
-          <button class="toggle org-chart-btn" data-toggle="collapse" data-target=".collapse.clinical-committee">
-            Clinical Committee
+          <button class="org-chart-btn" data-target=".subcommittee-container.clinical-committee"> Clinical Committee
           </button>
         </div>
       </div>
       <div class="org-chart-structure row justify-content-md-center">
         <div class="org-chart-structure col col-lg-auto">
-          <button class="toggle org-chart-btn" data-toggle="collapse" data-target=".collapse.preclinical-committee"
-          >Preclinical Committee
+          <button class="org-chart-btn" data-target=".subcommittee-container.preclinical-committee">Preclinical
+            Committee
           </button>
         </div>
         <div class="org-chart-structure col col-lg-auto">
-          <button class="toggle org-chart-btn" data-toggle="collapse" data-target=".collapse.special-interest-groups">
-            Special Interest Groups
+          <button class="org-chart-btn" data-target=".subcommittee-container.special-interest-groups"> Special Interest
+            Groups
           </button>
         </div>
       </div>
     </div>
+  <div class="subcommittee-result empty">
+  </div>
 
     {% for subcommittee in subcommittees.values %}
       {% include "site/org_chart_subcomittee.html" with subcommittee=subcommittee %}

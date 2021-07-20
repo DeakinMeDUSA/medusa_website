@@ -2731,6 +2731,80 @@ table.alt tbody tr td {
   line-height: 2;
 }
 
+.footer-container {
+  width: 80%;
+  height: auto;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-text {
+  font-size: 10px;
+}
+
+.icon-container {
+  padding: 10px;
+  margin: 5px;
+  width: auto;
+  height: 100px;
+  align-content: center;
+  place-items: flex-start;
+}
+
+.footer-svg {
+  padding: 0;
+  -webkit-transition: all 150ms ease;
+  -moz-transition: all 150ms ease;
+  -ms-transition: all 150ms ease;
+  transition: all 150ms ease;
+  margin: 0;
+  height: 100px;
+  transform: scale(0.7);
+  position: center;
+  width: 120px;
+}
+.footer-svg.facebook path {
+  transform: scale(0.06) translateX(210px);
+}
+.footer-svg.facebook:hover path {
+  fill: #3b579d;
+}
+.footer-svg.facebook.icon {
+  fill: black;
+}
+.footer-svg.instagram path {
+  transform: scale(0.065) translateY(0px);
+}
+.footer-svg.instagram:hover path {
+  fill: #dc4a38;
+}
+.footer-svg.instagram.icon {
+  fill: black;
+}
+.footer-svg.twitter path {
+  transform: scale(0.065) translateY(80px);
+}
+.footer-svg.twitter:hover path {
+  fill: #2caae1;
+}
+.footer-svg.twitter.icon {
+  fill: black;
+}
+.footer-svg.email path {
+  transform: scale(0.06) translateY(80px);
+}
+.footer-svg.email:hover path {
+  fill: #0fa400;
+}
+.footer-svg.email.icon {
+  fill: black;
+}
+
 /* Wrapper */
 #wrapper {
   -moz-transition: opacity 0.5s ease;

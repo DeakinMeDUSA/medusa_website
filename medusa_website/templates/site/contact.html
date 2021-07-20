@@ -1,0 +1,74 @@
+{% extends "site/base.html" %}
+{% load static %}
+{% block title %}MeDUSA - Contact{% endblock %}
+{% block css %}
+  {{ block.super }}
+  {#  {% stylesheet "css_core" %}#}
+  {% static "/css/main.css" %}
+{% endblock %}
+{% block content %}
+  <section>
+    <h3>Contact us</h3>
+    {% if messages %}
+      <div class="messages">
+        {% for message in messages %}
+          <h4  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </h4>
+        {% endfor %}
+      </div>
+    {% else %}
+      <form method="post" action="#">
+        {% csrf_token %}
+
+        <div class="fields">
+          <div class="field">
+            {{ form }}
+          </div>
+          {#          <div class="field">#}
+          {#            <label for="name">Name</label>#}
+          {#            <input type="text" name="name" id="name"/>#}
+          {#          </div>#}
+          {#          <div class="field">#}
+          {#            <label for="email">Email</label>#}
+          {#            <input type="text" name="email" id="email"/>#}
+          {#          </div>#}
+          {#          <div class="field">#}
+          {#            <label for="message">Message</label>#}
+          {#            <textarea name="message" id="message" rows="3"></textarea>#}
+          {#          </div>#}
+          <div class="field">
+
+            <script src='https://www.google.com/recaptcha/api.js'></script>
+            <div class="g-recaptcha" data-sitekey="6Le5WasbAAAAAJWBYCUjrerwXQ3FlM5OSaT08sGa"></div>
+          </div>
+        </div>
+
+        <ul class="actions">
+          <li><input type="submit" value="Send Message"/></li>
+        </ul>
+      </form>
+    {% endif %}
+  </section>
+  <section class="split contact">
+    <section class="alt">
+      <h3>Postal Address</h3>
+      <p>
+        School of Medicine, Deakin University, Locked Bag 20000, Geelong, VIC 3220
+      </p>
+      <h3>Street Address</h3>
+      <p>
+        School of Medicine, Deakin University, 75 Pigdons Road, Waurn Ponds VIC 3216
+      </p>
+    </section>
+    <section>
+      <h3>Email</h3>
+      <p>
+        President:&nbsp;<a href="mailto:president@medusa.org.au">president@medusa.org.au</a><br/>
+        Vice President:&nbsp;<a href="mailto:vp@medusa.org.au">vp@medusa.org.au</a><br/>
+        Secretary:&nbsp;<a href="mailto:secretary@medusa.org.au">secretary@medusa.org.au</a><br/>
+        Treasurer:&nbsp;<a href="mailto:treasurer@medusa.org.au">treasurer@medusa.org.au</a><br/>
+        Preclinical President:&nbsp;<a href="mailto:president.preclinical@medusa.org.au">president.preclinical@medusa.org.au</a><br/>
+        GCSC President:&nbsp;<a href="mailto:president.gcsc@medusa.org.au">president.gcsc@medusa.org.au</a>
+      </p>
+    </section>
+  </section>
+{% endblock %}
