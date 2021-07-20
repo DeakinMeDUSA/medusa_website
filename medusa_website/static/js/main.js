@@ -11,8 +11,11 @@
     $wrapper = $('#wrapper'),
     $header = $('#header'),
     $nav = $('#nav'),
+    $footer = $('#footer'),
     $main = $('#main'),
     $navPanelToggle, $navPanel, $navPanelInner
+  $main_articles = $main.children('article')
+  $collapsables = $('a[class="button collapsible"]')
 
   // Breakpoints.
   breakpoints({
@@ -240,5 +243,15 @@
     })
 
   }
+
+  // Ensure only one collapsible is shown at once
+  $('.toggle').click(function () {
+    const divToggleId = $(this).attr("data-target")
+    // console.log(`divToggleId = ${divToggleId}`)
+    //Hide all open collapsibles
+    $('.collapse').collapse('hide')
+    $(divToggleId).collapse('toggle')
+  })
+
 
 })(jQuery)

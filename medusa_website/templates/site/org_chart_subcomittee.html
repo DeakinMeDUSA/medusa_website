@@ -1,0 +1,16 @@
+{% load template_filters %}
+<div class="collapse subcommittee-container {{ subcommittee.title|spaces_to_hyphens_lowercase }}">
+  <div class="subcommittee-title">{{ subcommittee.title }}</div>
+  <div class="subcommittee" style="background-color: {{ subcommittee.org_chart_fill_color }}">
+    {% for member in subcommittee.members.all %}
+      <div class="org-card">
+        <div class="name-tag">
+          <span class="org-card-name">{{ member.name }}</span>
+          <span class="org-card-position">{{ member.position }}</span>
+          <span class="org-card-email"><a href="mailto:{{ member.email }}">{{ member.email }}</a></span>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="subcommittee-explanation-text">  {{ subcommittee.explanation_text|safe }}</div>
+</div>

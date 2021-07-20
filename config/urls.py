@@ -13,7 +13,7 @@ from medusa_website.users import utils
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path("", HomeView.as_view(), name="home"),
     path("site/", include("medusa_website.site.urls", namespace="site")),
-    path("about/", AboutView.as_view, name="about"),
+    path("about/", AboutView.as_view(), name="about"),
     path(
         "empty_test/",
         TemplateView.as_view(template_name="pages/empty_test.html"),
@@ -29,6 +29,8 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path("ping/", utils.ping),
     path("martor/", include("martor.urls")),
     url(r"^api/uploader/$", markdown_uploader, name="markdown_uploader_page"),
+    path('tinymce/', include('tinymce.urls')),
+
 ]
 
 if settings.DEBUG:

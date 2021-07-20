@@ -46,6 +46,7 @@
         <option value="$MODULE_DIR$/medusa_website/templates/pages" />
         <option value="$MODULE_DIR$/medusa_website/templates/users" />
         <option value="$MODULE_DIR$/medusa_website/templates/site" />
+        <option value="$MODULE_DIR$/medusa_website/templates/org_chart" />
       </list>
     </option>
   </component>

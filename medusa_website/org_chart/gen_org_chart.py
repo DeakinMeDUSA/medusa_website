@@ -1,63 +1,37 @@
-import re
-from copy import copy
 from dataclasses import dataclass
 from pathlib import Path
 
 import pandas as pd
+from django.db import IntegrityError
 
-CARD_TEMPLATE = Path(r"I:\GitHub\medusa_website\medusa_website\org_chart\card_template.html").read_text()
-ORG_CHART_TEMPATE = Path(r"I:\GitHub\medusa_website\medusa_website\org_chart\org_chart_template.html").read_text()
-OUTPUT_CHART = Path(r"I:\GitHub\medusa_website\medusa_website\org_chart\org_chart_output.html")
-EXCEL_FILE = Path(r"C:\Users\chris\Dropbox\Uni\MEDUSA IT\Org Chart 2021\OrgChart.xlsx")
+from medusa_website.org_chart.models import SubCommittee, CommitteeMember
+
+EXCEL_FILE = Path(r"I:\GitHub\medusa_website\medusa_website\org_chart\OrgChart.xlsx")
+assert EXCEL_FILE.exists()
+
 org_df: pd.DataFrame = pd.read_excel(EXCEL_FILE, sheet_name="For CSV Export")
 
 
 @dataclass
-class Employee:
+class RawCommitteeMember:
     name: str
     position: str
-    id: int
-    manager: str
     email: str
     sub_committee: str
-    image: bytes = None
-    fill: str = None
 
 
-all_people = [Employee(**row[1]) for row in org_df.iterrows()]
+all_people = [RawCommitteeMember(**row[1]) for row in org_df.iterrows()]
 all_people = [p for p in all_people if str(p.name) != "0"]
 
+for mem_raw in all_people:
 
-def gen_card_div(emp: Employee):
-    output_card = copy(CARD_TEMPLATE)
-    replace_attrs = ["name", "position", "email"]
-    for attr in replace_attrs:
-        output_card = re.sub(f"%{attr}%", str(getattr(emp, attr)), output_card, flags=re.IGNORECASE)
-    return output_card
-
-
-subcommittee_mapping = {
-    "Executive Committee": "executive",
-    "General Committee": "general",
-    "Clinical School Committee": "clinical",
-    "Preclinical Committee": "preclinical",
-    "Special Interest Groups": "special",
-    0: "toplevel",
-}
-
-all_cards = {}
-for person in all_people:
-    if all_cards.get(subcommittee_mapping[person.sub_committee]) is None:
-        all_cards[subcommittee_mapping[person.sub_committee]] = []
-    all_cards[subcommittee_mapping[person.sub_committee]].append(gen_card_div(emp=person))
-
-for subcommittee, sub_cards in all_cards.items():
-    ORG_CHART_TEMPATE = re.sub(
-        f"<!-- %cards_{subcommittee}% -->",
-        "\n".join(sub_cards),
-        ORG_CHART_TEMPATE,
-        flags=re.IGNORECASE,
-    )
-
-# output_html = "\n".join([f"<div>{card}</div>" for card in all_cards])
-OUTPUT_CHART.write_text(ORG_CHART_TEMPATE)
+    try:
+        mem_raw.sub_committee = SubCommittee.objects.get(title=mem_raw.sub_committee)
+    except SubCommittee.DoesNotExist as exc:
+        print(f"Could not create Member due to SubCommittee.DoesNotExist {mem_raw}")
+        raise exc
+    member = CommitteeMember(**mem_raw.__dict__)
+    try:
+        member.save()
+    except IntegrityError:
+        print(f"Already created - {member}")

@@ -2611,6 +2611,116 @@ table.alt tbody tr td {
   color: #eeeeee;
 }
 
+.collapse {
+  display: block;
+  max-height: 0px;
+  overflow: hidden;
+  transition: max-height 1s cubic-bezier(0, 1, 0, 1);
+}
+.collapse.show {
+  max-height: 150em;
+  transition: max-height 1s ease-in-out;
+}
+
+.org-card-name {
+  font-size: 15pt;
+  letter-spacing: 0.05rem;
+  text-transform: uppercase;
+}
+
+.org-card-position {
+  font-size: 10pt;
+}
+
+.org-card-email {
+  font-size: 9pt;
+  text-transform: lowercase;
+}
+
+.org-chart-btn {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  align-content: center;
+  align-items: center;
+  font-size: large;
+  width: 350px;
+}
+
+.subcommittee-container {
+  display: grid;
+  gap: 0px;
+}
+
+.subcommittee-explanation-text {
+  margin-top: 1.5rem;
+  letter-spacing: unset;
+  font-weight: unset;
+  column-count: 2;
+  column-gap: 30px;
+}
+
+.subcommittee {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 20px;
+  box-shadow: 2px 5px 15px 0px #17161694;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.subcommittee-title {
+  font-family: "Source Sans Pro", Helvetica, sans-serif;
+  font-weight: 900;
+  line-height: 1.5;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+  color: black;
+  display: block;
+  padding: 10px;
+  text-align: center;
+  border-radius: 5px;
+  position: relative;
+  top: 15px;
+  margin: 1rem;
+}
+
+.org-card {
+  font-family: "Source Sans Pro", Helvetica, sans-serif;
+  color: #e1e1e1;
+  font-weight: unset;
+  width: 300px;
+  height: 120px;
+  display: grid;
+  padding: 5px;
+  grid-template-columns: 2% 96% 2%;
+  grid-template-rows: 4% 92% 4%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 2px 5px 15px 0px #17161694;
+  background-color: #2c2d38;
+  border-radius: 3px;
+  text-align: left;
+}
+.org-card a {
+  color: #e1e1e1;
+}
+.org-card span {
+  margin-left: 10px;
+  padding: unset;
+}
+.org-card .name-tag {
+  grid-column: 1/span 4;
+  grid-row: 2/span 1;
+  align-self: center;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  line-height: 2;
+}
+
 /* Wrapper */
 #wrapper {
   -moz-transition: opacity 0.5s ease;

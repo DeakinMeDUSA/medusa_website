@@ -40,7 +40,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
 LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
-ROOT_URLCONF = "config.urls"
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -78,7 +77,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # "django.contrib.humanize", # Handy template tags
-    "djangocms_admin_style",  # https://github.com/django-cms/djangocms-admin-style
+    # "djangocms_admin_style",  # https://github.com/django-cms/djangocms-admin-style
     "django.contrib.admin",
     "django.forms",
 ]
@@ -103,11 +102,14 @@ THIRD_PARTY_APPS = [
     "extra_views",
     "martor",
     "pipeline",
+    "colorfield",
+    "tinymce",
 ]
 
 LOCAL_APPS = [
     "medusa_website.users.apps.UsersConfig",
     "medusa_website.mcq_bank.apps.McqBankConfig",
+    "medusa_website.org_chart.apps.OrgChartConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -225,6 +227,9 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "medusa_website.utils.context_processors.settings_context",
             ],
+            'libraries': {
+                'template_filters': 'medusa_website.org_chart.templatetags.template_filters',
+            }
         },
     }
 ]
@@ -448,3 +453,24 @@ MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
 # MARTOR_ALTERNATIVE_JS_FILE_THEME = None  # "semantic-themed/semantic.min.js"   # default None
 # MARTOR_ALTERNATIVE_CSS_FILE_THEME = None  # "semantic-themed/semantic.min.css" # default None
 # MARTOR_ALTERNATIVE_JQUERY_JS_FILE = None  # "jquery/dist/jquery.min.js"        # default None
+
+
+# TINYMCE
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "height": 800,
+    "menubar": 'edit view insert format tools table tc help',
+    "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
+               "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
+               "code,help,wordcount",
+    # "toolbar": "undo redo | formatselect | "
+    #            "bold italic backcolor | alignleft aligncenter "
+    #            "alignright alignjustify | bullist numlist outdent indent | "
+    #            "removeformat | help",
+}
+
+TINYMCE_SPELLCHECKER = True
+USE_COMPRESSOR = False
+USE_EXTRA_MEDIA = False
+USE_SPELLCHECKER = False
+USE_FILEBROWSER = False
