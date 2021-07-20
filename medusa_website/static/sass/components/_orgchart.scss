@@ -1,3 +1,4 @@
+
 .org-card-name {
   font-size: 15pt;
   letter-spacing: 0.05rem;
@@ -14,6 +15,21 @@
 
 }
 
+.org-chart-structure {
+
+  &.row {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    flex-direction: row;
+    justify-content: center;
+
+  }
+
+  &.col {
+  }
+}
 
 .org-chart-btn {
   margin-bottom: 10px;
@@ -35,39 +51,48 @@
   margin-top: 1.5rem;
   letter-spacing: unset;
   font-weight: unset;
-  // Flow text over two columns
+  // Flow text over two columns if screen is wide enough
   column-count: 2;
   column-gap: 30px;
+  @media (max-width: 800px) {
+    /* CSS that should be displayed if width is equal to or less than 800px goes here */
+    column-count: 1;
+    column-gap: 30px;
+  }
+
 }
 
 .subcommittee {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  //display: grid;
+  //grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  //gap: 20px;
+  //box-shadow: 2px 5px 15px 0px #17161694;
+  ////margin: 20px;
+  //padding: 20px;
+  //border-radius: 5px;
+
+
+  display: flex;
   gap: 20px;
   box-shadow: 2px 5px 15px 0px #17161694;
-  //margin: 20px;
   padding: 20px;
   border-radius: 5px;
-
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: stretch;
+  justify-content: center;
+  align-items: center;
 
 }
 
 
 .subcommittee-title {
-  font-family: "Source Sans Pro", Helvetica, sans-serif;
-  font-weight: 900;
-  line-height: 1.5;
-  letter-spacing: 0.075em;
-  text-transform: uppercase;
+
   color: black;
-  display: block;
-  padding: 10px;
+  //display: block;
   text-align: center;
-  border-radius: 5px;
-  position: relative;
   top: 15px;
   margin: 1rem;
-  //font-variant-caps: small-caps;
 
 }
 
@@ -87,6 +112,7 @@
   background-color: #2c2d38;
   border-radius: 3px;
   text-align: left;
+
 
   a {
     color: #e1e1e1;

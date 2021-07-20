@@ -249,8 +249,8 @@
     const divToggleId = $(this).attr("data-target")
     // console.log(`divToggleId = ${divToggleId}`)
     //Hide all open collapsibles
-    $('.collapse').collapse('hide')
-    $(divToggleId).collapse('toggle')
+    $('.collapse').fadeOut( "slow", "linear" )
+    $(divToggleId).fadeIn( "slow", "linear" )
   })
 
 

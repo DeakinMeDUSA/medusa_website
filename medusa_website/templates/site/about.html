@@ -5,7 +5,8 @@
 {% block title %}MeDUSA - About Us{% endblock %}
 {% block css %}
   {{ block.super }}
-  {% stylesheet "css_core" %}
+  {#  {% stylesheet "css_core" %}#}
+  {% static "/css/main.css" %}
 {% endblock %}
 
 {% block content %}
@@ -64,25 +65,25 @@
         </button>
       </div>
       {#      </div>#}
-      <div class="row justify-content-md-center">
-        <div class="col-6-large align-center">
+      <div class="org-chart-structure row ">
+        <div class="org-chart-structure col col-lg-auto">
           <button class="toggle org-chart-btn" data-toggle="collapse" data-target=".collapse.general-committee"
           >General Committee
           </button>
         </div>
-        <div class="col-6-large align-center">
+        <div class="org-chart-structure col col-lg-auto">
           <button class="toggle org-chart-btn" data-toggle="collapse" data-target=".collapse.clinical-committee">
             Clinical Committee
           </button>
         </div>
       </div>
-      <div class="row justify-content-md-center">
-        <div class="col-6-large align-center">
+      <div class="org-chart-structure row justify-content-md-center">
+        <div class="org-chart-structure col col-lg-auto">
           <button class="toggle org-chart-btn" data-toggle="collapse" data-target=".collapse.preclinical-committee"
           >Preclinical Committee
           </button>
         </div>
-        <div class="col-6-large align-center">
+        <div class="org-chart-structure col col-lg-auto">
           <button class="toggle org-chart-btn" data-toggle="collapse" data-target=".collapse.special-interest-groups">
             Special Interest Groups
           </button>

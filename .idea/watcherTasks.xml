@@ -22,7 +22,7 @@
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="&quot;.\medusa_website\static&quot; &quot;.\static&quot; /S" />
+      <option name="arguments" value="&quot;.\medusa_website\static&quot; &quot;.\static&quot; /S /XD &quot;sass&quot;" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" />
       <option name="exitCodeBehavior" value="NEVER" />
