@@ -1,4 +1,4 @@
-{% extends "site/base.html" %}
+{% extends "frontend/base.html" %}
 {% load template_filters %}
 {% load pipeline %}
 {% load static %}
@@ -18,7 +18,7 @@
       <p>MeDUSA is your medical society that represents you!</p>
     </header>
     <div class="image main">
-      <img alt="" src="{% static "images/site/building_ka.jpg" %}"/>
+      <img alt="" src="{% static "images/frontend/building_ka.jpg" %}"/>
     </div>
     <p>
       First established in 2008 by it's founding president Caroline Bate, MeDUSA aims to support all Deakin medical
@@ -88,13 +88,33 @@
         </div>
       </div>
     </div>
-  <div class="subcommittee-result empty">
-  </div>
+    <div class="subcommittee-result empty">
+    </div>
 
     {% for subcommittee in subcommittees.values %}
-      {% include "site/org_chart_subcomittee.html" with subcommittee=subcommittee %}
+      {% include "frontend/org_chart_subcomittee.html" with subcommittee=subcommittee %}
     {% endfor %}
 
+  </section>
+  <section id="sponsors">
+    <h2>Our Sponsors</h2>
+    MeDUSA acknowledges the kind and generous support from all our sponsors
+    <div class="sponsor-grid">
+      {% for sponsor in sponsors.values %}
+        {% include "frontend/sponsor.html" with sponsor=sponsor %}
+      {% endfor %}
+    </div>
+    <div style="margin-top: 20px;"> MeDUSA also acknowledges the kind and generous support of the School of Medicine,
+      Deakin University and DUSA.
+    </div>
+
+    <div class="supporter-container">
+      <div class="supporter-grid">
+        {% for supporter in supporters.values %}
+          {% include "frontend/sponsor.html" with sponsor=supporter %}
+        {% endfor %}
+      </div>
+    </div>
   </section>
 {% endblock %}
 
@@ -102,7 +122,26 @@
   {{ block.super }}
   {% javascript "js_core" %}
 
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   <script>
+    var elem = document.querySelector('.sponsor-grid')
+    var msnry = new Masonry(elem, {
+      // options
+      itemSelector: '.grid-item',
+      columnWidth: 330,
+      fitWidth: true,
 
+      {#gutter: 25,#}
+    })
+    var elem2 = document.querySelector('.supporter-grid')
+
+    var msnry2 = new Masonry(elem2, {
+      // options
+      itemSelector: '.grid-item',
+      columnWidth: 330,
+      fitWidth: true,
+      {#gutter: 25,#}
+    })
   </script>
+
 {% endblock %}

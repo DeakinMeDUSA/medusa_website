@@ -7,26 +7,30 @@ from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect
 from vanilla import TemplateView, FormView
 
+from medusa_website.frontend.forms import ContactForm
+from medusa_website.frontend.models import Sponsor, Supporter
 from medusa_website.org_chart.models import SubCommittee
-from medusa_website.site.forms import ContactForm
 
 logger = logging.getLogger(__name__)
 
 
 class AboutView(TemplateView):
-    template_name = "site/about.html"
+    template_name = "frontend/about.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # subcommittees =
         # history, c = History.objects.get_or_create(user=self.request.user)
         context["subcommittees"] = {subcomm.title: subcomm for subcomm in SubCommittee.objects.all().order_by("id")}
+        context["sponsors"] = {sponsor.name: sponsor for sponsor in Sponsor.objects.all().order_by("id")}
+        context["supporters"] = {supporter.name: supporter for supporter in Supporter.objects.all().order_by("id")}
+
         # context["session_history_table"] = SessionHistoryTable(history.session_history)
         return context
 
 
 class ContactView(FormView, TemplateView):
-    template_name = "site/contact.html"
+    template_name = "frontend/contact.html"
     form_class = ContactForm
 
     def get_context_data(self, **kwargs):
@@ -45,7 +49,6 @@ class ContactView(FormView, TemplateView):
         messages.success(self.request, 'Form submitted successfully, we will get in touch shortly!')
 
         return HttpResponseRedirect(self.request.path_info)
-
 
     def post(self, request, *args, **kwargs):
         form = self.get_form(data=request.POST, files=request.FILES)

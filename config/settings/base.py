@@ -110,6 +110,7 @@ LOCAL_APPS = [
     "medusa_website.users.apps.UsersConfig",
     "medusa_website.mcq_bank.apps.McqBankConfig",
     "medusa_website.org_chart.apps.OrgChartConfig",
+    "medusa_website.frontend.apps.FrontendConfig",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

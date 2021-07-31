@@ -7,18 +7,11 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
 from medusa_website.mcq_bank.views.markdown_uploader import markdown_uploader
-from medusa_website.pages.views import HomeView, AboutView
 from medusa_website.users import utils
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     # path("", HomeView.as_view(), name="home"),
-    path("", include("medusa_website.site.urls", namespace="site")),
-    path("about/", AboutView.as_view(), name="about"),
-    path(
-        "empty_test/",
-        TemplateView.as_view(template_name="pages/empty_test.html"),
-        name="empty_test",
-    ),
+    path("", include("medusa_website.frontend.urls", namespace="frontend")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management

@@ -1,5 +1,14 @@
-{% extends "site/base.html" %}
+{% extends "frontend/base.html" %}
+{% load pipeline %}
 {% load static %}
+
+
+{% block css %}
+  {{ block.super }}
+  {% stylesheet "css_juicer" %}
+{% endblock %}
+
+
 {% block content %}
 
   <!-- Featured Post -->
@@ -17,6 +26,13 @@
       <li><a href="#" class="button large">Full Story</a></li>
     </ul>
   </article>
+
+  <!-- Juicer Feed -->
+  <section class="posts">
+    <ul class="juicer-feed" data-feed-id="medusa-deakin" data-per="20" data-columns="3" data-filter="instagram"
+        data-overlay="true"
+    ></ul>
+  </section>
 
   <!-- Posts -->
   <section class="posts">
@@ -129,8 +145,14 @@
         </div>
       </div>
 
-      Other MeDUSA sponsors can be found on our <a href="{% url "site:sponsors" %}">sponsorship page</a>
+      Other MeDUSA sponsors can be found on our <a href="{% url "frontend:sponsors" %}">sponsorship page</a>
     </div>
   </div>
 
+{% endblock %}
+
+
+{% block javascript %}
+   {{ block.super }}
+   {% javascript "js_juicer" %}
 {% endblock %}

@@ -2805,6 +2805,26 @@ table.alt tbody tr td {
   fill: black;
 }
 
+/* ---- grid-item ---- */
+.grid-item {
+  box-sizing: border-box;
+  float: left;
+}
+
+.sponsor-grid {
+  margin: 0 auto;
+}
+
+.sponsor-image {
+  height: 300px;
+  width: 300px;
+  margin: 10px;
+}
+
+.supporter-grid {
+  margin: 0 auto;
+}
+
 /* Wrapper */
 #wrapper {
   -moz-transition: opacity 0.5s ease;

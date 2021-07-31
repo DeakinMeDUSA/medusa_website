@@ -1,0 +1,26 @@
+
+/* ---- grid-item ---- */
+
+.grid-item {
+  box-sizing: border-box;
+  //width: 260px;
+  //height: 260px;
+  float: left;
+  //padding: 20px;
+}
+
+.sponsor-grid {
+  //align-items: center;
+  margin: 0 auto;
+}
+
+.sponsor-image {
+  height: 300px;
+  width: 300px;
+  margin: 10px;
+}
+
+.supporter-grid {
+  //align-items: center;
+  margin: 0 auto;
+}
