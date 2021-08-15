@@ -80,6 +80,7 @@ DJANGO_APPS = [
     # "djangocms_admin_style",  # https://github.com/django-cms/djangocms-admin-style
     "django.contrib.admin",
     "django.forms",
+    "django.contrib.sitemaps",
 ]
 THIRD_PARTY_APPS = [
     # "webpack_loader",
