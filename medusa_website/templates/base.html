@@ -1,121 +1,76 @@
-{% load static i18n %}
 {% load pipeline %}
-
-<!DOCTYPE html>
-<html lang="en">
+{% load static %}
+<!DOCTYPE HTML>
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>
-    {% block title %}MeDUSA Website
-    {% endblock title %}
-  </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
   <meta name="description" content="Website for MeDUSA, Deakin University's medical student society">
   <meta name="author" content="Chris Culhane">
-
-
-  <link rel="icon" href="{% static 'images/favicon.ico' %}">
-
+  <title>
+    {% block title %}
+      MeDUSA Website
+    {% endblock title %}
+  </title>
   {% block css %}
-    {% stylesheet "css_core" %}
-
+    <link rel="stylesheet" href={% static "css/main.css" %}>
+    <noscript>
+      <link rel="stylesheet" href={% static "css/noscript.css" %}>
+    </noscript>
   {% endblock %}
 
 </head>
+<body class="is-preload">
 
-<body>
+<!-- Wrapper -->
+<div id="wrapper" class="fade-in">
 
-<div class="mb-1">
-  <nav class="navbar navbar-expand-md navbar-light bg-light">
-    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <a class="navbar-brand" href="{% url 'home' %}">MeDUSA Website</a>
+  <!-- Intro -->
+  <div id="intro">
+    <h1> MeDUSA </h1>
+    <p>
+      A society for Deakin MD students
+    </p>
+    <ul class="actions">
+      <li><a href="#header" class="button icon solid solo fa-arrow-down scrolly">Continue</a></li>
+    </ul>
+  </div>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="{% url 'home' %}">Home <span class="sr-only"></span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'empty_test' %}">Empty Test</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'frontend:index' %}">New frontend demo</a>
-        </li>
-        {% if request.user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'mcq_bank:quiz_index' %}">MCQ Bank</a>
-          </li>
-          <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
-            <a class="nav-link" href="{% url 'users:detail' request.user.email %}">My Profile</a>
-          </li>
-          <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
-            <a class="nav-link" href="{% url 'account_logout' %}">Sign Out</a>
-          </li>
+  <!-- Header -->
+  <header id="header">
+    <a href="{% url "frontend:index" %}" class="logo">MeDUSA</a>
+  </header>
 
-        {% else %}
-          <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
-            <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
-          </li>
-          <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
-            <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">Sign In</a>
-          </li>
-        {% endif %}
-      </ul>
-    </div>
-  </nav>
+  <!-- Nav -->
+  {% include "frontend/nav.html" %}
+
+  <!-- Main -->
+  <div id="main">
+
+    {% block content %}
+
+    {% endblock %}
+
+  </div>
+  <!-- Footer -->
+  {% include "frontend/footer.html" %}
+  <!-- Copyright -->
+  {% include "frontend/copywright.html" %}
 
 </div>
 
-<div class="container">
-
-  {% if messages %}
-    {% for message in messages %}
-      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
-          aria-hidden="true">&times;</span></button>
-      </div>
-    {% endfor %}
-  {% endif %}
-
-  {% block content %}
-    <p>This is the default 'content' block, overwrite using block content tags </p>
-
-  {% endblock content %}
-
-  {% block footer %}
-    {% include "footer.html" %}
-  {% endblock footer %}
-
-</div>
-
-{% block modal %}
-
-{% endblock modal %}
-
-<!-- Placed at the end of the document so the pages load faster -->
+<!-- Scripts -->
 {% block javascript %}
-  <!-- Bootstrap JS and its dependencies-->
   {% javascript "js_core" %}
-  <!--Sentry js needs to be loaded without compression to retain the 'Sentry' global var -->
-  <script type="text/javascript" src="{% static 'modules/core/sentry-6.9.0.min.js' %}"></script>
-  <script>
-    Sentry.init({ dsn: 'https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588' })
-    Sentry.showReportDialog({
-      eventId: "{{ event_id }}",
-    })
-  </script>
-{% endblock javascript %}
+  <script src={% static "js/jquery.scrollex.min.js" %}></script>
+  <script src={% static "js/jquery.scrolly.min.js" %}></script>
+  <script src={% static "js/browser.min.js" %}></script>
+  <script src={% static "js/breakpoints.min.js" %}></script>
+  <script src={% static "js/util.js" %}></script>
+  <script src={% static "js/main.js" %}></script>
+{% endblock %}
+
+
 </body>
 </html>

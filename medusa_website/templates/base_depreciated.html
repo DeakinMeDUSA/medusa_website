@@ -1,0 +1,118 @@
+{% load static i18n %}
+{% load pipeline %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>
+    {% block title %}MeDUSA Website
+    {% endblock title %}
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Website for MeDUSA, Deakin University's medical student society">
+  <meta name="author" content="Chris Culhane">
+
+
+  <link rel="icon" href="{% static 'images/favicon.ico' %}">
+
+  {% block css %}
+    {% stylesheet "css_core" %}
+
+  {% endblock %}
+
+</head>
+
+<body>
+
+<div class="mb-1">
+  <nav class="navbar navbar-expand-md navbar-light bg-light">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="{% url 'frontend:index' %}">MeDUSA Website</a>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'frontend:index' %}">Home <span class="sr-only"></span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'frontend:about' %}">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'frontend:index' %}">New frontend demo</a>
+        </li>
+        {% if request.user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'mcq_bank:quiz_index' %}">MCQ Bank</a>
+          </li>
+          <li class="nav-item">
+            {# URL provided by django-allauth/account/urls.py #}
+            <a class="nav-link" href="{% url 'users:detail' request.user.email %}">My Profile</a>
+          </li>
+          <li class="nav-item">
+            {# URL provided by django-allauth/account/urls.py #}
+            <a class="nav-link" href="{% url 'account_logout' %}">Sign Out</a>
+          </li>
+
+        {% else %}
+          <li class="nav-item">
+            {# URL provided by django-allauth/account/urls.py #}
+            <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
+          </li>
+          <li class="nav-item">
+            {# URL provided by django-allauth/account/urls.py #}
+            <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">Sign In</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+</div>
+
+<div class="container">
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">{{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span
+          aria-hidden="true">&times;</span></button>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% block content %}
+    <p>This is the default 'content' block, overwrite using block content tags </p>
+
+  {% endblock content %}
+
+  {% block footer %}
+    {% include "footer.html" %}
+  {% endblock footer %}
+
+</div>
+
+{% block modal %}
+
+{% endblock modal %}
+
+<!-- Placed at the end of the document so the pages load faster -->
+{% block javascript %}
+  <!-- Bootstrap JS and its dependencies-->
+  {% javascript "js_core" %}
+  <!--Sentry js needs to be loaded without compression to retain the 'Sentry' global var -->
+  <script type="text/javascript" src="{% static 'modules/core/sentry-6.9.0.min.js' %}"></script>
+  <script>
+    Sentry.init({ dsn: 'https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588' })
+    Sentry.showReportDialog({
+      eventId: "{{ event_id }}",
+    })
+  </script>
+{% endblock javascript %}
+</body>
+</html>

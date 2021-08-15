@@ -3,14 +3,14 @@ from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views import defaults as default_views
+from vanilla import TemplateView
 
 from medusa_website.mcq_bank.views.markdown_uploader import markdown_uploader
 from medusa_website.users import utils
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
-    # path("", HomeView.as_view(), name="home"),
     path("", include("medusa_website.frontend.urls", namespace="frontend")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
@@ -23,6 +23,9 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path("martor/", include("martor.urls")),
     url(r"^api/uploader/$", markdown_uploader, name="markdown_uploader_page"),
     path('tinymce/', include('tinymce.urls')),
+    # Catch the rest of the urls
+    # re_path(r'^(?P<path>.*)/$', view=TemplateView.as_view(template_name="frontend/index.html"),
+    #         name="catchall"),
 
 ]
 
