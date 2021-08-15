@@ -24,8 +24,12 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     url(r"^api/uploader/$", markdown_uploader, name="markdown_uploader_page"),
     path('tinymce/', include('tinymce.urls')),
 
-    path('sitemap.xml', sitemap, name='django.contrib.sitemaps.views.sitemap'),
+]
 
+sitemaps = {}  # Don't really need a proper sitemap
+
+urlpatterns += [
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
 if settings.DEBUG:
