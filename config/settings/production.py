@@ -21,7 +21,6 @@ ALLOWED_HOSTS = [
     "www.cculhane.com",
     "cculhane.com",
     "medusa.org.au",
-    "li2144-146.members.linode.com",
 ]
 
 # DATABASES

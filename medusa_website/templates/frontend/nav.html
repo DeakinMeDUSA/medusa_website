@@ -1,18 +1,19 @@
-
 <!-- TODO: Fix active nav tab with js or something else? -->
 <nav id="nav">
   <ul class="links">
     <li class="active"><a href="{% url "frontend:index" %}">Home</a></li>
+    <li><a href="{% url "frontend:about" %}">About Us</a></li>
+    <li><a href="{% url "frontend:contact" %}">Contact</a></li>
     <li><a href="{% url "frontend:generic" %}">Generic Page</a></li>
     <li><a href="{% url "frontend:elements" %}">Elements Reference</a></li>
-    <li><a href="{% url "frontend:about" %}">About Us</a></li>
-    <li><a href="{% url "frontend:sponsors" %}">Sponsors</a></li>
-    <li><a href="{% url "frontend:contact" %}">Contact</a></li>
   </ul>
   <ul class="icons">
-    <li><a href="https://www.instagram.com/medusa.deakin/" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
-    <li><a href="https://www.facebook.com/medusa.deakin/" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
-    <li><a href="https://twitter.com/medusadeakin" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+    <li><a href="https://www.instagram.com/medusa.deakin/" class="icon brands fa-instagram"><span class="label">Instagram</span></a>
+    </li>
+    <li><a href="https://www.facebook.com/medusa.deakin/" class="icon brands fa-facebook-f"><span
+      class="label">Facebook</span></a></li>
+    <li><a href="https://twitter.com/medusadeakin" class="icon brands fa-twitter"><span class="label">Twitter</span></a>
+    </li>
     <li><a href="mailto:secretary@medusa.org.au" class="icon far fa-envelope"><span class="label">Mail</span></a></li>
   </ul>
 </nav>
