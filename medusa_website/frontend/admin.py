@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from .models import Sponsor, Supporter
+from .models import Sponsor, Supporter, OfficialDocumentation
 
 
 @admin.register(Sponsor)
@@ -16,3 +16,11 @@ class SponsorAdmin(admin.ModelAdmin):
 @admin.register(Supporter)
 class SupporterAdmin(SponsorAdmin):
     ...
+
+
+@admin.register(OfficialDocumentation)
+class OfficialDocumentationAdmin(admin.ModelAdmin):
+    list_display = [
+        "id", "name", "file"
+    ]
+    search_fields = ("name", "id")

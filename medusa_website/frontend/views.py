@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from vanilla import TemplateView, FormView
 
 from medusa_website.frontend.forms import ContactForm
-from medusa_website.frontend.models import Sponsor, Supporter
+from medusa_website.frontend.models import Sponsor, Supporter, OfficialDocumentation
 from medusa_website.org_chart.models import SubCommittee
 
 logger = logging.getLogger(__name__)
@@ -24,6 +24,10 @@ class AboutView(TemplateView):
         context["subcommittees"] = {subcomm.title: subcomm for subcomm in SubCommittee.objects.all().order_by("id")}
         context["sponsors"] = {sponsor.name: sponsor for sponsor in Sponsor.objects.all().order_by("id")}
         context["supporters"] = {supporter.name: supporter for supporter in Supporter.objects.all().order_by("id")}
+        # Ensure Rules of Association are always first
+        context["rules_of_association"] = OfficialDocumentation.objects.get(name="MeDUSA Rules of Association")
+        offical_docs = OfficialDocumentation.objects.all().exclude(name="MeDUSA Rules of Association").order_by("-publish_year")
+        context["official_documentation"] = {document.name: document for document in offical_docs}
 
         # context["session_history_table"] = SessionHistoryTable(history.session_history)
         return context

@@ -28,3 +28,20 @@ class Supporter(models.Model):
 
     def __str__(self):
         return self.__repr__()
+
+
+class OfficialDocumentation(models.Model):
+    """ For use on the About page"""
+    class Meta:
+        verbose_name = "Official Documentation"
+        verbose_name_plural = "Official Documentation"
+
+    name = models.CharField(max_length=256, help_text="Name of the document", unique=True)
+    file = models.FileField(upload_to="official_documentation")
+    publish_year = models.IntegerField()
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}> - {self.name}"
+
+    def __str__(self):
+        return self.__repr__()

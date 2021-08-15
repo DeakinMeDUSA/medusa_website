@@ -116,28 +116,6 @@
       </div>
     </div>
   </section>
-  <section id="documents">
-    <h2>Official Documentation and Policies</h2>
-
-    <!-- Ensure Rules of Association is always first, and is bold -->
-    <div class="align-center">
-      <a style="font-weight: bold" target="_blank" href="{{ rules_of_association.file.url }}">
-        {{ rules_of_association.name }} ({{ rules_of_association.publish_year }}) </a>
-    </div>
-    <h5>Policies</h5>
-    <!-- Use subcommitee div class as its got columns setup for us -->
-    <div class="subcommittee-explanation-text">
-      <ul>
-
-        {% for document in official_documentation.values %}
-          <li><a target="_blank" href="{{ document.file.url }}">
-            {{ document.name }} ({{ document.publish_year }})
-          </a></li>
-        {% endfor %}
-      </ul>
-    </div>
-
-  </section>
 {% endblock %}
 
 {% block javascript %}
