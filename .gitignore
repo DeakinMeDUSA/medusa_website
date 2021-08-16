@@ -54,9 +54,6 @@ coverage.xml
 staticfiles/
 /static/
 
-# Compiled CSS
-/medusa_website/static/css
-
 # Sphinx documentation
 docs/_build/
 
