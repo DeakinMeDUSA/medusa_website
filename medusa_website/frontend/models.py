@@ -1,13 +1,7 @@
-import tempfile
-from pathlib import Path
-
-from django.core.files import File
 from django.core.files.base import ContentFile
-from django.core.files.uploadedfile import TemporaryUploadedFile
 from django.db import models
 from wand.color import Color
 from wand.image import Image
-from django.contrib import admin
 
 
 class Sponsor(models.Model):
@@ -72,7 +66,6 @@ class Publication(models.Model):
         return self.__repr__()
 
     def save(self, **kwargs):
-
         super(Publication, self).save(**kwargs)
         if self.has_thumbnail is False:
             self.gen_pdf_thumbnail(page_num=0)
@@ -93,10 +86,9 @@ class Publication(models.Model):
         pdf_img = Image(filename=f"{self.pdf.path}[{page_num}]")
 
         with pdf_img.convert("png") as converted:
-            # Set white background.
             converted.background_color = Color("white")
             converted.alpha_channel = "remove"
+            # scale height and preserve aspect ratio
+            converted.transform(resize='x400')
             f = ContentFile(content=converted.make_blob(format="png"))
-            # converted.save(f)
-
             self.thumbnail.save(name=f"{self.name}_{self.pub_date}.png", content=f)
