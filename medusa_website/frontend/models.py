@@ -85,10 +85,10 @@ class Publication(models.Model):
         """
         pdf_img = Image(filename=f"{self.pdf.path}[{page_num}]")
 
-        with pdf_img.convert("png") as converted:
+        with pdf_img.convert("jpg") as converted:
             converted.background_color = Color("white")
             converted.alpha_channel = "remove"
             # scale height and preserve aspect ratio
             converted.transform(resize='x400')
-            f = ContentFile(content=converted.make_blob(format="png"))
-            self.thumbnail.save(name=f"{self.name}_{self.pub_date}.png", content=f)
+            f = ContentFile(content=converted.make_blob(format="jpg"))
+            self.thumbnail.save(name=f"{self.name}_{self.pub_date}.jpg", content=f)
