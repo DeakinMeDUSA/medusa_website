@@ -1,0 +1,87 @@
+{% extends "frontend/base.html" %}
+{% load template_filters %}
+{% load pipeline %}
+{% load static %}
+{% block title %}MeDUSA - About Us{% endblock %}
+{% block css %}
+  {{ block.super }}
+  {% static "/css/main.css" %}
+{#  {% stylesheet "css_core" %}#}
+{% endblock %}
+
+{% block content %}
+
+  <!-- Post -->
+  <section>
+    <header class="major">
+      <h1>Publications</h1>
+      <p>MeDUSA publishes material throughout the year, covering the survival of medical school (MeDUSA Survival Guide)
+        and a biannual magazine (The Pulse).
+      </p>
+    </header>
+    {#    <div class="image main">#}
+    {#      <img alt="" src="{% static "images/frontend/building_ka.jpg" %}"/>#}
+    {#    </div>#}
+    <div>
+      <h5>1st Year Survival Guide</h5>
+      <p>
+        The Deakin Medical School 1st Year Survival Guide is a guide created to ease the nerves of starting medical
+        school. It is created for students by students, so while we don’t give you info on assessment or course
+        specifics, we hope to make you feel welcome and provide student experiences and tips for starting medicine at
+        Waurn Ponds.
+      </p>
+      <div class="publication-collection">
+        {% for pub in survival_guide %}
+          {% include "frontend/publication_item.html" with publication=pub %}
+        {% endfor %}
+
+      </div>
+    </div>
+    <div>
+      <h5>The Pulse</h5>
+      <p>
+        The Pulse is a student-lead and authored publication that typically comes out a couple of times each year. We
+        look for student articles or experiences to share with all year levels and are a platform to help get your
+        writing published! If you have an article to share in the next issue please email it to
+        <a href="mailto:publications@medusa.org.au">publications@medusa.org.au</a> and we will get in touch!
+      </p>
+      <div class="publication-collection">
+        {% for pub in the_pulse %}
+          {% include "frontend/publication_item.html" with publication=pub %}
+        {% endfor %}
+
+      </div>
+
+    </div>
+
+
+  </section>
+{% endblock %}
+
+{% block javascript %}
+  {{ block.super }}
+  {% javascript "js_core" %}
+
+  {#  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>#}
+  {#  <script>#}
+  {#    var elem = document.querySelector('.sponsor-grid')#}
+  {#    var msnry = new Masonry(elem, {#}
+  {#      // options#}
+  {#      itemSelector: '.grid-item',#}
+  {#      columnWidth: 330,#}
+  {#      fitWidth: true,#}
+  {##}
+  {#gutter: 25,#}
+  {#    })#}
+  {#    var elem2 = document.querySelector('.supporter-grid')#}
+  {##}
+  {#    var msnry2 = new Masonry(elem2, {#}
+  {#      // options#}
+  {#      itemSelector: '.grid-item',#}
+  {#      columnWidth: 330,#}
+  {#      fitWidth: true,#}
+  {#gutter: 25,#}
+  {#    })#}
+  {#  </script>#}
+
+{% endblock %}

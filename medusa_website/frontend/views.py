@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from vanilla import TemplateView, FormView
 
 from medusa_website.frontend.forms import ContactForm
-from medusa_website.frontend.models import Sponsor, Supporter, OfficialDocumentation
+from medusa_website.frontend.models import Sponsor, Supporter, OfficialDocumentation, Publication
 from medusa_website.org_chart.models import SubCommittee
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,8 @@ class AboutView(TemplateView):
         context["supporters"] = {supporter.name: supporter for supporter in Supporter.objects.all().order_by("id")}
         # Ensure Rules of Association are always first
         context["rules_of_association"] = OfficialDocumentation.objects.get(name="MeDUSA Rules of Association")
-        offical_docs = OfficialDocumentation.objects.all().exclude(name="MeDUSA Rules of Association").order_by("-publish_year")
+        offical_docs = OfficialDocumentation.objects.all().exclude(name="MeDUSA Rules of Association").order_by(
+            "-publish_year")
         context["official_documentation"] = {document.name: document for document in offical_docs}
 
         # context["session_history_table"] = SessionHistoryTable(history.session_history)
@@ -73,3 +74,15 @@ class ContactView(FormView, TemplateView):
                 messages.error(request, 'Invalid reCAPTCHA. Please try again.')
                 return self.form_invalid(form)
         return self.form_invalid(form)
+
+
+class PublicationsView(TemplateView):
+    template_name = "frontend/publications.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["the_pulse"] = [pub for pub in Publication.objects.filter(name="The Pulse").order_by("-pub_date")]
+        context["survival_guide"] = [pub for pub in
+                                     Publication.objects.filter(name="Survival Guide").order_by("-pub_date")]
+        return context

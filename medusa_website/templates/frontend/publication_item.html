@@ -1,0 +1,10 @@
+{% load template_filters %}
+{#<div class="publication-item">#}
+<div class="publication-card">
+  <h3 class="publication-name align-center">
+    {{ publication.name }} - {{ publication.pub_date.month|month_name }} {{ publication.pub_date.year }}</h3>
+  <div class="publication-thumbnail align-center">
+    <a href="{{ publication.pdf.url }}"><img src="{{ publication.thumbnail.url }}" alt="{{ publication.name }}"></a>
+  </div>
+</div>
+{#</div>#}

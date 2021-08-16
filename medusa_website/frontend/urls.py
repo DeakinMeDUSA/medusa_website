@@ -1,7 +1,7 @@
 from django.urls import path
 from vanilla import TemplateView
 
-from medusa_website.frontend.views import AboutView, ContactView
+from medusa_website.frontend.views import AboutView, ContactView, PublicationsView
 
 app_name = "frontend"
 urlpatterns = [
@@ -12,6 +12,7 @@ urlpatterns = [
     path("events/", view=TemplateView.as_view(template_name="frontend/events.html"), name="events"),
     path("about/", view=AboutView.as_view(), name="about"),
     path("contact/", view=ContactView.as_view(), name="contact"),
+    path("publications/", view=PublicationsView.as_view(), name="publications"),
 
 ]
 

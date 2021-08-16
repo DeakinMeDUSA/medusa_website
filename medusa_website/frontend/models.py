@@ -1,4 +1,13 @@
+import tempfile
+from pathlib import Path
+
+from django.core.files import File
+from django.core.files.base import ContentFile
+from django.core.files.uploadedfile import TemporaryUploadedFile
 from django.db import models
+from wand.color import Color
+from wand.image import Image
+from django.contrib import admin
 
 
 class Sponsor(models.Model):
@@ -32,6 +41,7 @@ class Supporter(models.Model):
 
 class OfficialDocumentation(models.Model):
     """ For use on the About page"""
+
     class Meta:
         verbose_name = "Official Documentation"
         verbose_name_plural = "Official Documentation"
@@ -45,3 +55,48 @@ class OfficialDocumentation(models.Model):
 
     def __str__(self):
         return self.__repr__()
+
+
+class Publication(models.Model):
+    """ Represents a MeDUSA Publication file, etc. The Pulse 2021"""
+    # Note the name is not unique, useful to get all publications of the same name (e.g. all editions of The Pulse)
+    name = models.CharField(max_length=256, help_text="Name of the publication", unique=False)
+    pdf = models.FileField(upload_to="publications")
+    pub_date = models.DateField(help_text="Publication date, generally the 1st of a month")
+    thumbnail = models.ImageField(upload_to="publication_thumbnails", blank=True, null=True)
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}> - {self.name}"
+
+    def __str__(self):
+        return self.__repr__()
+
+    def save(self, **kwargs):
+
+        super(Publication, self).save(**kwargs)
+        if self.has_thumbnail is False:
+            self.gen_pdf_thumbnail(page_num=0)
+
+    @property
+    def has_thumbnail(self):
+        return self.thumbnail.name is not None and self.thumbnail.name != ""
+
+    def gen_pdf_thumbnail(self, page_num=0):
+        """
+
+        Creates images for a page of the input pdf document and saves it
+        at img_path.
+
+        :param page_num: page number to create image from in the pdf file.
+        :return:
+        """
+        pdf_img = Image(filename=f"{self.pdf.path}[{page_num}]")
+
+        with pdf_img.convert("png") as converted:
+            # Set white background.
+            converted.background_color = Color("white")
+            converted.alpha_channel = "remove"
+            f = ContentFile(content=converted.make_blob(format="png"))
+            # converted.save(f)
+
+            self.thumbnail.save(name=f"{self.name}_{self.pub_date}.png", content=f)
