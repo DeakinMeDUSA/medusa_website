@@ -1,4 +1,3 @@
-
 /* ---- grid-item ---- */
 
 .grid-item {
@@ -9,18 +8,26 @@
   //padding: 20px;
 }
 
-.sponsor-grid {
+.sponsor-grid, .supporter-grid {
   //align-items: center;
   margin: 0 auto;
+
+  & a {
+    //border-bottom: dotted 1px;
+    border-bottom: none;
+  }
+
+  & img {
+    @include vendor('transition', 'transform #{_duration(transition)} ease-out');
+
+    &:hover {
+      @include vendor('transform', 'scale(1.05)');
+    }
+  }
 }
 
 .sponsor-image {
   height: 300px;
   width: 300px;
   margin: 10px;
-}
-
-.supporter-grid {
-  //align-items: center;
-  margin: 0 auto;
 }

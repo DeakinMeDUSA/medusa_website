@@ -36,6 +36,12 @@
   justify-content: center;
   align-items: center;
 
+
+  & a {
+    //border-bottom: dotted 1px;
+    border-bottom: none;
+  }
+
 }
 
 .publication-thumbnail {
