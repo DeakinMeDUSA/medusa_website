@@ -2,11 +2,12 @@
 {% load template_filters %}
 {% load pipeline %}
 {% load static %}
-{% block title %}MeDUSA - About Us{% endblock %}
+{% block title %}MeDUSA - Events{% endblock %}
 {% block css %}
   {{ block.super }}
   {#  {% stylesheet "css_core" %}#}
-  {% static "/css/main.css" %}
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.css">
+
 {% endblock %}
 
 {% block content %}
@@ -14,133 +15,52 @@
   <!-- Post -->
   <section class="">
     <header class="major">
-      <h1>About Us</h1>
-      <p>MeDUSA is your medical society that represents you!</p>
+      <h1>Events</h1>
+      <p><a
+        href="https://calendar.google.com/calendar/u/0?cid=bWVkdXNhLm9yZy5hdV9rc3RhOTNuNHIxYWFmNTJ0ZnV2YWFkcHVhY0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
+        target="_blank">Click here for more details on Google Calendar</a>
+        <br>
+        <a
+          href="https://www.facebook.com/pg/medusa.deakin/events/"
+          target="_blank">Social events can be found on the Facebook calendar here</a>
+      </p>
+      <p>
+
+      </p>
     </header>
-    <div class="image main">
-      <img alt="" src="{% static "images/frontend/building_ka.jpg" %}"/>
-    </div>
-    <p>
-      First established in 2008 by it's founding president Caroline Bate, MeDUSA aims to support all Deakin medical
-      students and enhance your medical student experience. From academic advocacy and policies to community
-      involvement and enormous social events, we aim to provide the best possible experience we can for our student
-      body. </p>
 
-    <p>
-      MeDUSA’s advocates for students in various aspects of their medical curriculum. This includes student
-      representation within committees of the School of Medicine (SoM), such as the Teaching and Learning Committee
-      (TLC) and Student Advisory Board for the Faculty of Health. Additionally, MeDUSA networks with other organisations
-      and stakeholders relevant to your medical career such as the Australian Medical Students’ Association (AMSA), the
-      Australian Medical Association (AMA) and the Postgraduate Medical Council of Victoria.</p>
-    <p>
-      MeDUSA has regular meetings with curriculum theme leaders, as well as the Head of School. The committee is
-      structured to include members from all year levels. This ensures that all cohorts are equally represented and
-      student concerns are addressed appropriately. MeDUSA also endeavours to provide students with valuable online
-      resources, which can be utilised by students at all clinical sites.</p>
-    <p>
-      MeDUSA has a growing number of special interest subcommittees, which encourage like-minded people to explore
-      particular areas of medicine and health together. In addition, we have close relationships with other health
-      organisations such as Universal Health at Deakin (UHAD), General Practice Student Network (GPSN) and Nursing,
-      Occupational Therapy, Medicine and Allied Health at Deakin (NOMAD).</p>
-    <p>
-      MeDUSA is a non-profit, incorporated organisation that is registered with the Department of Consumer and
-      Employment
-      Protection. As such, MeDUSA abides by a constitution and a set of register of resolutions. These documents include
-      details
-      about
-      the MeDUSA committee structure, election processes, annual general meeting requirements and the responsibilities
-      of
-      members. These documents can be requested from the MeDUSA Secretary, so that you, as a member of the student body,
-      can further your understanding of the functioning of MeDUSA as an organisation.</p>
+
+    <div id='calendar'></div>
+
 
   </section>
-  <section class="">
-    <h2>Committee Structure</h2>
-    <!-- Commitee Structure buttons -->
-    <!-- Three rows, with first row just containing executive committee, the others with two buttons each -->
-    <div class="container">
-      <div class="align-center">
-        <button class="org-chart-btn" data-target=".subcommittee-container.executive-committee"
-                style="font-size: large;">Executive Committee
-        </button>
-      </div>
-      {#      </div>#}
-      <div class="org-chart-structure row ">
-        <div class="org-chart-structure col col-lg-auto">
-          <button class="org-chart-btn" data-target=".subcommittee-container.general-committee">General Committee
-          </button>
-        </div>
-        <div class="org-chart-structure col col-lg-auto">
-          <button class="org-chart-btn" data-target=".subcommittee-container.clinical-committee"> Clinical Committee
-          </button>
-        </div>
-      </div>
-      <div class="org-chart-structure row justify-content-md-center">
-        <div class="org-chart-structure col col-lg-auto">
-          <button class="org-chart-btn" data-target=".subcommittee-container.preclinical-committee">Preclinical
-            Committee
-          </button>
-        </div>
-        <div class="org-chart-structure col col-lg-auto">
-          <button class="org-chart-btn" data-target=".subcommittee-container.special-interest-groups"> Special Interest
-            Groups
-          </button>
-        </div>
-      </div>
-    </div>
-    <div class="subcommittee-result empty">
-    </div>
 
-    {% for subcommittee in subcommittees.values %}
-      {% include "frontend/org_chart_subcomittee.html" with subcommittee=subcommittee %}
-    {% endfor %}
-
-  </section>
-  <section id="sponsors">
-    <h2>Our Sponsors</h2>
-    MeDUSA acknowledges the kind and generous support from all our sponsors
-    <div class="sponsor-grid">
-      {% for sponsor in sponsors.values %}
-        {% include "frontend/sponsor.html" with sponsor=sponsor %}
-      {% endfor %}
-    </div>
-    <div style="margin-top: 20px;"> MeDUSA also acknowledges the kind and generous support of the School of Medicine,
-      Deakin University and DUSA.
-    </div>
-
-    <div class="supporter-container">
-      <div class="supporter-grid">
-        {% for supporter in supporters.values %}
-          {% include "frontend/sponsor.html" with sponsor=supporter %}
-        {% endfor %}
-      </div>
-    </div>
-  </section>
 {% endblock %}
 
 {% block javascript %}
   {{ block.super }}
-  {% javascript "js_core" %}
-
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.5.1/main.min.js"></script>
   <script>
-    var elem = document.querySelector('.sponsor-grid')
-    var msnry = new Masonry(elem, {
-      // options
-      itemSelector: '.grid-item',
-      columnWidth: 330,
-      fitWidth: true,
 
-      {#gutter: 25,#}
+    document.addEventListener('DOMContentLoaded', function () {
+      var calendarEl = document.getElementById('calendar')
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        googleCalendarApiKey: 'AIzaSyCy-mujEZBMpra0gDgTrGvxHH0bH7rC0Os',
+        events: {
+          googleCalendarId: 'medusa.org.au_ksta93n4r1aaf52tfuvaadpuac@group.calendar.google.com',
+          className: 'gcal-event', // an option!
+        },
+      })
+      calendar.render()
     })
-    var elem2 = document.querySelector('.supporter-grid')
-
-    var msnry2 = new Masonry(elem2, {
-      // options
-      itemSelector: '.grid-item',
-      columnWidth: 330,
-      fitWidth: true,
-      {#gutter: 25,#}
+    // Make the toolbar responsive
+    // add the responsive classes after page initialization
+    window.onload = function () {
+      $('.fc-toolbar.fc-header-toolbar').addClass('row col-lg-12')
+    }
+    $(document).on('click', '.fc-button', function (e) {
+      $('.fc-toolbar.fc-header-toolbar').addClass('row col-lg-12')
     })
   </script>
 

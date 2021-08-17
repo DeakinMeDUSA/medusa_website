@@ -1,0 +1,29 @@
+// Restyle some elements for the calender to over-ride the overall website style
+
+button.fc-button.fc-button-primary {
+
+  &.fc-today-button {
+    background-color: white;
+    text-transform: uppercase;
+    font-family: "Source Sans Pro", Helvetica, sans-serif;
+
+    &:disabled {
+      background-color: #b6b6b6;
+    }
+  }
+
+  &.fc-next-button, &.fc-prev-button {
+    background-color: white;
+  }
+
+
+}
+.fc {
+  & a {
+    //border-bottom: dotted 1px;
+    border-bottom: none;
+  }
+  & td.fc-day.fc-day-today  {
+    background-color: #b9d5ff;
+  }
+}
