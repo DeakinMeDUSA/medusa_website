@@ -1,6 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
+import re
 import time
 from pathlib import Path
 
@@ -478,3 +479,11 @@ USE_SPELLCHECKER = False
 USE_FILEBROWSER = False
 
 GOOGLE_RECAPTCHA_SECRET_KEY = env("GOOGLE_RECAPTCHA_SECRET_KEY", default=None)
+
+IGNORABLE_404_URLS = [
+    re.compile(r'^/apple-touch-icon.*\.png$'),
+    re.compile(r'^/favicon.ico$'),
+    re.compile(r'^/phpmyadmin/'),
+    re.compile(r'\.(cgi|php|pl)$'),
+    re.compile(r'^/wp-.*'),
+]
