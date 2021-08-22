@@ -19,15 +19,19 @@
 
     {% if object == request.user %}
       <!-- Action buttons -->
-      <div class="row">
+      {#      <div class="row">#}
 
-        <div class="col-sm-12">
-          <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">Change user details</a>
-          <a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a>
-          <!-- Your Stuff: Custom user template urls -->
-        </div>
+      {#        <div class="col-sm-12">#}
+      <ul>
+        <li><a class="btn btn-primary" href="{% url 'users:update' %}" role="button">Change user details</a></li>
+        <li><a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a></li>
+        <li><a href="{% url 'account_logout' %}">Sign&nbsp;Out</a></li>
+      </ul>
 
-      </div>
+
+      {#        </div>#}
+
+      {#      </div>#}
       <!-- End Action buttons -->
     {% endif %}
 

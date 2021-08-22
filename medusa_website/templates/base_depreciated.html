@@ -50,21 +50,20 @@
           <li class="nav-item">
             <a class="nav-link" href="{% url 'mcq_bank:quiz_index' %}">MCQ Bank</a>
           </li>
-          <li class="nav-item">
-            {# URL provided by django-allauth/account/urls.py #}
+          <li> {# URL provided by django-allauth/account/urls.py #}
             <a class="nav-link" href="{% url 'users:detail' request.user.email %}">My Profile</a>
           </li>
-          <li class="nav-item">
+          <li>
             {# URL provided by django-allauth/account/urls.py #}
-            <a class="nav-link" href="{% url 'account_logout' %}">Sign Out</a>
+            <a href="{% url 'account_logout' %}">Sign Out</a>
           </li>
 
         {% else %}
-          <li class="nav-item">
+          <li>
             {# URL provided by django-allauth/account/urls.py #}
             <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">Sign Up</a>
           </li>
-          <li class="nav-item">
+          <li>
             {# URL provided by django-allauth/account/urls.py #}
             <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">Sign In</a>
           </li>

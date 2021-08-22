@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django.db.models import QuerySet
 
-from .models import Sponsor, Supporter, OfficialDocumentation, Publication
+from .models import Sponsor, Supporter, OfficialDocumentation, Publication, ConferenceReport, ElectiveReport
 
 
 @admin.register(Sponsor)
@@ -40,3 +40,19 @@ class PublicationAdmin(admin.ModelAdmin):
     ]
     search_fields = ("name", "id")
     actions = [generate_thumbnails]
+
+
+@admin.register(ConferenceReport)
+class ConferenceReportAdmin(admin.ModelAdmin):
+    list_display = [
+        "id", "conference_name", "conference_year", "conference_city", "report_author", "file"
+    ]
+    search_fields = list_display
+
+
+@admin.register(ElectiveReport)
+class ElectiveReportAdmin(admin.ModelAdmin):
+    list_display = [
+        "id", "elective_name", "elective_year", "elective_city", "report_author", "file"
+    ]
+    search_fields = list_display

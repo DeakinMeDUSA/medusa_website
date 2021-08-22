@@ -3,12 +3,14 @@ import logging
 import requests
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect
 from vanilla import TemplateView, FormView
 
 from medusa_website.frontend.forms import ContactForm
-from medusa_website.frontend.models import Sponsor, Supporter, OfficialDocumentation, Publication
+from medusa_website.frontend.models import Sponsor, Supporter, OfficialDocumentation, Publication, group_docs_by_year, \
+    ElectiveReport, ConferenceReport
 from medusa_website.org_chart.models import SubCommittee
 
 logger = logging.getLogger(__name__)
@@ -85,4 +87,26 @@ class PublicationsView(TemplateView):
         context["the_pulse"] = [pub for pub in Publication.objects.filter(name="The Pulse").order_by("-pub_date")]
         context["survival_guide"] = [pub for pub in
                                      Publication.objects.filter(name="Survival Guide").order_by("-pub_date")]
+        return context
+
+
+class ResourcesView(LoginRequiredMixin, TemplateView):
+    template_name = "frontend/resources.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+
+class TCSSView(LoginRequiredMixin, TemplateView):
+    template_name = "frontend/tcss.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tcss_policy"] = OfficialDocumentation.objects.get(name="TCSS Policy")
+
+        context["elective_reports_by_year"] = group_docs_by_year(ElectiveReport, "elective_year")
+        context["conference_reports_by_year"] = group_docs_by_year(ConferenceReport, "conference_year")
+
         return context

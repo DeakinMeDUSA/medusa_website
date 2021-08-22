@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load template_filters %}
+{% load pipeline %}
+{% load static %}
+{% block title %}MeDUSA - Resources{% endblock %}
+{% block css %}
+  {{ block.super }}
+  {% static "/css/main.css" %}
+  {#  {% stylesheet "css_core" %}#}
+{% endblock %}
+
+{% block content %}
+
+  <!-- Post -->
+  <section>
+    <header class="major">
+      <h1>Resources</h1>
+      <p>Members Only resources are shown below
+      </p>
+    </header>
+    <ul class="links">
+      <li><a href="{% url 'mcq_bank:quiz_index' %}">MCQ Bank</a></li>
+
+      <li><a href="https://dusa.org.au/club/medusa/">OSCE Bank</a></li>
+      <li><a href="https://drive.google.com/drive/u/0/folders/1ZZgD9XsTYSR6moAMQVLOdmSbGoZofTwP">MeDUSA Resource
+        Drive</a></li>
+      <li><a href="{% url 'frontend:tcss' %}">TCCS Info</a></li>
+
+
+    </ul>
+
+
+  </section>
+{% endblock %}
+
+{% block javascript %}
+  {{ block.super }}
+
+{% endblock %}

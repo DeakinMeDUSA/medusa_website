@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load template_filters %}
+{% load pipeline %}
+{% load static %}
+{% block title %}MeDUSA - TCSS{% endblock %}
+{% block css %}
+  {{ block.super }}
+  {% static "/css/main.css" %}
+  {#  {% stylesheet "css_core" %}#}
+{% endblock %}
+
+{% block content %}
+
+  <!-- Post -->
+  <section>
+    <header class="major">
+      <h1>TCSS Info</h1>
+      <p>Travel and Conference Support Scheme (TCSS)</p>
+      <a class="button"
+         href="https://docs.google.com/forms/d/e/1FAIpQLScOOp8vuQ09tULt16DkBsyVoukLa7F_X-0F0jTovMjpm2we4w/viewform">Apply
+        here!</a>
+    </header>
+
+    <p>
+      Both MeDUSA and the School of Medicine appreciate the benefit of conference attendance for professional and
+      personal development, networking and growth in the areas of academia and leadership. The Travel and Conference
+      Support Scheme (TCSS), initiated in 2013, helps provide financial support for students to attend conferences that
+      will enhance their experience at medical school and into their career. The policy for travel and conference
+      support has been derived in consultation with the School of Medicine to provide subsidies in a fair and equitable
+      manner.
+
+    </p>
+
+
+    <h3>How to Apply</h3>
+
+    <ol>
+      <li>Find a conference you want to attend</li>
+      <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScOOp8vuQ09tULt16DkBsyVoukLa7F_X-0F0jTovMjpm2we4w/viewform">Complete
+        the application form</a></li>
+      {#      <li>Forward the application form to TCSS@medusa.org.au</li>#}
+    </ol>
+    <h5>Successful applicants:</h5>
+    <ol>
+      <li>Fill out the Payment Request Form for the approved amount of funding after attending the conference to receive
+        the grant. Please also attach any appropriate tax invoices and receipts for your claim.
+      </li>
+      <li>Submit a conference report of your experience attending the conference (approximately 300 words)</li>
+      <li>Completed form and report sent to tcss@medusa.org.au</li>
+    </ol>
+
+    <h5>Important Information</h5>
+    <ul>
+      <li>To apply for TCSS funding, you must be a member of MeDUSA</li>
+      <li>The MeDUSA TCSS will provide funding for 50% of your registration, travel and accommodation costs (maximum
+        subsidy of $50 per night), up to a maximum of $500.
+      </li>
+      <li>Conferences must be of relevance to the study and/or practice of medicine</li>
+      <li>Successful applicants must provide receipts for all relevant expenses, and write a 300 word report on the
+        conference they attend +/- pictures
+      </li>
+      <li>Students may apply for more than one TCSS grant throughout the year, but will only be approved for one TCSS
+        grant per calendar year
+      </li>
+      <li>Grants will NOT be provided for attendance at AMSA National Convention or Global Health Conference unless a
+        student has been accepted to present original research as part of the Academic Program
+      </li>
+    </ul>
+    <p>Please see the <a href="{{ tcss_policy.file.url }}">TCSS Policy</a> for full details.</p>
+
+
+    <h3> Elective Reports</h3>
+    <div class="elective-reports">
+      {% for year, elective_reports in elective_reports_by_year.items %}
+
+        <h5>Electives undertaken in {{ year }}</h5>
+        <ul>
+          {% for report in elective_reports %}
+            <li><a href="{{ report.file.url }}">{{ report.elective_name }} ({{ report.elective_city }})
+              - {{ report.report_author }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </div>
+
+    <h3> Conference Reports</h3>
+    <div class="conference-reports">
+      {% for year, conference_reports in conference_reports_by_year.items %}
+        <h5>Conferences attended in {{ year }}</h5>
+        <ul>
+          {% for report in conference_reports %}
+            <li><a href="{{ report.file.url }}">{{ report.conference_name }} ({{ report.conference_city }})
+              - {{ report.report_author }}</a></li>
+          {% endfor %}
+        </ul>
+      {% endfor %}
+    </div>
+
+  </section>
+{% endblock %}
+
+{% block javascript %}
+  {{ block.super }}
+
+{% endblock %}

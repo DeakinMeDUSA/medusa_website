@@ -1,3 +1,6 @@
+import itertools
+from typing import Union, Type, List, Dict
+
 from django.core.files.base import ContentFile
 from django.db import models
 from wand.color import Color
@@ -92,3 +95,48 @@ class Publication(models.Model):
             converted.transform(resize='x400')
             f = ContentFile(content=converted.make_blob(format="jpg"))
             self.thumbnail.save(name=f"{self.name}_{self.pub_date}.jpg", content=f)
+
+
+class ConferenceReport(models.Model):
+    """ For use on the TCSS page"""
+
+    conference_name = models.CharField(max_length=256, help_text="Name of the conference")
+    conference_year = models.IntegerField(help_text="Year of the conference, e.g 2018")
+    conference_city = models.CharField(max_length=128,
+                                       help_text="City (and country if not obvious) where the elective took place, e.g. 'Canberra' or 'Vienna, Austria'")
+    report_author = models.CharField(max_length=256, help_text="Name of the author of the report")
+
+    file = models.FileField(upload_to="tcss_reports")
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}> - {self.conference_name} - {self.conference_year} - {self.report_author}"
+
+    def __str__(self):
+        return self.__repr__()
+
+
+class ElectiveReport(models.Model):
+    """ For use on the TCSS page"""
+
+    elective_name = models.CharField(max_length=256, help_text="Name of the elective")
+    elective_year = models.IntegerField(help_text="Year of the elective, e.g 2018")
+    elective_city = models.CharField(max_length=128,
+                                     help_text="City (and country if not obvious) where the elective took place, e.g. 'Canberra' or 'Vienna, Austria'")
+    report_author = models.CharField(max_length=256, help_text="Name of the author of the report")
+
+    file = models.FileField(upload_to="tcss_reports")
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}> - {self.elective_name} - {self.elective_year} - {self.elective_city}"
+
+    def __str__(self):
+        return self.__repr__()
+
+
+def group_docs_by_year(model: Union[Type[ConferenceReport], Type[ElectiveReport]],
+                       group_order_by: str) -> Dict[int, List[Union[ConferenceReport, ElectiveReport]]]:
+    models_to_group = model.objects.all().order_by(group_order_by)
+    grouped_by_year = {}
+    for year, grouped in itertools.groupby(models_to_group, lambda x: getattr(x, group_order_by)):
+        grouped_by_year[year] = list(grouped)
+    return grouped_by_year
