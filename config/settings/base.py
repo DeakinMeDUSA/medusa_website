@@ -167,7 +167,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.common.BrokenLinkEmailsMiddleware",
+    # "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "medusa_website.utils.custom_middleware.SimpleMiddleware",
@@ -479,11 +479,3 @@ USE_SPELLCHECKER = False
 USE_FILEBROWSER = False
 
 GOOGLE_RECAPTCHA_SECRET_KEY = env("GOOGLE_RECAPTCHA_SECRET_KEY", default=None)
-
-IGNORABLE_404_URLS = [
-    re.compile(r'^/apple-touch-icon.*\.png$'),
-    re.compile(r'^/favicon.ico$'),
-    re.compile(r'^/phpmyadmin/'),
-    re.compile(r'\.(cgi|php|pl)$'),
-    re.compile(r'^/wp-.*'),
-]
