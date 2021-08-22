@@ -11,6 +11,7 @@
 {% endblock %}
 {% block css %}
   {{ block.super }}
+  {% stylesheet "css_core" %}
   {% stylesheet "css_martor" %}
 
 {% endblock %}
@@ -28,6 +29,8 @@
     </div>
 
     {{ form.text | as_crispy_field }}
+    <label for="explanation" class="requiredField">Explanation text<span class="asteriskField">*</span>
+    </label>
     {{ form.explanation }}
     <hr>
     <h4>Answers</h4>
@@ -48,7 +51,8 @@
 {% endblock %}
 
 {% block javascript %}
-  {{ block.super }}
+{#  {{ block.super }}#}
+  {% javascript "js_core" %}
   {% javascript "js_martor" %}
 
 

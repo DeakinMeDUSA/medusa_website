@@ -7,8 +7,9 @@
   MCQ Bank
 {% endblock %}
 {% block css %}
-   {{ block.super }}
-   {% stylesheet "css_tablesorter" %}
+  {{ block.super }}
+{#  {% stylesheet "css_core" %}#}
+  {% stylesheet "css_tablesorter" %}
 {% endblock %}
 {% block content %}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
