@@ -1,28 +1,47 @@
 <!-- TODO: Fix active nav tab with js or something else? -->
+
+
 <nav id="nav">
   <ul class="links">
-    <li class="active"><a href="{% url "frontend:index" %}">Home</a></li>
-    <li><a href="{% url "frontend:about" %}">About</a></li>
-    <li><a href="{% url "frontend:contact" %}">Contact</a></li>
-    <li><a href="{% url "frontend:events" %}">Events</a></li>
-    <li><a href="{% url "frontend:publications" %}">Publications</a></li>
-    {% if request.user.is_authenticated %}
-      <li><a href="{% url "frontend:resources" %}">Resources</a></li>
+    {% with url_name=request.resolver_match.url_name %}
+      <!-- For each link, check if its the active url -->
+      <li class="{% if url_name == 'index' %}active{% endif %}">
+        <a href="{% url "frontend:index" %}">Home</a>
+      </li>
+      <li class="{% if url_name == 'about' %}active{% endif %}">
+        <a href="{% url "frontend:about" %}">About</a>
+      </li>
+      <li class="{% if url_name == 'contact' %}active{% endif %}">
+        <a href="{% url "frontend:contact" %}">Contact</a>
+      </li>
+      <li class="{% if url_name == 'events' %}active{% endif %}">
+        <a href="{% url "frontend:events" %}">Events</a>
+      </li>
+      <li class="{% if url_name == 'publications' %}active{% endif %}">
+        <a href="{% url "frontend:publications" %}">Publications</a>
+      </li>
+      {% if request.user.is_authenticated %}
+        <li class="{% if url_name == 'resources' %}active{% endif %}">
+          <a href="{% url "frontend:resources" %}">Resources</a>
+        </li>
 
-      <li class="nav-item">
-        {# URL provided by django-allauth/account/urls.py #}
-        <a class="nav-link" href="{% url 'users:detail' request.user.email %}"><i class="fas fa-user"></i>&nbsp;&nbsp;Profile</a>
-      </li>
+        <li class="{% if url_name == 'detail' %}active{% endif %}">
+          {# URL provided by django-allauth/account/urls.py #}
+          <a class="nav-link" href="{% url 'users:detail' request.user.email %}"><i class="fas fa-user"></i>&nbsp;&nbsp;Profile</a>
+        </li>
 
-    {% else %}
-      <li>        {# URL provided by django-allauth/account/urls.py #}
-        <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">Sign&nbsp;Up</a>
-      </li>
-      <li class="nav-item">
-        {# URL provided by django-allauth/account/urls.py #}
-        <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">Sign&nbsp;In</a>
-      </li>
-    {% endif %}
+      {% else %}
+        <li class="{% if url_name == 'account_signup' %}active{% endif %}">
+          {# URL provided by django-allauth/account/urls.py #}
+          <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">Sign&nbsp;Up</a>
+        </li>
+        <li class="{% if url_name == 'account_login' %}active{% endif %}">
+          {# URL provided by django-allauth/account/urls.py #}
+          <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">Sign&nbsp;In</a>
+        </li>
+      {% endif %}
+    {% endwith %}
+
 
     {#    <li><a href="{% url "frontend:generic" %}">Generic&nbsp;Page</a></li>#}
     {#    <li><a href="{% url "frontend:elements" %}">Elements&nbsp;Reference</a></li>#}
