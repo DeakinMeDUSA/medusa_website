@@ -106,6 +106,7 @@ THIRD_PARTY_APPS = [
     "pipeline",
     "colorfield",
     "tinymce",
+    "memoize",
 ]
 
 LOCAL_APPS = [
@@ -378,7 +379,8 @@ PIPELINE = {
             "output_filename": "pipeline/css/core.css",
         },
         "css_tablesorter": {
-            "source_filenames": ("modules/tablesorter/dist/css/scss/*.scss",),
+            "source_filenames": ("modules/tablesorter/dist/css/scss/*.scss",
+                                 "modules/tablesorter/dist/css/theme.metro-dark.min.css"),
             "output_filename": "pipeline/css/tablesorter.css",
         },
         "css_juicer": {

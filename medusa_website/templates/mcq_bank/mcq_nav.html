@@ -1,0 +1,21 @@
+<nav id="mcq_nav">
+  <ul class="links">
+    {% with url_name=request.resolver_match.url_name %}
+      {% if request.user.is_authenticated %}
+        <!-- For each link, check if its the active url -->
+        <li class="{% if url_name == 'quiz_index' %}active{% endif %}">
+          <a href="{% url "mcq_bank:quiz_index" %}">MCQ Bank Home</a>
+        </li>
+        <li class="{% if url_name == 'history' %}active{% endif %}">
+          <a href="{% url "mcq_bank:history" %}">History</a>
+        </li>
+        <li class="{% if url_name == 'question_list' %}active{% endif %}">
+          <a href="{% url "mcq_bank:question_list" %}">Question List</a>
+        </li>
+        <li class="{% if url_name == 'question_create' %}active{% endif %}">
+          <a href="{% url "mcq_bank:question_create" %}">Create Question</a>
+        </li>
+      {% endif %}
+    {% endwith %}
+  </ul>
+</nav>

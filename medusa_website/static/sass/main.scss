@@ -66,6 +66,8 @@
 @import "components/publications";
 @import "components/events";
 @import "components/mcq_bank";
+@import "components/tablesorter_custom";
+
 
 // Layout.
 
@@ -76,3 +78,4 @@
 @import 'layout/main';
 @import 'layout/footer';
 @import 'layout/navPanel';
+@import 'layout/mcq_nav';

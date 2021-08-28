@@ -6,6 +6,7 @@ from django.db.models import QuerySet
 from django.urls import reverse
 from django.utils.safestring import mark_safe
 from martor.models import MartorField
+from memoize import memoize
 
 from medusa_website.mcq_bank.models.category import Category
 from medusa_website.users.models import User
@@ -149,6 +150,7 @@ class Question(models.Model):
         return self in user.history.answered_questions()
 
     @classmethod
+    @memoize(timeout=600)  # cache result for 10 minutes
     def question_list_for_user(cls, user=User, questions: Optional[QuerySet] = None):
         """For use in the question_list view"""
         question_list = []

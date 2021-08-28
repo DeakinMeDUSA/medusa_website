@@ -12,7 +12,7 @@ from medusa_website.mcq_bank.models import History
 class CategoryProgressTable(tables.Table):
     class Meta:
         attrs = {
-            "class": "table tablesorter-metro-dark",  # Sorting is handled by js to avoid refresh
+            "class": "table tablesorter-custom",  # Sorting is handled by js to avoid refresh
             "id": "category-progress-table",
         }
         exclude = ("id",)
@@ -39,7 +39,7 @@ class CategoryProgressTable(tables.Table):
 class SessionHistoryTable(tables.Table):
     class Meta:
         attrs = {
-            "class": "table tablesorter-metro-dark",  # Sorting is handled by js to avoid refresh
+            "class": "table tablesorter-custom",  # Sorting is handled by js to avoid refresh
             "id": "session-history-table",
         }
 

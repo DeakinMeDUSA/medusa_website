@@ -4,6 +4,7 @@ from typing import Dict, List, Optional, Union
 from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
 from django.db.models import QuerySet
+from memoize import memoize
 
 from medusa_website.mcq_bank.models.category import Category
 from medusa_website.mcq_bank.utils import percent
@@ -30,6 +31,7 @@ class History(models.Model):
         verbose_name_plural = "User progress records"
 
     @property
+    @memoize(timeout=600)  # cache result for 10 minutes
     def category_progress(self) -> List[Dict[str, Optional[float]]]:
         """
         Returns a dict in which the key is the category name and the item is a dict of results, along with an aggregated "all"
@@ -75,6 +77,7 @@ class History(models.Model):
             )
 
         return cat_progress
+
 
     @property
     def session_history(
