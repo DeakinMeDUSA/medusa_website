@@ -2957,7 +2957,7 @@ Test out these customization files live
    or just replace (!".tablesorter-custom") with the contents of $theme
  */
 .tablesorter-custom {
-  font: 11px "trebuchet ms", verdana, arial;
+  font: 13px "Merriweather", Georgia, serif;
   background-color: #cdcdcd;
   margin: 10px 0 15px;
   width: 100%;
@@ -2990,7 +2990,7 @@ Test out these customization files live
   border-bottom: unset !important;
 }
 .tablesorter-custom th, .tablesorter-custom thead td {
-  font: 11px "trebuchet ms", verdana, arial;
+  font: 14px "Source Sans Pro", Helvetica, sans-serif;
   font-weight: bold;
   background-color: #70869d;
   color: #000;
