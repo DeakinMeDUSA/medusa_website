@@ -9,8 +9,6 @@ from django.forms import Form
 from django.forms.models import ModelForm, inlineformset_factory
 from django.forms.widgets import CheckboxSelectMultiple, RadioSelect
 from django.utils.safestring import mark_safe
-from martor.fields import MartorFormField
-from martor.widgets import AdminMartorWidget, MartorWidget
 
 from medusa_website.mcq_bank.models import Category, Question, QuizSession, Answer
 from medusa_website.users.models import User
@@ -19,8 +17,21 @@ from medusa_website.users.models import User
 class QuestionForm(forms.Form):
     def __init__(self, question, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
+
         choice_list = [x for x in question.get_answers_list()]
         self.fields["answers"] = forms.ChoiceField(choices=choice_list, widget=RadioSelect)
+
+        self.helper = FormHelper()
+        self.helper.form_id = "id-QuestionForm"
+        # self.helper.form_class = "blueForms"
+        self.helper.form_method = "post"
+        self.helper.layout = Layout(
+            # Div("categories", css_class="session-create-div"),
+            # Div("max_num_questions", css_class="session-create-div"),
+            # Div("include_answered", css_class="session-create-div"),
+            Div("answers"),
+            ButtonHolder(Submit("submit_answer", "Submit")),
+        )
 
 
 class AuthorNameWidget(forms.Widget):

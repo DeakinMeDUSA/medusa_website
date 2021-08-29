@@ -1,10 +1,11 @@
 {% extends "mcq_bank/base_mcq_bank.html" %}
 {% load i18n %}
+{% load crispy_forms_tags %}
 
 {% load quiz_tags %}
 
-{% block title %} {{ quiz.title }} {% endblock %}
-{% block description %} {{ quiz.title }} - {{ quiz.description }} {% endblock %}
+{% block title %} MeDUSA - MCQ Bank {% endblock %}
+{% block description %} MeDUSA - MCQ Bank {% endblock %}
 
 {% block content %}
   <div class="container">
@@ -65,22 +66,7 @@
                    style="max-width: 30vw; max-height: 50vh; padding: 10px"/>
             </a>
           {% endif %}
-
-          <form action="" method="POST">{% csrf_token %}
-            <input type=hidden name="question_id" value="{{ question.id }}">
-
-            <ul class="list-group">
-
-              {% for answer in form.answers %}
-                <li class="list-group-item">
-                  {{ answer }}
-                </li>
-              {% endfor %}
-
-            </ul>
-            <input type="submit" class="btn btn-large btn-block btn-warning" value=Submit>
-          </form>
-
+          {% crispy form %}
         {% endif %}
 
         <hr>
