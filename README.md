@@ -1,11 +1,7 @@
 MeDUSA Website
 ==============
 
-Website for MeDUSA, Deakin University's medical student society
-
-![image](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg%0A%20%20:target:%20https://github.com/pydanny/cookiecutter-django/%0A%20%20:alt:%20Built%20with%20Cookiecutter%20Django)
-
-![image](https://img.shields.io/badge/code%20style-black-000000.svg%0A%20%20:target:%20https://github.com/ambv/black%0A%20%20:alt:%20Black%20code%20style)
+Website for MeDUSA, Deakin University's medical student society, [hosted here](https://www.medusa.org.au)
 
 License
 :   MIT
@@ -57,18 +53,3 @@ coverage report:
 
 Moved to [Live reloading and SASS
 compilation](http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html).
-
-### Sentry
-
-Sentry is an error logging aggregator service. You can sign up for a
-free account at <https://sentry.io/signup/?code=cookiecutter> or
-download and host it yourself. The system is setup with reasonable
-defaults, including 404 logging and integration with the WSGI
-application.
-
-You must set the DSN url in production.
-
-Deployment
-----------
-
-The following details how to deploy this application.
