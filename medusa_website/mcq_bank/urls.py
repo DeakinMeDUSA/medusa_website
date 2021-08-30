@@ -14,7 +14,7 @@ from .views import (
     QuizTakeView,
 )
 from .views.question import QuestionDetailView
-from .views.session import QuizSessionCreateFromQuestionsView
+from .views.session import QuizSessionCreateFromQuestionsView, complete_session
 
 app_name = "mcq_bank"
 
@@ -35,6 +35,11 @@ urlpatterns = [
         "quiz/session/<int:id>",
         view=QuizSessionRunView.as_view(),
         name="quiz_session_run",
+    ),
+    path(
+        "quiz/session/complete/<int:id>",
+        view=complete_session,
+        name="quiz_session_complete",
     ),
     path("session/", view=QuizTakeView.as_view(), name="run_session"),
     path(

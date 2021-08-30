@@ -1,11 +1,9 @@
 from typing import Optional
 
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from django.template import loader
-from django.utils.decorators import method_decorator
 from django.views.generic import FormView
 from vanilla import DetailView
 
@@ -40,13 +38,12 @@ class QuizTakeView(LoginRequiredMixin, FormView, DetailView):
         # Set question index to match url if specified
         if self.request.GET.get("q"):
             question_index = int(self.request.GET["q"])
-            if question_index < 0 or question_index > self.session.questions.count() -1:
+            if question_index < 0 or question_index > self.session.questions.count() - 1:
                 raise ValueError("Invalid question index specified!")
             else:
                 self.session.current_question_index = question_index
 
             self.session.save()
-
 
         return super(QuizTakeView, self).dispatch(request, *args, **kwargs)
 
@@ -76,6 +73,8 @@ class QuizTakeView(LoginRequiredMixin, FormView, DetailView):
         context = super(QuizTakeView, self).get_context_data(**kwargs)
         context["question"] = self.question
         context["session"] = self.session
+        if self.session.current_question_response is not None:
+            context["submitted_answer"] = self.session.current_question_response
 
         return context
 

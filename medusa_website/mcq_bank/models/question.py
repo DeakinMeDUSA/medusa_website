@@ -170,7 +170,7 @@ class Question(models.Model):
             html = markdown.markdown(self.explanation)
             return mark_safe(html)
         else:
-            return mark_safe("None")
+            return mark_safe("<i>No explanation provided</i>")
 
     def editable(self, user: User):
         return user.is_staff or user.is_superuser or (user == self.author)

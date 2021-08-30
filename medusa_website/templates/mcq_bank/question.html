@@ -37,17 +37,14 @@
             {% if not session.current_question_answered %}
               {% crispy form %}
               <div class="answer-response">
-                <p>Some placeholder to be replaced eventually</p>
-
+              <!-- This will be replaced by the answer response after submission -->
               </div>
             {% else %}
               {% include "mcq_bank/answer_response.html" %}
             {% endif %}
-
-
           </div>
         {% endif %}
-
+        <hr>
         <div>
           {% if session.previous_question_index is not None %}
             <a class="button" style="float: left"
@@ -68,6 +65,7 @@
 
 
       <div class="col-4">
+        <a class="" href="{% url "mcq_bank:quiz_session_detail" id=session.id %}"> View all questions in quiz</a>
         {% include "mcq_bank/reference_ranges.html" %}
 
       </div>
@@ -91,5 +89,13 @@
 
       },
     })
+
+    $('.reference-range-btn').click(function () {
+      // Get the associated div for this button
+      const divToggleId = $(this).attr('data-target')
+      $(divToggleId).slideToggle(400)
+    })
+
+
   </script>
 {% endblock %}

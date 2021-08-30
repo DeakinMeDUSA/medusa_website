@@ -8,69 +8,69 @@
   Quiz session of {{ quiz_session.id }} for {{ quiz_session.user }}
 {% endblock %}
 
-{% block css %}
-  {{ block.super }}
-  {% stylesheet "css_tablesorter" %}
-{% endblock %}
+
 {% block content %}
-  <h2>Quiz Session ID: {{ quiz_session.id }}</h2>
-  <hr>
-
-  {% if is_current %}
-    <a class="btn btn-primary" href="{% url "mcq_bank:run_session" %}">Start questions</a>
-  {% else %}
-    <p>User: {{ quiz_session.user }}</p>
-    <p>Started: {{ quiz_session.started }}</p>
-    <p>Completed: {{ quiz_session.finished }}</p>
-    <p>Score: {{ quiz_session.percent_correct }}%</p>
-
-  {% endif %}
-
-  {#  <table class="table table-bordered table-striped">#}
-  <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
-  <table id="session-table" class="tablesorter-metro-dark">
+  <section>
+    <h2>Quiz Session ID: {{ quiz_session.id }}</h2>
 
 
-    <thead>
-    <tr>
-      <th>Question</th>
-      <th>Your answer</th>
-      <th>Category</th>
-      <th>Correct?</th>
-      <th>Review Question</th>
-    </tr>
-    </thead>
+    {% if is_current %}
+      {% if answered_questions.len > 0 %}
+        <a class="btn btn-primary" href="{% url "mcq_bank:run_session" %}">Resume questions</a>
 
-    <tbody>
-    {% for question in questions %}
-      {% quiz_session_answer_for_question quiz_session question as answer %}
+      {% else %}
+        <a class="btn btn-primary" href="{% url "mcq_bank:run_session" %}">Start questions</a>
+      {% endif %}
+    {% else %}
+      <p>User: {{ quiz_session.user }}</p>
+      <p>Started: {{ quiz_session.started }}</p>
+      <p>Completed: {{ quiz_session.finished }}</p>
+      <p>Score: {{ quiz_session.percent_correct }}%</p>
+
+    {% endif %}
+
+    <table id="session-table" class="tablesorter-custom">
+      <thead>
       <tr>
-        <td>
-          {{ question.text }}
-        </td>
-        <td>{{ answer.text }}</td>
-        <td>{{ answer.question.category }}</td>
-        <td>
-          {% if answer.correct is True %}
-            <p>Correct</p>
-          {% elif answer.correct is False %}
-            <p style="color: #470006">Incorrect</p>
-          {% else %}
-            <p style="color: grey">Unanswered</p>
-          {% endif %}
-        </td>
-        <td>
-          <a href="{% url 'mcq_bank:question_detail' question.id %}">
-            View Question {{ question.id }}
-          </a>
-        </td>
+        <th>Question</th>
+        <th>Your answer</th>
+        <th>Category</th>
+        <th>Correct?</th>
+        <th>Review Question</th>
       </tr>
+      </thead>
 
-    {% endfor %}
+      <tbody>
+      {% for question in questions %}
+        {% quiz_session_answer_for_question quiz_session question as answer %}
+        <tr>
+          <td>
+            {{ question.text }}
+          </td>
+          <td>{{ answer.text }}</td>
+          <td>{{ answer.question.category }}</td>
+          <td>
+            {% if answer.correct is True %}
+              <p>Correct</p>
+            {% elif answer.correct is False %}
+              <p style="color: #470006">Incorrect</p>
+            {% else %}
+              <p style="color: grey">Unanswered</p>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'mcq_bank:question_detail' question.id %}">
+              View Question {{ question.id }}
+            </a>
+          </td>
+        </tr>
 
-    </tbody>
+      {% endfor %}
 
-  </table>
+      </tbody>
+
+    </table>
+  </section>
 {% endblock %}
 {% block javascript %}
   {{ block.super }}

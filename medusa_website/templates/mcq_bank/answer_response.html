@@ -1,29 +1,45 @@
 <div>
 
-  {% if not answer.correct %}
-    <div class="alert alert-error">
-      <strong>You answered the above question incorrectly</strong>
-    </div>
-  {% endif %}
 
+  <div class="">
+    <p>Your answer: {{ submitted_answer.text }}
+      <b>
+        {% if submitted_answer.correct %} (Correct){% else %} (Incorrect) {% endif %}
+      </b>
+    </p>
+  </div>
+<!-- TODO clean this up a bit! -->
   <table class="table table-striped table-bordered">
     <tbody>
     {% for answer in question.answers.all %}
       {% if answer.correct %}
-        <tr class="success">
+        <tr class="mcq-answer correct">
           <td>{{ answer.text }}</td>
-          <td><strong>This is the correct answer</strong></td>
-          {% else %}
-        <tr>
-        <td>{{ answer.text }}</td>
-        <td>
-          {% if answer.id|add:"0" == previous.previous_answer|add:"0" %}
-            1
+          {% if answer.explanation %}
+            <td>{{ answer.explanation }}</td>
           {% endif %}
-        </td>
+        </tr>
+      {% elif answer == submitted_answer %}
+        {% if submitted_answer.correct is False %}
+          <tr class="mcq-answer incorrect submitted">
+            {% else %}
+          <tr class="mcq-answer submitted">
+        {% endif %}
+      <td>{{ answer.text }}</td>
+      {% if answer.explanation %}
+        <td>{{ answer.explanation }}</td>
       {% endif %}
-    </tr>
+      </tr>
+      {% else %}
+        <tr class="mcq-answer">
+          <td>{{ answer.text }}</td>
+          {% if answer.explanation %}
+            <td>{{ answer.explanation }}</td>
+          {% endif %}
+        </tr>
+      {% endif %}
     {% endfor %}
     </tbody>
   </table>
+  {{ question.explanation_as_html }}
 </div>

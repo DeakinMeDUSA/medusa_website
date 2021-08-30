@@ -116,7 +116,7 @@ class QuizSessionCreateFromQuestionsView(LoginRequiredMixin, CreateView):
                 include_answered=True,
                 save=True,
             )
-            return HttpResponseRedirect(reverse("mcq_bank:quiz_session_detail", kwargs={"id": new_session.id}))
+            return HttpResponseRedirect(reverse("mcq_bank:quiz_session_run"))
         else:
             return self.form_invalid(form)
 
@@ -153,8 +153,7 @@ class QuizSessionCreateView(LoginRequiredMixin, CreateView):
                 randomise_order=form.cleaned_data["randomise_order"],
                 include_answered=form.cleaned_data["include_answered"],
             )
-            # return HttpResponseRedirect(reverse("mcq_bank:quiz_session_run", kwargs={"id": quiz_session.id}))
-            return HttpResponseRedirect(reverse("mcq_bank:quiz_session_detail", kwargs={"id": quiz_session.id}))
+            return HttpResponseRedirect(reverse("mcq_bank:quiz_session_run"))
         else:
             return self.form_invalid(form)
 

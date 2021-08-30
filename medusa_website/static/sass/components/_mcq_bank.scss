@@ -3,3 +3,17 @@
   padding: 0 2rem !important;
   margin-bottom: 1rem;
 }
+.mcq-answer {
+  &.correct {
+    background-color: #a1eea1;
+  }
+
+  &.incorrect {
+    background-color: #ff7070;
+  }
+
+  &.submitted {
+    font-weight: bold;
+  }
+
+}

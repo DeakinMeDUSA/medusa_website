@@ -27,11 +27,11 @@
     </div>
     <div>
       {% if has_current_session %}
-        <button id="check-session" class="mcq-start-button btn btn-primary" type="button" name="button">
+        <button id="check-session" class="mcq-start-button button btn-primary" type="button" name="button">
           Start new session / Continue old session <i class="fa fa-chevron-right"></i>
         </button>
       {% else %}
-        <a id="start-session" class="mcq-start-button btn btn-primary" href="{% url "mcq_bank:quiz_session_create" %}">
+        <a id="start-session" class="mcq-start-button button btn-primary" href="{% url "mcq_bank:quiz_session_create" %}">
           Start new session <i class="fa fa-chevron-right"></i>
         </a>
       {% endif %}

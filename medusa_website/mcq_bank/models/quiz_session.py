@@ -94,6 +94,16 @@ class QuizSession(models.Model):
         return self.question_at_index(self.current_question_index)
 
     @property
+    def current_question_response(self) -> Optional[Answer]:
+        """
+        Returns the current question's answer or None
+        """
+        try:
+            return self.answers.all().get(question=self.current_question)
+        except Answer.DoesNotExist:
+            return None
+
+    @property
     def current_question_answered(self) -> bool:
         if q := self.current_question:
             return q in self.answered_questions
@@ -107,7 +117,7 @@ class QuizSession(models.Model):
         else:
             return None
 
-    @cached_property
+    @property
     def previous_question_index(self) -> Optional[int]:
         if self.current_question_index > 0:
             return self.current_question_index - 1
