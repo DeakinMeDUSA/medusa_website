@@ -10,9 +10,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.html import format_html
-from django_filters import FilterSet
+from django_filters import FilterSet, ModelChoiceFilter
 from django_filters.views import FilterView
-from memoize import memoize
 from vanilla import ListView, UpdateView, CreateView, DetailView
 
 from medusa_website.mcq_bank.forms import (
@@ -280,6 +279,10 @@ class QuestionListFilter(FilterSet):
     class Meta:
         model = Question
         fields = ["category", "author"]
+
+    author = ModelChoiceFilter(queryset=User.objects.filter(
+        id__in=Question.objects.select_related("author").order_by("author").distinct("author").values_list("author",
+                                                                                                           flat=True)))
 
 
 class QuestionListTable(tables.Table):

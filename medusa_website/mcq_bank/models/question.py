@@ -150,7 +150,7 @@ class Question(models.Model):
         return self in user.history.answered_questions()
 
     @classmethod
-    @memoize(timeout=600)  # cache result for 10 minutes
+    @memoize(timeout=60)  # cache result for 60 seconds
     def question_list_for_user(cls, user=User, questions: Optional[QuerySet] = None):
         """For use in the question_list view"""
         question_list = []
@@ -159,8 +159,9 @@ class Question(models.Model):
         history, created = History.objects.get_or_create(user=user)  # force init of history
 
         all_questions = questions or Question.objects.all()
+        answered_questions = history.answered_questions(questions=all_questions)
         for q in all_questions:
-            q.answered = q.is_answered(user=user)
+            q.answered = True if q in answered_questions else False
         return all_questions
 
     @property
