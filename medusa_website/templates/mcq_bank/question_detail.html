@@ -11,36 +11,32 @@
 {% endblock %}
 
 {% block css %}
-  {{ block.super }}
   {% stylesheet "css_core" %}
+  {{ block.super }}
 {% endblock %}
 
 {% block content %}
-  <link href="{% static 'css/forms.css' %}" rel="stylesheet">
+  <section>
+    <h3>Viewing question (id: {{ question.id }})</h3>
 
-  <h3 class="lead">Viewing question (id: {{ question.id }})</h3>
-  {{ form.author | as_crispy_field }}
-  {{ form.category  | as_crispy_field }}
-  {{ form.image | as_crispy_field }}
-  {{ form.text | as_crispy_field }}
-  {{ form.explanation | as_crispy_field }}
-  <hr>
-  <h4>Answers</h4>
-  {{ form.randomise_answer_order | as_crispy_field }}
+    {{ form.author | as_crispy_field }}
+    {{ form.category  | as_crispy_field }}
+    {{ form.question_image | as_crispy_field }}
+    {{ form.answer_image | as_crispy_field }}
 
-  <table>
-    {% crispy answer_formset answer_formset_helper %}
-  </table>
-  {% if editable %}
-    <div class="buttonHolder">
-      <a class="btn btn-primary" href={% url "mcq_bank:question_update" question.id %}>Edit Question/Answers</a>
-    </div>
-  {% endif %}
+    {{ form.text | as_crispy_field }}
+    {{ form.explanation | as_crispy_field }}
+    <hr>
+    <h4>Answers</h4>
+    {{ form.randomise_answer_order | as_crispy_field:"generic" }}
 
-
-
+    <table>
+      {% crispy answer_formset answer_formset_helper %}
+    </table>
+    {% if editable %}
+      <div class="buttonHolder">
+        <a class="button" href={% url "mcq_bank:question_update" question.id %}>Edit Question/Answers</a>
+      </div>
+    {% endif %}
+  </section>
 {% endblock %}
-
-{% block javascript %}
-  {{ block.super }}
-{% endblock javascript %}

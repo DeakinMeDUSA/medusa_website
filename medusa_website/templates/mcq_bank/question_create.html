@@ -23,23 +23,29 @@
     {% csrf_token %}
     <div class="form-group row">
       <div class="form-group col-md-6 mb-0">{{ form.category | as_crispy_field }}</div>
-      <div class="form-group col-md-6 mb-0">{{ form.image | as_crispy_field }}</div>
+      <div class="form-group col-md-6 mb-0">{{ form.question_image | as_crispy_field }}</div>
+      <div class="form-group col-md-6 mb-0">{{ form.answer_image | as_crispy_field }}</div>
+
     </div>
 
     {{ form.text | as_crispy_field }}
 
     {{ form.explanation | as_crispy_field }}
+
     <hr>
     <h4>Answers</h4>
-    <p>Provide at least two answers, and leave any un-needed answer fields blank.</p>
-    <div class="">{{ form.randomise_answer_order | as_crispy_field }}</div>
+    <div class="">
+      <p>Provide at least two answers, and leave any un-needed answer fields blank.</p>
+
+      {{ form.randomise_answer_order | as_crispy_field:"generic" }}</div>
 
     <table>
       {% crispy answer_formset answer_formset_helper %}
     </table>
-
     <input type="button" class="btn btn-secondary" value="Add more answers" id="add-answer" style="margin-bottom: 15px">
+
     <div class="buttonHolder">
+
       <input type="submit" name="submit" value="Submit" class="btn btn-primary">
     </div>
   </form>
@@ -48,32 +54,5 @@
 {% block javascript %}
   {{ block.super }}
   {% javascript "js_martor" %}
-
-
-  <script type="application/javascript">
-    let answerForms = document.querySelectorAll('tbody > tr')
-    let container = document.querySelector('tbody')
-    let addButton = document.querySelector('#add-answer')
-    let totalForms = document.querySelector('#id_answers-TOTAL_FORMS')
-    let formNum = answerForms.length - 1 // Get the number of the last form on the page with zero-based indexing
-    addButton.addEventListener('click', addForm)
-
-    function addForm(e) {
-      e.preventDefault()
-
-      let newForm = answerForms[0].cloneNode(true) //Clone the bird form
-      let formRegex = RegExp(`answers-(\\d){1}-`, 'g') //Regex to find all instances of the form number
-
-      formNum++ //Increment the form number
-      newForm.innerHTML = newForm.innerHTML.replace(formRegex, `answers-${formNum}-`) //Update the new form to have the correct form number
-      // remove existing values
-      text_values = newForm.querySelectorAll('input[type=text]')
-      text_values.forEach(element => element.setAttribute('value', ''))
-
-      let new_row = container.insertRow() //Insert a new row
-      new_row.innerHTML = newForm.innerHTML
-      totalForms.setAttribute('value', `${formNum + 1}`) //Increment the number of total forms in the management form
-    }
-  </script>
-
+  <script src={% static "js/formset_add.js" %}></script>
 {% endblock %}

@@ -2927,6 +2927,11 @@ button.fc-button.fc-button-primary.fc-next-button, button.fc-button.fc-button-pr
   font-weight: bold;
 }
 
+.session-create-div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 /* Tablesorter Custom SCSS Theme by Dan Feidt (https://github.com/HongPong)
  Converted from Custom LESS Theme by Rob Garrison
 
