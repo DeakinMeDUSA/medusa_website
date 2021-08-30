@@ -42,35 +42,39 @@ class History(models.Model):
         cat_progress = []
 
         all_qs = Question.objects.all()
-        answered_qs = Record.objects.filter(user=self.user)
+        all_qs_count = all_qs.count()
+        answered_qs = Record.objects.filter(user=self.user).prefetch_related("answer", "question__category")
         distinct_answers = answered_qs.distinct("question")
-        all_attempted_percent = percent(distinct_answers.count(), all_qs.count())
+        distinct_answers_count = distinct_answers.count()
+        all_attempted_percent = percent(distinct_answers_count, all_qs_count)
         all_correct_q = [r for r in answered_qs if r.is_correct]
         all_average_score = percent(len(all_correct_q), answered_qs.count())
         cat_progress.append(
             {
                 "id": 0,
                 "name": "OVERALL",
-                "cat_qs_num": all_qs.count(),
-                "attempted_num": distinct_answers.count(),
+                "cat_qs_num": all_qs_count,
+                "attempted_num": distinct_answers_count,
                 "attempted_percent": all_attempted_percent,
                 "cat_average_score": all_average_score,
             }
         )
 
-        for cat in Category.objects.all():
+        for cat in Category.objects.all().prefetch_related("questions"):
             all_cat_qs = cat.questions.all()
-            answered = Record.objects.filter(question__category=cat, user=self.user)
+            all_cat_qs_count = all_cat_qs.count()
+            answered = answered_qs.filter(question__category=cat)
             distinct_answers = answered.distinct("question")
-            cat_attempted_percent = percent(distinct_answers.count(), all_cat_qs.count())
+            distinct_answers_count = distinct_answers.count()
+            cat_attempted_percent = percent(distinct_answers_count, all_cat_qs_count)
             correct_q = [r for r in answered if r.is_correct]
             cat_average_score = percent(len(correct_q), answered.count())
             cat_progress.append(
                 {
                     "id": cat.id,
                     "name": cat.name,
-                    "cat_qs_num": all_cat_qs.count(),
-                    "attempted_num": distinct_answers.count(),
+                    "cat_qs_num": all_cat_qs_count,
+                    "attempted_num": distinct_answers_count,
                     "attempted_percent": cat_attempted_percent,
                     "cat_average_score": cat_average_score,
                 }
