@@ -3568,6 +3568,7 @@ body.is-preload #intro:not(.hidden) + #header + #nav {
   font-size: 0.8rem;
   outline: none;
   padding: 0 2rem;
+  border-bottom: none !important;
 }
 #nav ul.links li a:hover {
   color: inherit !important;
@@ -3578,6 +3579,7 @@ body.is-preload #intro:not(.hidden) + #header + #nav {
 }
 #nav ul.links li.active a {
   color: #1e252d;
+  border-bottom: none !important;
 }
 #nav ul.links li.active a:hover {
   color: #18bfef !important;
@@ -4448,6 +4450,7 @@ body.is-preload #intro:not(.hidden) + #header + #nav {
   font-size: 0.8rem;
   outline: none;
   padding: 0 2rem;
+  border-bottom: none !important;
 }
 #mcq_nav ul.links li a:hover {
   color: inherit !important;
@@ -4458,6 +4461,7 @@ body.is-preload #intro:not(.hidden) + #header + #nav {
 }
 #mcq_nav ul.links li.active a {
   color: #1e252d;
+  border-bottom: none !important;
 }
 #mcq_nav ul.links li.active a:hover {
   color: #18bfef !important;

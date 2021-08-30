@@ -15,6 +15,7 @@ urlpatterns = [
     path("publications/", view=PublicationsView.as_view(), name="publications"),
     path("resources/", view=ResourcesView.as_view(), name="resources"),
     path("tcss/", view=TCSSView.as_view(), name="tcss"),
+    path("feedback/", view=TemplateView.as_view(template_name="frontend/feedback.html"), name="feedback"),
 
 ]
 

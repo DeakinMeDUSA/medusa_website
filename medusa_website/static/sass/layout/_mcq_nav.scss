@@ -50,6 +50,7 @@
           font-size: 0.8rem;
           outline: none;
           padding: 0 2rem;
+          border-bottom: none !important;
 
           &:hover {
             color: inherit !important;
@@ -62,6 +63,8 @@
 
           a {
             color: _palette(invert, bg);
+            border-bottom: none !important;
+
 
             &:hover {
               color: _palette(invert, accent) !important;
