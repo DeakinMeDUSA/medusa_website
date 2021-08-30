@@ -12,21 +12,27 @@ class AnswerInline(admin.TabularInline):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    admin_thumbnail = AdminThumbnail(image_field="image")
+    question_image_thumbnail = AdminThumbnail(image_field="question_image")
+    answer_image_thumbnail = AdminThumbnail(image_field="answer_image")
+
     list_display = [
         "id",
         "text",
-        "has_image",
-        "image_url",
+        "has_question_image",
+        "has_answer_image",
+        "question_image_url",
+        "answer_image_url",
         "category",
     ]
-    readonly_fields = ("id", "admin_thumbnail")
+    readonly_fields = ("id", "question_image_thumbnail", "answer_image_thumbnail")
     fields = [
         "text",
         "category",
         "author",
-        "image",
-        "admin_thumbnail",
+        "question_image",
+        "answer_image",
+        "question_image_thumbnail",
+        "answer_image_thumbnail",
         "explanation",
         "randomise_answer_order",
     ]
@@ -35,39 +41,6 @@ class QuestionAdmin(admin.ModelAdmin):
     # filter_horizontal = ("quiz",) # Must be many-to-many
 
     inlines = [AnswerInline]
-
-    # def __init__(self, *args, **kwargs):
-    #     super(QuestionAdmin, self).__init__(*args, **kwargs)
-
-
-# class QuizAdminForm(forms.ModelForm):
-#     """
-#     below is from
-#     http://stackoverflow.com/questions/11657682/django-admin-interface-using-horizontal-filter-with-inline-manytomany-field
-#     """
-#
-#     class Meta:
-#         model = Quiz
-#         exclude = []
-#
-#     questions = forms.ModelMultipleChoiceField(
-#         queryset=Question.objects.all(),
-#         required=False,
-#         label="Questions",
-#         widget=FilteredSelectMultiple(verbose_name="Questions", is_stacked=False),
-#     )
-#
-#     def __init__(self, *args, **kwargs):
-#         super(QuizAdminForm, self).__init__(*args, **kwargs)
-#         if self.instance.pk:
-#             self.fields["questions"].initial = self.instance.questions.all()
-#
-#     def save(self, commit=True):
-#         quiz = super(QuizAdminForm, self).save(commit=False)
-#         quiz.save()
-#         quiz.questions.set(self.cleaned_data["questions"])
-#         self.save_m2m()
-#         return quiz
 
 
 @admin.register(Category)

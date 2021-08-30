@@ -25,8 +25,11 @@ class Question(models.Model):
         unique=True,
     )
     author = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
-    image = models.ImageField(
-        null=True, blank=True, verbose_name="Image", help_text="Upload an image supporting the question"
+    question_image = models.ImageField(
+        null=True, blank=True, verbose_name="Question Image", help_text="Upload an image to be shown in the question prompt"
+    )
+    answer_image = models.ImageField(
+        null=True, blank=True, verbose_name="Answer Image", help_text="Upload an image to be shown with the answers"
     )
 
     category = models.ForeignKey(
@@ -74,18 +77,20 @@ class Question(models.Model):
         return len([a for a in self.answers.all() if a.correct])
 
     @property
-    def has_image(self) -> bool:
-        if self.image:
-            return True
-        else:
-            return False
+    def has_question_image(self) -> bool:
+        return True if self.question_image else False
 
     @property
-    def image_url(self) -> Optional[str]:
-        if self.image:
-            return self.image.url
-        else:
-            return None
+    def has_answer_image(self) -> bool:
+        return True if self.question_image else False
+
+    @property
+    def question_image_url(self) -> Optional[str]:
+        return self.question_image.url if self.question_image else None
+
+    @property
+    def answer_image_url(self) -> Optional[str]:
+        return self.answer_image.url if self.answer_image else None
 
     @staticmethod
     def check_if_correct(guess: str):

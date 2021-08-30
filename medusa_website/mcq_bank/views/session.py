@@ -116,7 +116,7 @@ class QuizSessionCreateFromQuestionsView(LoginRequiredMixin, CreateView):
                 include_answered=True,
                 save=True,
             )
-            return HttpResponseRedirect(reverse("mcq_bank:quiz_session_run"))
+            return HttpResponseRedirect(reverse("mcq_bank:run_session"))
         else:
             return self.form_invalid(form)
 
@@ -153,28 +153,12 @@ class QuizSessionCreateView(LoginRequiredMixin, CreateView):
                 randomise_order=form.cleaned_data["randomise_order"],
                 include_answered=form.cleaned_data["include_answered"],
             )
-            return HttpResponseRedirect(reverse("mcq_bank:quiz_session_run"))
+            return HttpResponseRedirect(reverse("mcq_bank:run_session"))
         else:
             return self.form_invalid(form)
 
     def get_context_data(self, *args, **kwargs):
         context = super(QuizSessionCreateView, self).get_context_data(**kwargs)
         context["has_current_session"] = True if QuizSession.get_current(user=self.request.user) is not None else False
-        print(context)
-        return context
-
-
-class QuizSessionRunView(LoginRequiredMixin, DetailView):
-    model = QuizSession
-    template_name = "mcq_bank/quiz_session_run.html"
-    context_object_name = "quiz_session"
-    lookup_field = "id"
-
-    # form_class = QuizSessionCreateForm
-
-    def get_context_data(self, **kwargs):
-        context = super(QuizSessionRunView, self).get_context_data(**kwargs)
-        context["questions"] = context["quiz_session"].questions.all()
-        context["answers"] = context["quiz_session"].answers.all()
         print(context)
         return context

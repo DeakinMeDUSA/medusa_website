@@ -105,7 +105,8 @@ class QuestionDetailForm(ModelForm):
 class QuestionUpdateForm(ModelForm):
     class Meta:
         model = Question
-        fields = ["author", "text", "category", "image", "explanation", "randomise_answer_order"]
+        fields = ["author", "text", "category", "question_image", "answer_image", "explanation",
+                  "randomise_answer_order"]
 
     # text = forms.CharField(widget=AdminPagedownWidget())
     # explanation = MartorFormField()
@@ -123,7 +124,7 @@ class QuestionUpdateForm(ModelForm):
 class QuestionCreateForm(ModelForm):
     class Meta:
         model = Question
-        fields = ["text", "category", "image", "explanation", "randomise_answer_order"]
+        fields = ["text", "category", "question_image", "answer_image", "explanation", "randomise_answer_order"]
 
     # explanation = forms.CharField(widget=AdminMartorWidget())
 

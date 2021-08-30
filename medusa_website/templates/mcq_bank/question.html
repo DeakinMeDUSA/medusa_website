@@ -27,10 +27,10 @@
 
             <p class="lead">{{ question.text }}</p>
 
-            {% if question.image %}
+            {% if question.question_image %}
               <a href=""
-                 onclick="window.open('{{ question.image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
-                <img src="{{ question.image.url }}" alt="{{ question.text }}"
+                 onclick="window.open('{{ question.question_image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
+                <img src="{{ question.question_image.url }}" alt="{{ question.text }}"
                      style="max-width: 30vw; max-height: 50vh; padding: 10px"/>
               </a>
             {% endif %}

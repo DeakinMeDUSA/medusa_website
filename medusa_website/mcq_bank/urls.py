@@ -10,7 +10,6 @@ from .views import (
     QuizSessionCreateView,
     QuizSessionDetailView,
     QuizSessionEndOrContinueView,
-    QuizSessionRunView,
     QuizTakeView,
 )
 from .views.question import QuestionDetailView
@@ -32,11 +31,6 @@ urlpatterns = [
         name="check_session",
     ),
     path(
-        "quiz/session/<int:id>",
-        view=QuizSessionRunView.as_view(),
-        name="quiz_session_run",
-    ),
-    path(
         "quiz/session/complete/<int:id>",
         view=complete_session,
         name="quiz_session_complete",
@@ -55,6 +49,5 @@ urlpatterns = [
     re_path("^$", view=QuizIndexView.as_view(), name="quiz_index"),
     re_path("^.*$", view=IndexRedirectView.as_view(), name="index_redirect"),  # redirect all others to index
 ]
-
 
 # TODO link detail view to use a modified UPdateView to keep things DRY
