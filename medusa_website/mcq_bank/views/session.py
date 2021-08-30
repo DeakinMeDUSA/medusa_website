@@ -160,5 +160,4 @@ class QuizSessionCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, *args, **kwargs):
         context = super(QuizSessionCreateView, self).get_context_data(**kwargs)
         context["has_current_session"] = True if QuizSession.get_current(user=self.request.user) is not None else False
-        print(context)
         return context

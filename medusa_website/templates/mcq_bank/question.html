@@ -79,7 +79,7 @@
   <script>
     // Handle question submission
     $('#id-QuestionForm').ajaxForm({
-      url: 'http://localhost:8000/mcq_bank/session/', // TODO fix URL make dynamic
+      url: '{% url "mcq_bank:run_session" %}', // TODO fix URL make dynamic
       dataType: 'json',
       success: function (response) {
         console.log('The server says: ' + JSON.stringify(response))

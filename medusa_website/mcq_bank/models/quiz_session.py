@@ -139,7 +139,7 @@ class QuizSession(models.Model):
 
     def mark_quiz_complete(self):
         self.complete = True
-        self.end = now()
+        self.finished = now()
         self.save()
 
     def add_user_answer(self, answer: Answer):
@@ -171,7 +171,7 @@ class QuizSession(models.Model):
     def get_current(cls, user: User) -> Optional["QuizSession"]:
         try:
             return cls.objects.get(user=user, complete=False)
-        except QuizSession.DoesNotExist:
+        except (QuizSession.DoesNotExist, TypeError):
             return None
 
     @property

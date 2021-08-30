@@ -319,7 +319,7 @@ class QuestionListTable(tables.Table):
 
     def render_image(self, value, record: Question):
         return format_html(
-            f"""<a href="" onclick="window.open('{record.image.url}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=800px, height=600px'); return false;">{value}</a>"""
+            f"""<a href="" onclick="window.open('{record.question_image.url}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=800px, height=600px'); return false;">{value}</a>"""
         )
 
     def render_id(self, value, record: Question):
