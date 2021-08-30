@@ -76,16 +76,16 @@ class ImageDisplayWidget(forms.Widget):
 class QuestionDetailForm(ModelForm):
     class Meta:
         model = Question
-        fields = ["author", "text", "category", "image", "explanation", "randomise_answer_order"]
+        fields = ["author", "text", "category", "question_image", "answer_image", "explanation", "randomise_answer_order"]
 
     author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
     explanation = forms.CharField(
         label="Explanation", max_length=500, disabled=True, widget=RenderMarkdownWidget(css_class="form-control")
     )
 
-    image = forms.ImageField(label="Image", disabled=True, widget=ImageDisplayWidget)
+    question_image = forms.ImageField(label="Question Image", disabled=True, widget=ImageDisplayWidget)
+    answer_image = forms.ImageField(label="Answer Image", disabled=True, widget=ImageDisplayWidget)
 
-    #
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
