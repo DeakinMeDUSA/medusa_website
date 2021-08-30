@@ -12,70 +12,84 @@
     <div class="row">
       <div class="col-8">
 
-        {% if previous.answers %}
-
-          <p class="muted"><small>The previous question:</small></p>
-          <p>{{ previous.previous_question }}</p>
-
-          {% if previous.previous_outcome %}
-            <div class="alert alert-success">
-          {% else %}
-            <div class="alert alert-warning">
-          {% endif %}
-        <p><small>
-          Your answer was </small>
-          <strong>
-            {{ previous.previous_outcome|yesno:"correct,incorrect" }}
-          </strong>
-        </p>
-
-        </div>
-
-          {% include 'mcq_bank/correct_answer.html' %}
-
-          <p><strong>Explanation:</strong></p>
-          <div class="well " style="background-color: #fcf8e3;">
-            <p>{{ previous.previous_question.explanation_as_html }}</p>
-          </div>
-
-          <hr>
-
-        {% endif %}
-
-        <br/>
-
         {% if question %}
+          <div class="question-toanswer">
+            {% if session %}
+              <div style="float: right;">
+                Question {{ session.current_question_index|add:1 }} of {{ session.progress.1 }}
+              </div>
+            {% endif %}
 
-          {% if progress %}
-            <div style="float: right;">
-              Question {{ progress.0|add:1 }} of {{ progress.1 }}
-            </div>
-          {% endif %}
+            <p>
+              <small class="muted">Question category:</small>
+              <strong>{{ question.category }}</strong>
+            </p>
 
-          <p>
-            <small class="muted">Question category:</small>
-            <strong>{{ question.category }}</strong>
-          </p>
+            <p class="lead">{{ question.text }}</p>
 
-          <p class="lead">{{ question.text }}</p>
+            {% if question.image %}
+              <a href=""
+                 onclick="window.open('{{ question.image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
+                <img src="{{ question.image.url }}" alt="{{ question.text }}"
+                     style="max-width: 30vw; max-height: 50vh; padding: 10px"/>
+              </a>
+            {% endif %}
+            {% if not session.current_question_answered %}
+              {% crispy form %}
+              <div class="answer-response">
+                <p>Some placeholder to be replaced eventually</p>
 
-          {% if question.image %}
-            <a href=""
-               onclick="window.open('{{ question.image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
-              <img src="{{ question.image.url }}" alt="{{ question.text }}"
-                   style="max-width: 30vw; max-height: 50vh; padding: 10px"/>
-            </a>
-          {% endif %}
-          {% crispy form %}
+              </div>
+            {% else %}
+              {% include "mcq_bank/answer_response.html" %}
+            {% endif %}
+
+
+          </div>
         {% endif %}
 
-        <hr>
-        </div>
-        <div class="col-4">
-          {% include "mcq_bank/reference_ranges.html" %}
+        <div>
+          {% if session.previous_question_index is not None %}
+            <a class="button" style="float: left"
+               href="{% url "mcq_bank:run_session" %}?q={{ session.previous_question_index }}"> Previous
+              question</a>
+          {% endif %}
+          {% if session.next_question_index is not None %}
+            <a class="button" style="float: right"
+               href="{% url "mcq_bank:run_session" %}?q={{ session.next_question_index }}"> Next question</a>
+          {% else %}
+            <a class="button complete-quiz" style="float: right"
+               href="{% url "mcq_bank:quiz_session_complete" id=session.id %}"> Complete Quiz</a>
+          {% endif %}
 
         </div>
+
+      </div>
+
+
+      <div class="col-4">
+        {% include "mcq_bank/reference_ranges.html" %}
+
       </div>
     </div>
   </div>
+{% endblock %}
+
+
+{% block javascript %}
+  {{ block.super }}
+  <script>
+    // Handle question submission
+    $('#id-QuestionForm').ajaxForm({
+      url: 'http://localhost:8000/mcq_bank/session/', // TODO fix URL make dynamic
+      dataType: 'json',
+      success: function (response) {
+        console.log('The server says: ' + JSON.stringify(response))
+
+        $('div.answer-response').html(response.answer_response)
+        $('#id-QuestionForm').hide()
+
+      },
+    })
+  </script>
 {% endblock %}

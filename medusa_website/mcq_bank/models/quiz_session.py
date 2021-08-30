@@ -1,15 +1,18 @@
-from datetime import datetime
+import logging
 from typing import Optional
 
 from django.db import models
 from django.db.models import QuerySet
 from django.urls import reverse
+from django.utils.functional import cached_property
 from django.utils.timezone import now
 
 from medusa_website.mcq_bank.models.answer import Answer
 from medusa_website.mcq_bank.models.question import Question
 from medusa_website.mcq_bank.models.record import Record
 from medusa_website.users.models import User
+
+logger = logging.getLogger(__name__)
 
 
 class QuizSessionExists(RuntimeError):
@@ -28,8 +31,6 @@ class QuizSession(models.Model):
 
     Incorrect_questions is a list in the same format.
 
-    Sitting deleted when quiz finished unless quiz.exam_paper is true.
-
     User_answers is a json object in which the question PK is stored
     with the answer the user gave.
     """
@@ -46,13 +47,36 @@ class QuizSession(models.Model):
     complete = models.BooleanField(default=False, verbose_name="Complete")
     started = models.DateTimeField(auto_now_add=True, verbose_name="Session Started")
     finished = models.DateTimeField(null=True, blank=True, verbose_name="Session Ended")
+    current_question_index = models.IntegerField(blank=False, null=False, default=0,
+                                                 verbose_name="Index of the question currently being answered")
 
-    class Meta:
-        permissions = (("view_sittings", "Can see completed exams."),)
+    def increment_question_index(self, save=True):
+        self.current_question_index += 1
+        if save:
+            self.save()
+
+    def decrement_question_index(self, save=True):
+        self.current_question_index -= 1
+        if save:
+            self.save()
+
+    def question_at_index(self, index: int):
+        if index < 0:  # Otherwise we'll return items from the other end of the list
+            logger.warning(f"Could not get question at index {index}")
+            return None
+        try:
+            return list(self.questions.all())[index]
+        except IndexError:
+            logger.warning(f"Could not get question at index {index}")
+            return None
 
     @property
-    def remaining_questions(self) -> QuerySet[Question]:
+    def unanswered_questions(self) -> QuerySet[Question]:
         return Question.objects.filter(quiz_sessions=self).exclude(answers__in=self.answers.all())
+
+    @property
+    def answered_questions(self) -> QuerySet[Question]:
+        return Question.objects.filter(quiz_sessions=self, answers__in=self.answers.all())
 
     @property
     def correct_answers(self) -> QuerySet[Answer]:
@@ -65,12 +89,30 @@ class QuizSession(models.Model):
     @property
     def current_question(self) -> Optional[Question]:
         """
-        Returns the next question, if no question is found, returns None
+        Returns the current question, note that this question isn't necessarily un-answered or present
         """
-        if self.remaining_questions.count() == 0:
-            return None
+        return self.question_at_index(self.current_question_index)
+
+    @property
+    def current_question_answered(self) -> bool:
+        if q := self.current_question:
+            return q in self.answered_questions
         else:
-            return self.remaining_questions.first()
+            return False
+
+    @property
+    def next_question_index(self) -> Optional[int]:
+        if self.current_question_index < self.questions.count() - 1:
+            return self.current_question_index + 1
+        else:
+            return None
+
+    @cached_property
+    def previous_question_index(self) -> Optional[int]:
+        if self.current_question_index > 0:
+            return self.current_question_index - 1
+        else:
+            return None
 
     def user_answer_for_question(self, question: Question):
         try:
@@ -97,10 +139,12 @@ class QuizSession(models.Model):
         if answer.question.id in self.answers.values_list("question__id", flat=True):
             raise RuntimeError("Answer given is for a question that has already been answered!")
         self.answers.add(answer)
+        if self.current_question_index < self.questions.count() - 1:
+            self.increment_question_index(save=False)
         self.save()
         ans_rec = Record(user=self.user, answer=answer, question=answer.question)
         ans_rec.save()
-        if self.remaining_questions.count() == 0:
+        if self.unanswered_questions.count() == 0:
             print("QuizSession complete! Marking complete")
             self.mark_quiz_complete()
 
@@ -144,7 +188,7 @@ class QuizSession(models.Model):
             questions = questions.order_by("?")
 
         max_n = max_n if max_n <= questions.count() else questions.count()
-        selected_qs = questions[0 : max_n + 1]
+        selected_qs = questions[0: max_n + 1]
 
         if selected_qs.count() < 1:
             raise RuntimeError("Cannot create Quiz Session without any questions!")
@@ -177,3 +221,6 @@ class QuizSession(models.Model):
 
     def get_absolute_url(self):
         return reverse("mcq_bank:quiz_session_detail", kwargs={"id": self.id})
+
+    def __repr__(self):
+        return f"<QuizSession: QuizSession object ({self.id}), Q index={self.current_question_index}>"

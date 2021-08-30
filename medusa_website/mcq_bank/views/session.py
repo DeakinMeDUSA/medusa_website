@@ -1,4 +1,5 @@
 from bootstrap_modal_forms.generic import BSModalFormView
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -33,6 +34,14 @@ class QuizSessionDetailView(LoginRequiredMixin, DetailView):
         return context
 
 
+@login_required
+def complete_session(request, **kwargs):
+    # Simple endpoint to mark a quiz session as complete when a button is pressed
+    quiz_session = QuizSession.objects.get(id=kwargs["id"])
+    quiz_session.mark_quiz_complete()
+    return HttpResponseRedirect(reverse("mcq_bank:quiz_session_detail", kwargs={"id": quiz_session.id}))
+
+
 class QuizSessionEndOrContinueView(LoginRequiredMixin, BSModalFormView):
     template_name = "mcq_bank/session_end_or_continue_modal.html"
     form_class = QuizSessionContinueOrStopForm
@@ -63,7 +72,6 @@ class QuizSessionEndOrContinueView(LoginRequiredMixin, BSModalFormView):
         context["questions_total"] = progress[1]
         context["percent_complete"] = round(100 * progress[0] / progress[1], 2) if progress[1] > 0 else 0
 
-        print(context)
         return context
 
     def form_valid(self, form):

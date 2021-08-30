@@ -31,7 +31,7 @@ class History(models.Model):
         verbose_name_plural = "User progress records"
 
     @property
-    @memoize(timeout=600)  # cache result for 10 minutes
+    @memoize(timeout=120)  # cache result for 120 seconds
     def category_progress(self) -> List[Dict[str, Optional[float]]]:
         """
         Returns a dict in which the key is the category name and the item is a dict of results, along with an aggregated "all"

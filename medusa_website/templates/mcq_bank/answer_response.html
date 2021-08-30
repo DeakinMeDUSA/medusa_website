@@ -1,0 +1,29 @@
+<div>
+
+  {% if not answer.correct %}
+    <div class="alert alert-error">
+      <strong>You answered the above question incorrectly</strong>
+    </div>
+  {% endif %}
+
+  <table class="table table-striped table-bordered">
+    <tbody>
+    {% for answer in question.answers.all %}
+      {% if answer.correct %}
+        <tr class="success">
+          <td>{{ answer.text }}</td>
+          <td><strong>This is the correct answer</strong></td>
+          {% else %}
+        <tr>
+        <td>{{ answer.text }}</td>
+        <td>
+          {% if answer.id|add:"0" == previous.previous_answer|add:"0" %}
+            1
+          {% endif %}
+        </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>

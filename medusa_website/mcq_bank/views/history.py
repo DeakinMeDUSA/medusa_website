@@ -56,7 +56,7 @@ class SessionHistoryTable(tables.Table):
 
     def render_id(self, value, record):
         session_url = reverse("mcq_bank:quiz_session_detail", kwargs={"id": record["id"]})
-        return format_html(f'<a href="{session_url}">{value}</a>')
+        return format_html(f'<a href="{session_url}">Review {value}</a>')
 
 
 class HistoryView(LoginRequiredMixin, TemplateView):

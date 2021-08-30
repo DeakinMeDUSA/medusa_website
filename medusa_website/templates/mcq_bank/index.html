@@ -37,16 +37,18 @@
       {% endif %}
     </div>
 
-    <h2>Category Progress</h2>
-    {% render_table category_progress_table %}
-
-  </section>
-  <section class="">
     <ul>
       <li><a href="{% url "mcq_bank:history" %}">Quiz History and Progress</a></li>
       <li><a href="{% url "mcq_bank:question_list" %}">View all Questions</a></li>
       <li><a href="{% url "mcq_bank:question_create" %}">Create new question</a></li>
     </ul>
+  </section>
+
+  <section class="">
+
+    <h2>Category Progress</h2>
+    {% render_table category_progress_table %}
+
   </section>
 
 
@@ -58,12 +60,17 @@
   {% javascript "js_tablesorter" %}
   <script type="text/javascript">
     $(document).ready(function () {
+      $('#check-session').click(function() {
+        $(this).hide();
+      });
 
       $('#check-session').modalForm({
         formURL: "{% url 'mcq_bank:check_session' %}",
-      })
-    })
 
+      })
+
+
+    })
   </script>
 
   <script type="application/javascript">

@@ -2,17 +2,19 @@ from typing import Optional
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
+from django.template import loader
 from django.utils.decorators import method_decorator
 from django.views.generic import FormView
+from vanilla import DetailView
 
 from medusa_website.mcq_bank.models import Answer, History, Question, QuizSession
-
-from ...users.models import User
 from ..forms import QuestionForm
+from ...users.models import User
 
 
-class QuizTakeView(LoginRequiredMixin, FormView):
+class QuizTakeView(LoginRequiredMixin, FormView, DetailView):
     form_class = QuestionForm
     template_name = "mcq_bank/question.html"
     result_template_name = "mcq_bank/result.html"
@@ -26,7 +28,6 @@ class QuizTakeView(LoginRequiredMixin, FormView):
         self.question: Optional[Question] = None
         self.history: Optional[History] = None
 
-    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.user = self.request.user
         print(f"User = {self.user}")
@@ -35,6 +36,17 @@ class QuizTakeView(LoginRequiredMixin, FormView):
         if self.session is None:
             return redirect("mcq_bank:quiz_session_create")
         self.history = self.user.history
+
+        # Set question index to match url if specified
+        if self.request.GET.get("q"):
+            question_index = int(self.request.GET["q"])
+            if question_index < 0 or question_index > self.session.questions.count() -1:
+                raise ValueError("Invalid question index specified!")
+            else:
+                self.session.current_question_index = question_index
+
+            self.session.save()
+
 
         return super(QuizTakeView, self).dispatch(request, *args, **kwargs)
 
@@ -45,43 +57,39 @@ class QuizTakeView(LoginRequiredMixin, FormView):
 
         form_class = self.form_class
 
-        return form_class(**self.get_form_kwargs())
+        return form_class(question=self.question, **self.get_form_kwargs())
 
-    def get_form_kwargs(self):
-        kwargs = super(QuizTakeView, self).get_form_kwargs()
-
-        return dict(kwargs, question=self.question)
+    # def get_form_kwargs(self):
+    #     kwargs = super(QuizTakeView, self).get_form_kwargs()
+    #
+    #     return dict(kwargs, question=self.question)
 
     def form_valid(self, form):
-
-        self.form_valid_user(form)
-        if self.session.remaining_questions.count() == 0:
+        submitted_answer = self.submit_answer_response(form)
+        if self.session.unanswered_questions.count() == 0:
             return self.final_result_user()
 
-        self.request.POST = {}
-
-        return super(QuizTakeView, self).get(self, self.request)
+        answer_response = self.render_answer_response(request=self.request, submitted_answer=submitted_answer)
+        return JsonResponse({"answer_response": answer_response})
 
     def get_context_data(self, **kwargs):
         context = super(QuizTakeView, self).get_context_data(**kwargs)
         context["question"] = self.question
         context["session"] = self.session
-        if hasattr(self, "previous"):
-            context["previous"] = self.previous
-        if hasattr(self, "progress"):
-            context["progress"] = self.history
+
         return context
 
-    def form_valid_user(self, form):
-        answer = Answer.objects.get(id=form.cleaned_data["answers"])
-        self.session.add_user_answer(answer=answer)
+    def submit_answer_response(self, form) -> Answer:
+        submitted_answer = Answer.objects.get(id=form.cleaned_data["answers"])
+        self.session.add_user_answer(answer=submitted_answer)
+        return submitted_answer
 
-        self.previous = {
-            "previous_answer": answer,
-            "previous_outcome": answer.correct,
-            "previous_question": self.question,
-            "answers": self.question.get_answers(),
+    def render_answer_response(self, request, submitted_answer) -> str:
+        context = {
+            'submitted_answer': submitted_answer,
+            'question': submitted_answer.question,
         }
+        return loader.render_to_string("mcq_bank/answer_response.html", context=context, request=request)
 
     def final_result_user(self):
         results = {
@@ -89,9 +97,7 @@ class QuizTakeView(LoginRequiredMixin, FormView):
             "score": self.session.correct_answers.count(),
             "max_score": self.session.questions.count(),
             "percent": self.session.percent_correct,
-            "previous": self.previous,
         }
 
         self.session.mark_quiz_complete()
-
         return render(self.request, self.result_template_name, results)

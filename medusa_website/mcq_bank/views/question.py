@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 
 def validate_answer_formset(answer_formset: AnswerCreateFormSet) -> Tuple[bool, AnswerCreateFormSet, List[Form]]:
-    # Check at least two answers provided
+    # Check at least two answers provided when creating question
     complete_answer_forms = []
     incomplete_answer_forms = []
     invalid_answer_forms = []
@@ -292,7 +292,7 @@ class QuestionListTable(tables.Table):
             "id": "question-list-table",
         }
         model = Question
-        exclude = ("randomise_answer_order", "flagged_by", "is_reviewed", "reviewed_by")
+        exclude = ("randomise_answer_order", "flagged_by", "is_reviewed", "reviewed_by", "explanation")
         sequence = ("id", "author", "category", "answered", "text", "answer", "explanation", "image")
 
     id = tables.Column(linkify=False, accessor="id", orderable=False)
@@ -301,7 +301,7 @@ class QuestionListTable(tables.Table):
     answered = tables.Column(linkify=False, orderable=False, empty_values=())
     text = tables.Column(linkify=False, orderable=False)
     answer = tables.Column(linkify=False, orderable=False, empty_values=(), verbose_name="Answer")
-    explanation = tables.Column(linkify=False, orderable=False)
+    # explanation = tables.Column(linkify=False, orderable=False)
     image = tables.Column(linkify=False, orderable=False)
     is_flagged = tables.Column(linkify=False, orderable=False)
     filterset_class = QuestionListFilter
