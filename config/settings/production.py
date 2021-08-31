@@ -18,9 +18,8 @@ ALLOWED_HOSTS = [
     "0.0.0.0",
     "127.0.0.1",
     "172.105.190.146",
-    "www.cculhane.com",
-    "cculhane.com",
     "medusa.org.au",
+    "www.medusa.org.au"
 ]
 
 # DATABASES
