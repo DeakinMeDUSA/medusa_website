@@ -46,7 +46,9 @@
   </header>
 
   <!-- Nav -->
-  {% include "frontend/nav.html" %}
+  {% block nav %}
+    {% include "frontend/nav.html" %}
+  {% endblock %}
 
   <!-- Main -->
   <div id="main">
@@ -78,6 +80,17 @@
     Sentry.showReportDialog({
       eventId: "{{ event_id }}",
     })
+  </script>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HDX7LQ3NH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || []
+
+    function gtag() {dataLayer.push(arguments)}
+
+    gtag('js', new Date())
+
+    gtag('config', 'G-9HDX7LQ3NH')
   </script>
 
 {% endblock %}

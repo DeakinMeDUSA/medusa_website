@@ -1,83 +1,37 @@
-<!-- A modified base for use in the mcq_bank, with less overhead -->
+<!-- A modified base for use in the mcq_bank, with an extra nav row -->
+{% extends "base.html" %}
+
 {% load pipeline %}
 {% load static %}
-<!DOCTYPE HTML>
-<html>
-<head>
 
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-  <meta name="description" content="Website for MeDUSA, Deakin University's medical student society">
-  <meta name="author" content="Chris Culhane">
-  <title>
-    {% block title %}
-      MeDUSA Website
-    {% endblock title %}
-  </title>
-  {% block css %}
-    <link rel="stylesheet" href={% static "css/main.css" %}>
-    <link rel="stylesheet" href={% static "css/fontawesome-all.min.css" %}>
+{% block title %}
+  MeDUSA - MCQ Bank
+{% endblock title %}
 
-    <noscript>
-      <link rel="stylesheet" href={% static "css/noscript.css" %}>
-    </noscript>
-  {% endblock %}
+{% block css %}
+  {{ block.super }}
+{% endblock %}
 
-</head>
-<body class="is-preload">
-
-<!-- Wrapper -->
-<div id="wrapper" class="fade-in">
-
-  {% block intro %}
-
-  {% endblock %}
-
-  <!-- Header -->
-  <header id="header">
-    <a href="{% url "frontend:index" %}" class="logo">MeDUSA</a>
-  </header>
-
-  <!-- Nav -->
-  {% include "frontend/nav.html" %}
-  <!-- MCQ Bank specific nav bar underneath -->
-  {% include "mcq_bank/mcq_nav.html" %}
-
-  <!-- Main -->
-  <div id="main">
-
-    {% block content %}
-
-    {% endblock %}
-
-  </div>
-  <!-- Footer -->
-  {% include "frontend/footer.html" %}
-  <!-- Copyright -->
-  {% include "frontend/copywright.html" %}
-
-</div>
-
-<!-- Scripts -->
-{% block javascript %}
-  {% javascript "js_core" %}
-  <script src={% static "js/jquery.form.min.js" %}></script>
-  <script src={% static "js/jquery.scrollex.min.js" %}></script>
-  <script src={% static "js/jquery.scrolly.min.js" %}></script>
-  <script src={% static "js/browser.min.js" %}></script>
-  <script src={% static "js/breakpoints.min.js" %}></script>
-  <script src={% static "js/util.js" %}></script>
-  <script src={% static "js/main.js" %}></script>
-  <script src="{% static 'modules/core/sentry-6.9.0.min.js' %}"></script>
-  <script>
-    Sentry.init({ dsn: 'https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588' })
-    Sentry.showReportDialog({
-      eventId: "{{ event_id }}",
-    })
-  </script>
+{% block intro %}
 
 {% endblock %}
 
 
-</body>
-</html>
+{% block nav %}
+  {{ block.super }}
+  <!-- MCQ Bank specific nav bar underneath -->
+  {% include "mcq_bank/mcq_nav.html" %}
+{% endblock %}
+
+
+
+{% block content %}
+
+{% endblock %}
+
+
+{% block javascript %}
+  {{ block.super }}
+  <script src={% static "js/jquery.form.min.js" %}></script>
+
+{% endblock %}
