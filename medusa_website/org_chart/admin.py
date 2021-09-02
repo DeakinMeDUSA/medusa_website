@@ -23,6 +23,6 @@ class CommitteeMemberAdmin(admin.ModelAdmin):
     list_display = [
         "email",
         "position",
-        "email",
+        "name",
     ]
-    search_fields = ("title", "position", "email")
+    search_fields = ("title", "position", "email", "name")
