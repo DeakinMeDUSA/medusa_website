@@ -1,6 +1,7 @@
 """
 Email backend that uses the GMail API via OAuth2 authentication.
 """
+import base64
 import datetime
 import logging
 from pathlib import Path
@@ -9,15 +10,11 @@ from typing import Dict, Tuple, Optional
 import dateparser
 from django.conf import settings
 from django.core.mail.backends.base import BaseEmailBackend
-
-logger = logging.getLogger(__name__)
-import base64
-
 from google.auth.transport.requests import Request
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 
-assert settings.GMAIL_CREDENTIALS_PATH.exists()
+logger = logging.getLogger(__name__)
 
 
 class GmailBackend(BaseEmailBackend):
