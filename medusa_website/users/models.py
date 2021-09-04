@@ -58,6 +58,7 @@ class MemberRecordsImport(models.Model):
 
     members = ManyToManyField(MemberRecord, blank=True, related_name="member_record_imports")
     import_dt = models.DateTimeField(_("import time"), auto_now_add=True)
+    report_date = models.DateField(help_text="Date the report was generated", unique=True)
     file = models.FileField(upload_to="dusa_reports/%Y", null=True, blank=True)
 
     def import_memberlist(self) -> pd.DataFrame:
@@ -72,7 +73,11 @@ class MemberRecordsImport(models.Model):
         print(f"df = {df}")
         for idx, row in df.iterrows():
             member, created = MemberRecord.objects.update_or_create(
-                email=row["Email"], name=row["Full Name"], end_date=row["End Date"]
+                email=row["Email"],
+                defaults={
+                    "email": row["Email"],
+                    "name": row["Full Name"],
+                    "end_date": row["End Date"]}
             )
             member.member_record_imports.add(self)
             member.save()

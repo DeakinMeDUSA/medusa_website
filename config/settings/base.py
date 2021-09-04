@@ -1,7 +1,6 @@
 """
 Base settings to build other settings files upon.
 """
-import re
 import time
 from pathlib import Path
 
@@ -107,6 +106,7 @@ THIRD_PARTY_APPS = [
     "colorfield",
     "tinymce",
     "memoize",
+    "django_celery_beat"
 ]
 
 LOCAL_APPS = [
@@ -266,13 +266,15 @@ X_FRAME_OPTIONS = "DENY"
 EMAIL_BACKEND = "medusa_website.gmailapi_backend.mail.GmailBackend"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
-GMAIL_API_CLIENT_ID = env("GMAIL_API_CLIENT_ID", default=None)
-GMAIL_API_CLIENT_SECRET = env("GMAIL_API_CLIENT_SECRET", default=None)
-GMAIL_API_REFRESH_TOKEN = env("GMAIL_API_REFRESH_TOKEN", default=None)
 DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="website@medusa.org.au>")
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[MeDUSA Website]")
+
+# Gmail-specific settings
+MEMBERLIST_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="it@medusa.org.au")
+GMAIL_CREDENTIALS_PATH = Path(env("GMAIL_CREDENTIALS_PATH")).resolve()
+GMAIL_SCOPES = ['https://mail.google.com/']
 
 # ADMIN
 # ------------------------------------------------------------------------------
@@ -481,3 +483,9 @@ USE_SPELLCHECKER = False
 USE_FILEBROWSER = False
 
 GOOGLE_RECAPTCHA_SECRET_KEY = env("GOOGLE_RECAPTCHA_SECRET_KEY", default=None)
+
+# CELERY
+CELERY_TIMEZONE = "Australia/Melbourne"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_URL = "redis://localhost:6379/0"

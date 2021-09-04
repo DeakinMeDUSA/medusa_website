@@ -50,8 +50,8 @@ def import_users(modeladmin, request, queryset: QuerySet[MemberRecordsImport]):
 
 @admin.register(MemberRecordsImport)
 class MemberRecordsImportAdmin(admin.ModelAdmin):
-    list_display = ["id", "import_dt", "file"]
-    readonly_fields = ("id",)
+    list_display = ["id", "import_dt", "report_date", "file"]
+    readonly_fields = ("id", "report_date")
     fields = ["members", "file"]
     actions = [import_users]
 

@@ -1,39 +1,51 @@
 """
 Email backend that uses the GMail API via OAuth2 authentication.
 """
-import base64
+import datetime
 import logging
+from pathlib import Path
+from typing import Dict, Tuple, Optional
 
+import dateparser
 from django.conf import settings
 from django.core.mail.backends.base import BaseEmailBackend
 
-import google.oauth2.credentials
-import googleapiclient.discovery
-
 logger = logging.getLogger(__name__)
+import base64
+
+from google.auth.transport.requests import Request
+from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+
+assert settings.GMAIL_CREDENTIALS_PATH.exists()
 
 
 class GmailBackend(BaseEmailBackend):
-    def __init__(
-        self, client_id=None, client_secret=None, refresh_token=None, user_id=None, fail_silently=False, **kwargs
-    ):
-        super().__init__(fail_silently=fail_silently, **kwargs)
-        self.client_id = client_id or settings.GMAIL_API_CLIENT_ID
-        self.client_secret = client_secret or settings.GMAIL_API_CLIENT_SECRET
-        self.refresh_token = refresh_token or settings.GMAIL_API_REFRESH_TOKEN
-        if hasattr(settings, "GMAIL_API_USER_ID"):
-            self.user_id = user_id or settings.GMAIL_API_USER_ID
-        else:
-            self.user_id = user_id or "me"
+    SCOPES = settings.GMAIL_SCOPES
+    CREDS_PTH = settings.GMAIL_CREDENTIALS_PATH
 
-        credentials = google.oauth2.credentials.Credentials(
-            "token",
-            refresh_token=self.refresh_token,
-            token_uri="https://accounts.google.com/o/oauth2/token",
-            client_id=self.client_id,
-            client_secret=self.client_secret,
-        )
-        self.service = googleapiclient.discovery.build("gmail", "v1", credentials=credentials, cache_discovery=False)
+    def __init__(self, account_email: str = None, fail_silently=False, **kwargs):
+        super().__init__(fail_silently=fail_silently, **kwargs)
+
+        self.account_email = account_email or settings.DEFAULT_FROM_EMAIL
+        self.credentials = self.authenticate(account_email)
+        self.user_id = "me"
+        self.service = build('gmail', 'v1', credentials=self.credentials, cache_discovery=False)
+
+    def authenticate(self, account_email: str) -> Credentials:
+        def refresh_cred(cred: Credentials):
+            if cred.valid is False:
+                cred.refresh(Request())
+                print(f"Refreshed credentials for {cred.signer_email}")
+
+        service_credentials = Credentials.from_service_account_file(str(self.CREDS_PTH), scopes=self.SCOPES)
+        refresh_cred(service_credentials)
+
+        print(f"Getting user credentials for {account_email} ...")
+        user_credentials = service_credentials.with_subject(account_email)
+        refresh_cred(user_credentials)
+
+        return user_credentials
 
     def send_message(self, email_message):
         if not email_message.recipients():
@@ -63,3 +75,59 @@ class GmailBackend(BaseEmailBackend):
         if not self.fail_silently and last_exception:
             raise last_exception
         return msg_count
+
+    def get_email(self, subject: str, latest=True):
+        raise NotImplementedError()
+
+    def get_messages(self, subject: str, latest_first=True):
+        def get_items(request_id, response, exception):
+            if exception is not None:
+                print(f'An error occurred for request_id {request_id}: {exception}')
+            else:
+                returned_messages.extend(response["messages"])
+
+        returned_messages = []
+
+        query = f""
+        if subject:
+            query += f"subject:{subject} "
+
+        print(f"Getting messages with query:\n{query}")
+        results = self.service.users().messages().list(userId='me', q=query).execute()
+        messages_inital = results["messages"]
+
+        if messages_inital != []:
+            batch = self.service.new_batch_http_request(callback=get_items)
+            batch._batch_uri = 'https://www.googleapis.com/batch/gmail/v1'
+
+            for msg in messages_inital:
+                batch.add(self.service.users().threads().get(userId="me", id=msg["id"]))
+
+            batch.execute()
+        else:
+            raise RuntimeError(f"No messages found with query: {query}")
+
+        if latest_first:
+            returned_messages.sort(key=lambda m: m["internalDate"], reverse=True)
+        return returned_messages
+
+    def get_attachment_for_message(self, msg: Dict) -> Tuple[Optional[bytes], Optional[Path]]:
+        for part in msg['payload']['parts']:
+            if part['filename']:
+                attachment_id = part['body']['attachmentId']
+                # try:
+                print(f"attachment_id = {attachment_id}")
+                attachment = self.service.users().messages().attachments().get(userId='me', messageId=msg['id'],
+                                                                               id=attachment_id).execute()
+                file_data = base64.urlsafe_b64decode(attachment['data'].encode('UTF-8'))
+                return file_data, Path(part['filename'])
+        else:
+            return None, None
+
+    @staticmethod
+    def get_date_of_msg(msg) -> datetime.datetime:
+        for header in msg["payload"]["headers"]:
+            if header["name"] == "Date":
+                return dateparser.parse(header["value"].replace(" (UTC)", ""))
+        else:  # no-return
+            raise RuntimeError(f"Could not find date for msg id {msg['id']}")
