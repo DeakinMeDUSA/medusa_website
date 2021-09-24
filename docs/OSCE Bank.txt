@@ -1,0 +1,17 @@
+OSCE Bank
+
+
+- Stem +/- Image
+- Patient Script 
+- Marking Guide +/- Image
+- Supporting Notes +/- Image
+
+Tags for OSCE Station (can have multiple)
+
+- Year level (1st Year, 2nd Year, 3rd Year, 4th Year)
+
+- Types (History, Examination, Procedure, Communication, Management, Medicolegal, Interpretation)
+
+- Specialities
+	- Anaesthetics, Cardiology, Cardiothoracics, Dermatology, Emergency Medicine, Endocrinology, ENT, Gastroenterology, 
+	General medicine, General Practice, General Surgery, Geriatrics, Obstetrics and Gynaecology, Haematology, Infectious disease, Intensive care, Neurology, Orthopaedics, Peadiatrics, Palliative care, Psychiatry, Rehababilitation, Renal, Respiratory, Urology, Vascular, Neurosurgery, Ophthalmology, Public Health, Ethics

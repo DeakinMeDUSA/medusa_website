@@ -1,0 +1,101 @@
+{% extends "mcq_bank/base_mcq_bank.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% load quiz_tags %}
+
+{% block title %} MeDUSA - MCQ Bank {% endblock %}
+{% block description %} MeDUSA - MCQ Bank {% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-8">
+
+        {% if question %}
+          <div class="question-toanswer">
+            {% if session %}
+              <div style="float: right;">
+                Question {{ session.current_question_index|add:1 }} of {{ session.progress.1 }}
+              </div>
+            {% endif %}
+
+            <p>
+              <small class="muted">Question category:</small>
+              <strong>{{ question.category }}</strong>
+            </p>
+
+            <p class="lead">{{ question.text }}</p>
+
+            {% if question.question_image %}
+              <a href=""
+                 onclick="window.open('{{ question.question_image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
+                <img src="{{ question.question_image.url }}" alt="{{ question.text }}"
+                     style="max-width: 30vw; max-height: 50vh; padding: 10px"/>
+              </a>
+            {% endif %}
+            {% if not session.current_question_answered %}
+              {% crispy form %}
+              <div class="answer-response">
+              <!-- This will be replaced by the answer response after submission -->
+              </div>
+            {% else %}
+              {% include "mcq_bank/answer_response.html" %}
+            {% endif %}
+          </div>
+        {% endif %}
+        <hr>
+        <div>
+          {% if session.previous_question_index is not None %}
+            <a class="button" style="float: left"
+               href="{% url "mcq_bank:run_session" %}?q={{ session.previous_question_index }}"> Previous
+              question</a>
+          {% endif %}
+          {% if session.next_question_index is not None %}
+            <a class="button" style="float: right"
+               href="{% url "mcq_bank:run_session" %}?q={{ session.next_question_index }}"> Next question</a>
+          {% else %}
+            <a class="button complete-quiz" style="float: right"
+               href="{% url "mcq_bank:quiz_session_complete" id=session.id %}"> Complete Quiz</a>
+          {% endif %}
+
+        </div>
+
+      </div>
+
+
+      <div class="col-4">
+        <a class="" href="{% url "mcq_bank:quiz_session_detail" id=session.id %}"> View all questions in quiz</a>
+        {% include "mcq_bank/reference_ranges.html" %}
+
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block javascript %}
+  {{ block.super }}
+  <script>
+    // Handle question submission
+    $('#id-QuestionForm').ajaxForm({
+      url: '{% url "mcq_bank:run_session" %}', // TODO fix URL make dynamic
+      dataType: 'json',
+      success: function (response) {
+        console.log('The server says: ' + JSON.stringify(response))
+
+        $('div.answer-response').html(response.answer_response)
+        $('#id-QuestionForm').hide()
+
+      },
+    })
+
+    $('.reference-range-btn').click(function () {
+      // Get the associated div for this button
+      const divToggleId = $(this).attr('data-target')
+      $(divToggleId).slideToggle(400)
+    })
+
+
+  </script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "osce_bank/base_osce_bank.html" %}
+{% load static %}
+{% load pipeline %}
+{% load render_table from django_tables2 %}
+
+{% block css %}
+  {{ block.super }}
+  {#  {% stylesheet "css_core" %}#}
+  {#  {% stylesheet "css_tablesorter" %}#}
+  {#    <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>#}
+
+{% endblock %}
+
+{% block content %}
+
+  <section class="">
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+        </div>
+      </div>
+    </div>
+    <div>
+{#      {% if has_current_session %}#}
+{#        <button id="check-session" class="mcq-start-button button btn-primary" type="button" name="button">#}
+{#          Start new session / Continue old session <i class="fa fa-chevron-right"></i>#}
+{#        </button>#}
+{#      {% else %}#}
+{#        <a id="start-session" class="mcq-start-button button btn-primary" href="{% url "osce_bank:osce_session_create" %}">#}
+{#          Start new session <i class="fa fa-chevron-right"></i>#}
+{#        </a>#}
+{#      {% endif %}#}
+    </div>
+
+    <ul>
+      <li><a href="{% url "osce_bank:history" %}">OSCE History and Progress</a></li>
+      <li><a href="{% url "osce_bank:osce_station_list" %}">View all OSCE Stations</a></li>
+      <li><a href="{% url "osce_bank:osce_station_create" %}">Create new OSCE Station</a></li>
+    </ul>
+  </section>
+
+{#  <section class="">#}
+{##}
+{#    <h2>Category Progress</h2>#}
+{#    {% render_table category_progress_table %}#}
+{##}
+{#  </section>#}
+
+
+{% endblock %}
+
+{% block javascript %}
+  {{ block.super }}
+  {% javascript "js_bootstrap_modal_forms" %}
+  {% javascript "js_tablesorter" %}
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $('#check-session').click(function() {
+        $(this).hide();
+      });
+
+      $('#check-session').modalForm({
+        formURL: "{% url 'osce_bank:check_session' %}",
+
+      })
+
+
+    })
+  </script>
+
+  <script type="application/javascript">
+    $(function () {
+      $('#category-progress-table').tablesorter()
+      $('#session-history-table').tablesorter()
+    })
+  </script>
+{% endblock javascript %}

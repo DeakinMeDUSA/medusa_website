@@ -148,6 +148,8 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
         if form.is_valid():
             updated_question: Question = form.save(commit=False)
             updated_question.author = form.instance.author or orig_author
+            updated_question.save()
+            return HttpResponseRedirect(self.get_success_url())
         else:
             return self.form_invalid(form)
 

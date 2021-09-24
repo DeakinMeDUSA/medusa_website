@@ -1,0 +1,87 @@
+{% extends "osce_bank/base_osce_bank.html" %}
+{% load pipeline %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load quiz_tags %}
+
+{% block title %}
+  MeDUSA - All OSCE Stations
+{% endblock %}
+{% block description %}
+  All OSCE Stations
+{% endblock %}
+
+
+{% block content %}
+  <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
+  <h2>OSCE Station list</h2>
+
+  <form action="" method="get" class="form">
+    <div class="container">
+      <div class="row">
+        <div class="form-group col-md-4 mb-0">
+          {{ filter.form.level|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-4 mb-0">
+          {{ filter.form.author |as_crispy_field }}
+        </div>
+        <div class="form-group col-md-4 mb-0">
+          {#          {{ filter.form.completed }}#}
+          <label for="id_completed" class=""> Completed </label>
+          <select name="completed" class="select form-control" id="id_completed">
+            <option value="">---</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+      </div>
+      <div class="row" style="margin-top: 10px; margin-bottom: 10px">
+        <div class="form-group col-8">
+          <div class="row">
+            <div class="form-group col-md-4">
+              <a class="btn btn-secondary" href="{% url 'osce_bank:osce_station_list' %}">Reset filter(s)</a>
+            </div>
+            <div class="form-group col-md-4">
+              {% bootstrap_button 'Apply filter(s)' button_type="submit" button_class="btn-primary" %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+{#  <form action="{% url 'osce_bank:quiz_session_create_from_osce_stations' %}" method="post" class="form">#}
+{#    {% csrf_token %}#}
+{#    <div hidden>#}
+{#      {{ osce_create_form.user | as_crispy_field }}#}
+{#      {{ osce_create_form.osce_stations| as_crispy_field }}#}
+{#    </div>#}
+{#    <div class="form-group col-4">#}
+{#      <div class="row" style="margin-top: 10px; margin-bottom: 10px">#}
+{#        <div class="form-group col-md-offset">#}
+{#          <input type="submit" class="btn btn-primary" value="New quiz from displayed OSCE stations"#}
+{#                 style="margin-left: 10px">#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </form>#}
+
+  {% render_table osce_station_list_table %}
+
+
+
+{% endblock %}
+{% block javascript %}
+  {{ block.super }}
+
+  {% javascript "js_tablesorter" %}
+  <script type="application/javascript">
+    $(function () {
+      $('#osce_station-list-table').tablesorter()
+    })
+
+  </script>
+{% endblock javascript %}

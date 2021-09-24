@@ -1,17 +1,15 @@
-import markdown
 from bootstrap_modal_forms.forms import BSModalModelForm
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Field
 from crispy_forms.layout import Layout, ButtonHolder, Submit
 from django import forms
-from django.db.models.fields.files import ImageFieldFile
 from django.forms import Form
 from django.forms.models import ModelForm, inlineformset_factory
 from django.forms.widgets import CheckboxSelectMultiple, RadioSelect
-from django.utils.safestring import mark_safe
 
 from medusa_website.mcq_bank.models import Category, Question, QuizSession, Answer
 from medusa_website.users.models import User
+from medusa_website.utils.widgets import AuthorNameWidget, RenderMarkdownWidget, ImageDisplayWidget
 
 
 class QuestionForm(forms.Form):
@@ -34,49 +32,11 @@ class QuestionForm(forms.Form):
         )
 
 
-class AuthorNameWidget(forms.Widget):
-    def render(self, name, value, attrs=None, renderer=None):
-        if value:
-            author = User.objects.get(id=value)
-            return mark_safe(f"<b>{author.name}</b>") if value is not None else "-"
-        else:
-            return mark_safe("-")
-
-
-class RenderMarkdownWidget(forms.Widget):
-    def __init__(self, css_class: str = None, *args, **kwargs):
-        self.css_class = css_class
-        super(RenderMarkdownWidget, self).__init__(*args, **kwargs)
-
-    def render(self, name, value, attrs=None, renderer=None):
-        if value:
-            html = f'<div class="{self.css_class}">{markdown.markdown(value)}</div>'
-            return mark_safe(html)
-        else:
-            return mark_safe("None")
-
-
-class ImageDisplayWidget(forms.Widget):
-    def __init__(self, max_width="50vw", max_height="50vh", *args, **kwargs):
-        self.max_width = max_width
-        self.max_height = max_height
-        super(ImageDisplayWidget, self).__init__(*args, **kwargs)
-
-    def render(self, name, value: ImageFieldFile, attrs=None, renderer=None):
-        if value:
-            style = f"max-width: {self.max_width}; max-height: {self.max_height};"
-            html = f'<a href="{value.url}"><img src="{value.url}" style="{style}"/></a>'
-            # html = f'<img src="{value.url}" style="{style}" onclick="enlargeImg(this)"/>'
-
-            return mark_safe(html)
-        else:
-            return mark_safe("None")
-
-
 class QuestionDetailForm(ModelForm):
     class Meta:
         model = Question
-        fields = ["author", "text", "category", "question_image", "answer_image", "explanation", "randomise_answer_order"]
+        fields = ["author", "text", "category", "question_image", "answer_image", "explanation",
+                  "randomise_answer_order"]
 
     author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
     explanation = forms.CharField(

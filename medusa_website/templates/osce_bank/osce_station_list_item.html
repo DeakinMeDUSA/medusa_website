@@ -1,0 +1,46 @@
+{% load template_filters %}
+
+<div class="osce-station-item-container">
+
+  <div class="osce-item-title">
+    <div class="row">
+      <h5>{{ osce_station.id }} | {{ osce_station.title }}</h5>
+      {% if osce_station.completed %}
+        <span class="osce-span completed">Completed</span>
+      {% else %}
+        <span class="osce-span incomplete">Incomplete</span>
+      {% endif %}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="osce-station-item">
+
+        <div class="row">
+          <div class="sub-item-key">Level</div>
+          <div class="sub-item-val">{{ osce_station.level }}</div>
+        </div>
+        <div class="row">
+          <div class="sub-item-key">Types</div>
+          <div class="sub-item-val">
+            {% for station_type in osce_station.types.all %}
+              {{ station_type }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="row">
+          <div class="sub-item-key">Specialities</div>
+          <div class="sub-item-val">
+            {% for speciality in osce_station.specialities.all %}
+              {{ speciality }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-sm-4 align-right">
+      <button style="margin-right: 2rem"> Start <i class="fa fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>

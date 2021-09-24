@@ -1,0 +1,106 @@
+
+.osce-start-button {
+  //background-color: ;
+  padding: 0 2rem !important;
+  margin-bottom: 1rem;
+}
+
+.session-create-div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.osce-station-item-container {
+
+  border: 2px #F2F2F2 solid;
+  box-shadow: 2px 5px 15px 0px #17161694;
+  margin-top: 2rem;
+
+  h5, h6 {
+    margin: 0 0 0 1rem;
+  }
+
+  .osce-item-title {
+    margin-top: 1rem;
+  }
+
+  .osce-station-item {
+    margin: 1rem 0 1rem 1rem;
+  }
+
+  .sub-item-key {
+    width: 7rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .sub-item-val {
+    font-weight: bold;
+  }
+
+  .osce-span {
+    margin-left: 2rem;
+    padding: 0.1rem 1rem 0.1rem 1rem;
+    box-shadow: inset 0 0 0 1px #575757;
+
+    & .completed {
+      background: #baffba;
+    }
+
+    &.incomplete {
+      background: #f58a8a;
+    }
+  }
+}
+
+
+.osce-fields-div {
+
+  .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: black !important;
+  }
+
+  .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
+    background-image: unset !important;
+  }
+
+  #div_id_specialities > div > div {
+    display: inline-block;
+    width: 20rem;
+  }
+
+  #div_id_types > div > div {
+    display: inline-block;
+    width: 15rem;
+  }
+
+  #div_id_level > div > div {
+    display: inline-block;
+    width: 12rem;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  select {
+    height: _size(element-height);
+  }
+
+  textarea {
+    padding: 0.75rem 1rem;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"], {
+    & + label {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  input[type="checkbox"] {
+    & + label {
+      &:before {
+        border-radius: 0 !important;
+      }
+    }
+  }
+}

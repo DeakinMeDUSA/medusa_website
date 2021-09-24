@@ -18,6 +18,7 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
     path("mcq_bank/", include("medusa_website.mcq_bank.urls", namespace="mcq_bank")),
+    path("osce_bank/", include("medusa_website.osce_bank.urls", namespace="osce_bank")),
     path("ping/", utils.ping),
     path("martor/", include("martor.urls")),
     url(r"^api/uploader/$", markdown_uploader, name="markdown_uploader_page"),

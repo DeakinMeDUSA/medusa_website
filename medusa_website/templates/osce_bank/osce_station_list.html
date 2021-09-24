@@ -1,0 +1,84 @@
+{% extends "osce_bank/base_osce_bank.html" %}
+{% load pipeline %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% load bootstrap3 %}
+{% load crispy_forms_tags %}
+{% load quiz_tags %}
+
+{% block title %}
+  MeDUSA - All OSCE Stations
+{% endblock %}
+
+{% block css %}
+  {{ block.super }}
+  {% stylesheet "css_core" %}
+
+{% endblock %}
+
+
+{% block description %}
+  All OSCE Stations
+{% endblock %}
+
+
+{% block content %}
+  <h2>OSCE Station list</h2>
+
+  <form action="" method="get" class="form">
+    <div class="container">
+      <div class="form-group row osce-fields-div">
+        <div class="form-group col-md-6 mb-0">
+          {{ filter.form.level | as_crispy_field:"generic" }}
+          {{ filter.form.author |as_crispy_field }}
+          {{ filter.form.is_flagged |as_crispy_field }}
+          {{ filter.form.is_reviewed |as_crispy_field }}
+          <label for="id_completed" class=""> Completed </label>
+          <select name="completed" class="select form-control" id="id_completed">
+            <option value="">---</option>
+            <option value="1">Yes</option>
+            <option value="0">No</option>
+          </select>
+        </div>
+        <div class="form-group col-md-6 mb-0">
+          {{ filter.form.types | as_crispy_field:"generic" }}
+
+        </div>
+        {{ filter.form.specialities | as_crispy_field:"generic" }}
+      </div>
+
+      <div class="row" style="margin-top: 10px; margin-bottom: 10px">
+        <div class="form-group col-8">
+          <div class="row">
+            <div class="form-group col-md-4">
+              <a class="btn btn-secondary" href="{% url 'osce_bank:osce_station_list' %}">Reset filter(s)</a>
+            </div>
+            <div class="form-group col-md-4">
+              {% bootstrap_button 'Apply filter(s)' button_type="submit" button_class="btn-primary" %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="osce-list-container">
+  {% for osce_station in displayed_osce_stations %}
+    {% include "osce_bank/osce_station_list_item.html" with osce_station=osce_station %}
+
+  {% endfor %}
+
+  </div>
+
+{% endblock %}
+{% block javascript %}
+  {{ block.super }}
+
+  {% javascript "js_tablesorter" %}
+  <script type="application/javascript">
+    $(function () {
+    })
+
+  </script>
+{% endblock javascript %}

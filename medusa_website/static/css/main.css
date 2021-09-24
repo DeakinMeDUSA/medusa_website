@@ -1889,6 +1889,7 @@ select {
   background-position: calc(100% - 1rem) center;
   height: 3rem;
   padding-right: 3rem;
+  margin-bottom: 3rem;
   text-overflow: ellipsis;
 }
 select:focus::-ms-value {
@@ -2930,6 +2931,84 @@ button.fc-button.fc-button-primary.fc-next-button, button.fc-button.fc-button-pr
 .session-create-div {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+.osce-start-button {
+  padding: 0 2rem !important;
+  margin-bottom: 1rem;
+}
+
+.session-create-div {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.osce-station-item-container {
+  border: 2px #F2F2F2 solid;
+  box-shadow: 2px 5px 15px 0px #17161694;
+  margin-top: 2rem;
+}
+.osce-station-item-container h5, .osce-station-item-container h6 {
+  margin: 0 0 0 1rem;
+}
+.osce-station-item-container .osce-item-title {
+  margin-top: 1rem;
+}
+.osce-station-item-container .osce-station-item {
+  margin: 1rem 0 1rem 1rem;
+}
+.osce-station-item-container .sub-item-key {
+  width: 7rem;
+  margin-bottom: 0.3rem;
+}
+.osce-station-item-container .sub-item-val {
+  font-weight: bold;
+}
+.osce-station-item-container .osce-span {
+  margin-left: 2rem;
+  padding: 0.1rem 1rem 0.1rem 1rem;
+  box-shadow: inset 0 0 0 1px #575757;
+}
+.osce-station-item-container .osce-span .completed {
+  background: #baffba;
+}
+.osce-station-item-container .osce-span.incomplete {
+  background: #f58a8a;
+}
+
+.osce-fields-div .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: black !important;
+}
+.osce-fields-div .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
+  background-image: unset !important;
+}
+.osce-fields-div #div_id_specialities > div > div {
+  display: inline-block;
+  width: 20rem;
+}
+.osce-fields-div #div_id_types > div > div {
+  display: inline-block;
+  width: 15rem;
+}
+.osce-fields-div #div_id_level > div > div {
+  display: inline-block;
+  width: 12rem;
+}
+.osce-fields-div input[type=text],
+.osce-fields-div input[type=password],
+.osce-fields-div input[type=email],
+.osce-fields-div select {
+  height: 3rem;
+}
+.osce-fields-div textarea {
+  padding: 0.75rem 1rem;
+}
+.osce-fields-div input[type=checkbox] + label,
+.osce-fields-div input[type=radio] + label {
+  padding-bottom: 0.5rem;
+}
+.osce-fields-div input[type=checkbox] + label:before {
+  border-radius: 0 !important;
 }
 
 /* Tablesorter Custom SCSS Theme by Dan Feidt (https://github.com/HongPong)

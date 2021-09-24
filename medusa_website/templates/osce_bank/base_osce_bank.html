@@ -1,0 +1,37 @@
+<!-- A modified base for use in the mcq_bank, with an extra nav row -->
+{% extends "base.html" %}
+
+{% load pipeline %}
+{% load static %}
+
+{% block title %}
+  MeDUSA - OSCE Bank
+{% endblock title %}
+
+{% block css %}
+  {{ block.super }}
+{% endblock %}
+
+{% block intro %}
+
+{% endblock %}
+
+
+{% block nav %}
+  {{ block.super }}
+  <!-- OSCE Bank specific nav bar underneath -->
+  {% include "osce_bank/osce_nav.html" %}
+{% endblock %}
+
+
+
+{% block content %}
+
+{% endblock %}
+
+
+{% block javascript %}
+  {{ block.super }}
+  <script src={% static "js/jquery.form.min.js" %}></script>
+
+{% endblock %}
