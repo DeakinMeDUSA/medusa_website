@@ -267,13 +267,13 @@ X_FRAME_OPTIONS = "DENY"
 EMAIL_BACKEND = "medusa_website.gmailapi_backend.mail.GmailBackend"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
-DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="website@medusa.org.au>")
+DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="website@medusa.org.au")
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[MeDUSA Website]")
 
 # Gmail-specific settings
-MEMBERLIST_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="it@medusa.org.au")
+MEMBERLIST_EMAIL = "it@medusa.org.au"
 GMAIL_CREDENTIALS_PATH = Path(env("GMAIL_CREDENTIALS_PATH")).resolve()
 GMAIL_SCOPES = ['https://mail.google.com/']
 

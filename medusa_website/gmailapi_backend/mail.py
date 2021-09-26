@@ -25,7 +25,7 @@ class GmailBackend(BaseEmailBackend):
         super().__init__(fail_silently=fail_silently, **kwargs)
 
         self.account_email = account_email or settings.DEFAULT_FROM_EMAIL
-        self.credentials = self.authenticate(account_email)
+        self.credentials = self.authenticate(self.account_email)
         self.user_id = "me"
         self.service = build('gmail', 'v1', credentials=self.credentials, cache_discovery=False)
 
