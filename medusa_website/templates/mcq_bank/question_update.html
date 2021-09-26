@@ -23,16 +23,14 @@
     <form action="{% url 'mcq_bank:question_update' id=question.id %}" method="post">
       {% csrf_token %}
       {{ form.author | as_crispy_field }}
-      <div class="form-group row">
+      <div class="form-group row mcq-fields-div">
         <div class="form-group col-md-4 mb-0">{{ form.category | as_crispy_field }}</div>
         <div class="form-group col-md-4 mb-0">{{ form.question_image | as_crispy_field }}</div>
         <div class="form-group col-md-4 mb-0">{{ form.answer_image | as_crispy_field }}</div>
-
       </div>
       <hr style="border: black 1px solid">
 
       <div class="form-group row mcq-fields-div">
-
         <div class="form-group col-md-6 mb-0">
           <div class="form-group row mcq-fields-div" style="align-items: end">
             {{ form.is_reviewed | as_crispy_field:"generic" }}
@@ -48,43 +46,26 @@
         </div>
       </div>
       <hr style="border: black 1px solid">
+
       {{ form.text | as_crispy_field }}
-      <label for="explanation" class="requiredField">Explanation text<span class="asteriskField">*</span>
-      </label>
-      {{ form.explanation }}
+      {{ form.explanation|as_crispy_field }}
       <hr style="border: black 1px solid">
+
       <h4>Answers</h4>
       <p>Provide at least two answers, and leave any un-needed answer fields blank.</p>
-      <div class="">{{ form.randomise_answer_order | as_crispy_field:"generic" }}</div>
-
-
-      {#      <div id="div_id_randomise_answer_order">#}
-      {#        <input type="checkbox" name="randomise_answer_order"#}
-      {#               id="id_randomise_answer_order" checked="">#}
-      {#        <label for="id_randomise_answer_order" class="custom-control-label">#}
-      {#          Randomise answer order?#}
-      {#        </label>#}
-      {#        <small id="hint_id_randomise_answer_order" class="form-text text-muted">If True (default), answers will be#}
-      {#          displayed in a random order each time</small>#}
-      {#      </div>#}
-
-      {#      <div id="fff_test" class="custom-control custom-checkbox">#}
-      {#      <input type="checkbox" name="fff_test_cbox" class=""#}
-      {#             id="fff_test_cbox" checked="">#}
-      {#      <label for="fff_test_cbox" class="">Click me</label>#}
-      {#    </div>#}
-
+      {{ form.randomise_answer_order | as_crispy_field:"generic" }}
       <table>
         {% crispy answer_formset answer_formset_helper %}
       </table>
 
-      <input type="button" class="btn btn-secondary" value="Add more answers" id="add-answer"
-             style="margin-bottom: 15px">
+      <button type="button" class="button" value="Add more answers" id="add-answer"
+              style="margin-bottom: 15px">Add more answers
+      </button>
       <div class="buttonHolder">
-        <input type="submit" name="submit" value="Update" class="btn btn-primary">
+        <input type="submit" name="submit" value="Update" class="button">
       </div>
+    </form>
   </section>
-  </form>
 
 {% endblock %}
 

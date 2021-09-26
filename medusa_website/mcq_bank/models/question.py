@@ -42,7 +42,7 @@ class Question(models.Model):
 
     explanation = MartorField(
         help_text="Explanation to be shown after the question has been answered",
-        verbose_name="Explanation",
+        verbose_name="Explanation", null=True, blank=True
     )
 
     randomise_answer_order = models.BooleanField(
