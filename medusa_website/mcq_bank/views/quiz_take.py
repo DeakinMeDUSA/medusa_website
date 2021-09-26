@@ -16,9 +16,6 @@ from ...users.models import User
 class QuizTakeView(LoginRequiredMixin, FormView, DetailView):
     form_class = QuestionForm
     template_name = "mcq_bank/question.html"
-    result_template_name = "mcq_bank/result.html"
-    session_create_template_name = "mcq_bank/quiz_session_create.html"
-    single_complete_template_name = "mcq_bank/single_complete.html"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -64,8 +61,6 @@ class QuizTakeView(LoginRequiredMixin, FormView, DetailView):
 
     def form_valid(self, form):
         submitted_answer = self.submit_answer_response(form)
-        if self.session.unanswered_questions.count() == 0:
-            return self.final_result_user()
 
         answer_response = self.render_answer_response(request=self.request, submitted_answer=submitted_answer)
         return JsonResponse({"answer_response": answer_response})
@@ -90,14 +85,3 @@ class QuizTakeView(LoginRequiredMixin, FormView, DetailView):
             'question': submitted_answer.question,
         }
         return loader.render_to_string("mcq_bank/answer_response.html", context=context, request=request)
-
-    def final_result_user(self):
-        results = {
-            "session": self.session,
-            "score": self.session.correct_answers.count(),
-            "max_score": self.session.questions.count(),
-            "percent": self.session.percent_correct,
-        }
-
-        self.session.mark_quiz_complete()
-        return render(self.request, self.result_template_name, results)

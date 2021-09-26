@@ -19,6 +19,8 @@
 {% block content %}
   <section>
     <h3>Viewing OSCE Station (id: {{ osce_station.id }})</h3>
+    <!-- See https://stackoverflow.com/questions/14999134/how-to-pass-a-message-from-httpresponseredirect-in-django -->
+    {% include "messages.html" %}
     {{ form.author | as_crispy_field }}
 
     <div class="form-group row osce-fields-div">
@@ -28,12 +30,33 @@
 
       </div>
       <div class="form-group col-md-6 mb-0">
-
         {{ form.types | as_crispy_field:"generic" }}
+      </div>
+    </div>
+    <div class="form-group row osce-fields-div">
+
+      <div class="form-group col-md-12">
+        {{ form.specialities | as_crispy_field:"generic" }}
 
       </div>
-      {{ form.specialities | as_crispy_field:"generic" }}
+    </div>
 
+    <hr style="border: black 1px solid">
+    <div class="form-group row osce-fields-div">
+
+      <div class="form-group col-md-6 mb-0">
+        <div class="form-group row osce-fields-div" style="align-items: end">
+          {{ form.is_reviewed | as_crispy_field:"generic" }}
+          {{ form.reviewed_by | as_crispy_field:"generic" }}
+        </div>
+        <div class="form-group row osce-fields-div" style="align-items: end">
+          {{ form.is_flagged | as_crispy_field:"generic" }}
+          {{ form.flagged_by | as_crispy_field:"generic" }}
+        </div>
+      </div>
+      <div class="form-group col-md-6 mb-0">
+        {{ form.flagged_message | as_crispy_field:"generic" }}
+      </div>
     </div>
     <hr style="border: black 1px solid">
 

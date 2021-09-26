@@ -26,7 +26,8 @@ class Question(models.Model):
     )
     author = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
     question_image = models.ImageField(
-        null=True, blank=True, verbose_name="Question Image", help_text="Upload an image to be shown in the question prompt"
+        null=True, blank=True, verbose_name="Question Image",
+        help_text="Upload an image to be shown in the question prompt"
     )
     answer_image = models.ImageField(
         null=True, blank=True, verbose_name="Answer Image", help_text="Upload an image to be shown with the answers"
@@ -163,7 +164,7 @@ class Question(models.Model):
 
         history, created = History.objects.get_or_create(user=user)  # force init of history
 
-        all_questions = questions or Question.objects.all()
+        all_questions = questions if questions is not None else Question.objects.all()
         answered_questions = history.answered_questions(questions=all_questions)
         for q in all_questions:
             q.answered = True if q in answered_questions else False

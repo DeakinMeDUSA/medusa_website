@@ -1,0 +1,35 @@
+{% extends "osce_bank/base_osce_bank.html" %}
+{% load pipeline %}
+{% load crispy_forms_filters %}
+{% load static %}
+{% load i18n %}
+{% load quiz_tags %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  MeDUSA - Flag OSCE Station
+{% endblock %}
+
+{% block css %}
+  {{ block.super }}
+  {#  {% stylesheet "css_core" %}#}
+
+{% endblock %}
+
+{% block content %}
+  <section>
+    <h3>Flag OSCE Station (id: {{ osce_station.id }})</h3>
+    <!-- See https://stackoverflow.com/questions/14999134/how-to-pass-a-message-from-httpresponseredirect-in-django -->
+    {% include "messages.html" %}
+    <p>Explain what is incorrect in the station so we can update it. Thanks for your help!</p>
+    <form action="{% url 'osce_bank:osce_station_mark_flagged' osce_station.id %}" method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        {{ form.flagged_message | as_crispy_field }}
+      </div>
+      <div class="buttonHolder">
+        <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+      </div>
+    </form>
+  </section>
+{% endblock %}

@@ -18,7 +18,8 @@
 {% block content %}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
   <h2>Question list</h2>
-
+  <p>Filter and select a question to edit/view below. Note that you can only edit MCQ questions you have authored, unless you
+    have admin permission. To request edit permissions, <a href="mailto:it@medusa.org.au">email the IT Chair.</a></p>
   <form action="" method="get" class="form">
     <div class="container">
       <div class="row">
@@ -29,13 +30,7 @@
           {{ filter.form.author |as_crispy_field }}
         </div>
         <div class="form-group col-md-4 mb-0">
-          {#          {{ filter.form.answered }}#}
-          <label for="id_answered" class=""> Answered </label>
-          <select name="answered" class="select form-control" id="id_answered">
-            <option value="">---</option>
-            <option value="1">Yes</option>
-            <option value="0">No</option>
-          </select>
+          {{ filter.form.answered |as_crispy_field }}
         </div>
       </div>
       <div class="row" style="margin-top: 10px; margin-bottom: 10px">

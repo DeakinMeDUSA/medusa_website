@@ -1,4 +1,5 @@
 {% extends "mcq_bank/base_mcq_bank.html" %}
+{% load crispy_forms_filters %}
 {% load static %}
 {% load i18n %}
 {% load quiz_tags %}
@@ -9,7 +10,7 @@
 {% endblock %}
 
 {% block content %}
-  <h3>Create new Quiz session</h3>
+  <h2>Create new Quiz session</h2>
 
   {% if has_current_session %}
 
@@ -17,7 +18,24 @@
 
   {% else %}
 
-    {% crispy form %}
+    <form action="{% url 'mcq_bank:quiz_session_create' %}" method="post">
+      {% csrf_token %}
+      <div class="form-group row mcq-fields-div">
+        <div class="form-group col-6">
+          {{ form.max_num_questions | as_crispy_field:"generic" }}
+        </div>
+        <div class="form-group col-md-6 mb-0">
+          {{ form.include_answered | as_crispy_field:"generic" }}
+          {{ form.randomise_order | as_crispy_field:"generic" }}
+        </div>
+        {{ form.categories | as_crispy_field:"generic" }}
+      </div>
+      <hr>
+      <div class="buttonHolder">
+
+        <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+      </div>
+    </form>
   {% endif %}
 
 {% endblock %}

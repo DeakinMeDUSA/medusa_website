@@ -1,75 +1,113 @@
-{% extends "mcq_bank/base_mcq_bank.html" %}
+{% extends "osce_bank/base_osce_bank.html" %}
+{% load quiz_tags %}
+{% load crispy_forms_filters %}
 {% load i18n %}
 {% load crispy_forms_tags %}
 
-{% load quiz_tags %}
 
-{% block title %} MeDUSA - MCQ Bank {% endblock %}
-{% block description %} MeDUSA - MCQ Bank {% endblock %}
+{% block title %} MeDUSA - OSCE Station {% endblock %}
+{% block description %}  MeDUSA - OSCE Station {% endblock %}
 
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <div class="col-8">
+  <div class="osce-container">
+    <h2>{{ osce_station.title }}</h2>
+    <hr>
+    <div class="osce-stem">
+      <h2>Stem:</h2>
+      <!-- OSCE Stem and image -->
+      {{ osce_station.stem_as_html }}
+      {% if osce_station.stem_image %}
+        {% clickable_image image_url=osce_station.stem_image.url alt_text="Stem image" %}
+      {% endif %}
+    </div>
 
-        {% if question %}
-          <div class="question-toanswer">
-            {% if session %}
-              <div style="float: right;">
-                Question {{ session.current_question_index|add:1 }} of {{ session.progress.1 }}
-              </div>
-            {% endif %}
-
-            <p>
-              <small class="muted">Question category:</small>
-              <strong>{{ question.category }}</strong>
-            </p>
-
-            <p class="lead">{{ question.text }}</p>
-
-            {% if question.question_image %}
-              <a href=""
-                 onclick="window.open('{{ question.question_image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
-                <img src="{{ question.question_image.url }}" alt="{{ question.text }}"
-                     style="max-width: 30vw; max-height: 50vh; padding: 10px"/>
-              </a>
-            {% endif %}
-            {% if not session.current_question_answered %}
-              {% crispy form %}
-              <div class="answer-response">
-              <!-- This will be replaced by the answer response after submission -->
-              </div>
-            {% else %}
-              {% include "mcq_bank/answer_response.html" %}
-            {% endif %}
-          </div>
-        {% endif %}
+    <div class="osce-patient-script-container">
+      <!-- Patient Script -->
+      <div class="align-center">
         <hr>
-        <div>
-          {% if session.previous_question_index is not None %}
-            <a class="button" style="float: left"
-               href="{% url "mcq_bank:run_session" %}?q={{ session.previous_question_index }}"> Previous
-              question</a>
-          {% endif %}
-          {% if session.next_question_index is not None %}
-            <a class="button" style="float: right"
-               href="{% url "mcq_bank:run_session" %}?q={{ session.next_question_index }}"> Next question</a>
-          {% else %}
-            <a class="button complete-quiz" style="float: right"
-               href="{% url "mcq_bank:quiz_session_complete" id=session.id %}"> Complete Quiz</a>
-          {% endif %}
-
-        </div>
-
-      </div>
-
-
-      <div class="col-4">
-        <a class="" href="{% url "mcq_bank:quiz_session_detail" id=session.id %}"> View all questions in quiz</a>
-        {% include "mcq_bank/reference_ranges.html" %}
+        <a class="button patient-script-btn" role="button"
+           data-target=".osce-patient-script-collapsible">
+          Show / Hide patient script <i class="fa fa-chevron-down"></i>
+        </a></div>
+      <div class="osce-patient-script-collapsible" style="display: none">
+        <h2>Patient Script:</h2>
+        {{ osce_station.patient_script_as_html }}
 
       </div>
     </div>
+
+    <div class="osce-marking-guide">
+      <!-- Marking guide and image -->
+      <div class="align-center">
+        <hr>
+        <a class="button marking-guide-btn align-center" role="button"
+           data-target=".osce-marking-guide-collapsible">
+          Show / Hide marking guide <i class="fa fa-chevron-down"></i>
+        </a></div>
+      <div class="osce-marking-guide-collapsible" style="display: none">
+        <h2>Marking Guide:</h2>
+        {{ osce_station.marking_guide_as_html }}
+        {% if osce_station.marking_guide_image %}
+          {% clickable_image image_url=osce_station.marking_guide_image.url alt_text="Marking guide image" %}
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="osce-supporting-notes">
+      <!-- Supporting notes and image -->
+      <div class="align-center">
+        <hr>
+        <a class="button supporting-notes-btn" role="button"
+           data-target=".osce-supporting-notes-collapsible">
+          Show / Hide supporting notes <i class="fa fa-chevron-down"></i>
+        </a></div>
+
+      <div class="osce-supporting-notes-collapsible" style="display: none">
+        <h2>Supporting Notes:</h2>
+        {{ osce_station.supporting_notes_as_html }}
+        {% if osce_station.supporting_notes_image %}
+          {% clickable_image image_url=osce_station.supporting_notes_image.url alt_text="Supporting notes image" %}
+
+        {% endif %}
+      </div>
+    </div>
+    <div class="osce-run-complete ">
+      <hr>
+      <div class="row" style="display: flex; justify-content: space-around">
+        <div class="col col-lg-auto">
+          <form method="POST" action="{% url 'osce_bank:osce_station_run' osce_station.id %}">
+            {% csrf_token %}
+            {#        {{ form.id | as_crispy_field}}#}
+            <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
+
+            <input class="button" type="submit" name="action" value="Complete OSCE Station"/>
+          </form>
+        </div>
+
+        {% if not osce_station.is_flagged %}
+          <div class="col col-lg-auto">
+            <form method="GET" action="{% url 'osce_bank:osce_station_mark_flagged' osce_station.id %}">
+              {% csrf_token %}
+              <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
+              <input class="button" type="submit" name="action" value="Flag as incorrect"/>
+            </form>
+          </div>
+        {% endif %}
+
+        {% if user.is_staff or user.is_superuser %}
+          {% if not osce_station.is_reviewed %}
+            <div class="col col-lg-auto">
+              <form method="POST" action="{% url 'osce_bank:osce_station_mark_reviewed' osce_station.id %}">
+                {% csrf_token %}
+                <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
+                <input class="button" type="submit" name="action" value="Mark as reviewed"/>
+              </form>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
   </div>
 {% endblock %}
 
@@ -77,20 +115,19 @@
 {% block javascript %}
   {{ block.super }}
   <script>
-    // Handle question submission
-    $('#id-QuestionForm').ajaxForm({
-      url: '{% url "mcq_bank:run_session" %}', // TODO fix URL make dynamic
-      dataType: 'json',
-      success: function (response) {
-        console.log('The server says: ' + JSON.stringify(response))
 
-        $('div.answer-response').html(response.answer_response)
-        $('#id-QuestionForm').hide()
 
-      },
+    $('.patient-script-btn').click(function () {
+      // Get the associated div for this button
+      const divToggleId = $(this).attr('data-target')
+      $(divToggleId).slideToggle(400)
     })
-
-    $('.reference-range-btn').click(function () {
+    $('.marking-guide-btn').click(function () {
+      // Get the associated div for this button
+      const divToggleId = $(this).attr('data-target')
+      $(divToggleId).slideToggle(400)
+    })
+    $('.supporting-notes-btn').click(function () {
       // Get the associated div for this button
       const divToggleId = $(this).attr('data-target')
       $(divToggleId).slideToggle(400)

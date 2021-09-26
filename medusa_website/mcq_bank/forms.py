@@ -161,21 +161,6 @@ class QuizSessionCreateForm(ModelForm):
         model = QuizSession
         fields = []
 
-    def __init__(self, *args, **kwargs):
-        # self.user = kwargs.pop("user")
-        self.helper = FormHelper()
-        self.helper.form_id = "id-exampleForm"
-        self.helper.form_class = "blueForms"
-        self.helper.form_method = "post"
-        self.helper.layout = Layout(
-            Div("categories", css_class="session-create-div"),
-            Div("max_num_questions", css_class="session-create-div"),
-            Div("include_answered", css_class="session-create-div"),
-            Div("randomise_order", css_class="session-create-div"),
-            ButtonHolder(Submit("create_session", "Create Quiz Session")),
-        )
-        super(QuizSessionCreateForm, self).__init__(*args, **kwargs)
-
     max_num_questions = forms.ChoiceField(
         label="Maximum number of questions",
         choices=((10, "10"), (50, "50"), (100, "100")),

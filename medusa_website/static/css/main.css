@@ -2933,6 +2933,33 @@ button.fc-button.fc-button-primary.fc-next-button, button.fc-button.fc-button-pr
   padding-bottom: 10px;
 }
 
+.mcq-fields-div .custom-control-input:checked ~ .custom-control-label::before {
+  background-color: black !important;
+}
+.mcq-fields-div .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
+  background-image: unset !important;
+}
+.mcq-fields-div #div_id_categories > div > div {
+  display: inline-block;
+  width: 20rem;
+}
+.mcq-fields-div input[type=text],
+.mcq-fields-div input[type=password],
+.mcq-fields-div input[type=email],
+.mcq-fields-div select {
+  height: 3rem;
+}
+.mcq-fields-div textarea {
+  padding: 0.75rem 1rem;
+}
+.mcq-fields-div input[type=checkbox] + label,
+.mcq-fields-div input[type=radio] + label {
+  padding-bottom: 0.5rem;
+}
+.mcq-fields-div input[type=checkbox] + label:before {
+  border-radius: 0 !important;
+}
+
 .osce-start-button {
   padding: 0 2rem !important;
   margin-bottom: 1rem;
@@ -3001,7 +3028,8 @@ button.fc-button.fc-button-primary.fc-next-button, button.fc-button.fc-button-pr
   height: 3rem;
 }
 .osce-fields-div textarea {
-  padding: 0.75rem 1rem;
+  padding: 0.2rem 0.2rem;
+  height: 10rem;
 }
 .osce-fields-div input[type=checkbox] + label,
 .osce-fields-div input[type=radio] + label {

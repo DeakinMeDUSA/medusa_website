@@ -6,14 +6,14 @@
         <li class="{% if url_name == 'osce_index' %}active{% endif %}">
           <a href="{% url "osce_bank:osce_index" %}">OSCE Bank Home</a>
         </li>
-        <li class="{% if url_name == 'history' %}active{% endif %}">
-          <a href="{% url "osce_bank:history" %}">OSCE User History</a>
-        </li>
         <li class="{% if url_name == 'osce_station_list' %}active{% endif %}">
           <a href="{% url "osce_bank:osce_station_list" %}">OSCE Station List</a>
         </li>
         <li class="{% if url_name == 'osce_station_create' %}active{% endif %}">
-          <a href="{% url "osce_bank:osce_station_create" %}">Create OSCE Station</a>
+          <a href="{% url "osce_bank:osce_station_create" %}">Create New OSCE Station</a>
+        </li>
+        <li class="{% if url_name == 'osce_station_list_edit' %}active{% endif %}">
+          <a href="{% url "osce_bank:osce_station_list_edit" %}">Edit/Review OSCE Stations</a>
         </li>
       {% endif %}
     {% endwith %}

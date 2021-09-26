@@ -18,6 +18,12 @@
 {% block content %}
 
   <section class="">
+    <p>
+      Welcome to MeDUSA's MCQ Bank, a source for MCQs from all four years of med school, created and refined
+      by Deakin students.
+      Please contribute any MCQs you might have by <a href="{% url "mcq_bank:question_create" %}">creating
+      one here.</a>
+    </p>
     <div class="modal fade" tabindex="-1" role="dialog" id="modal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -31,13 +37,15 @@
           Start new session / Continue old session <i class="fa fa-chevron-right"></i>
         </button>
       {% else %}
-        <a id="start-session" class="mcq-start-button button btn-primary" href="{% url "mcq_bank:quiz_session_create" %}">
+        <a id="start-session" class="mcq-start-button button btn-primary"
+           href="{% url "mcq_bank:quiz_session_create" %}">
           Start new session <i class="fa fa-chevron-right"></i>
         </a>
       {% endif %}
     </div>
-
+    <hr>
     <ul>
+      Navigation:
       <li><a href="{% url "mcq_bank:history" %}">Quiz History and Progress</a></li>
       <li><a href="{% url "mcq_bank:question_list" %}">View all Questions</a></li>
       <li><a href="{% url "mcq_bank:question_create" %}">Create new question</a></li>
@@ -60,16 +68,12 @@
   {% javascript "js_tablesorter" %}
   <script type="text/javascript">
     $(document).ready(function () {
-      $('#check-session').click(function() {
-        $(this).hide();
-      });
-
+      $('#check-session').click(function () {
+        $(this).hide()
+      })
       $('#check-session').modalForm({
         formURL: "{% url 'mcq_bank:check_session' %}",
-
       })
-
-
     })
   </script>
 

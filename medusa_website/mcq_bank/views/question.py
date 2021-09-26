@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.html import format_html
-from django_filters import FilterSet, ModelChoiceFilter
+from django_filters import FilterSet, ModelChoiceFilter, BooleanFilter
 from django_filters.views import FilterView
 from vanilla import ListView, UpdateView, CreateView, DetailView
 
@@ -25,6 +25,7 @@ from medusa_website.mcq_bank.forms import (
     QuizSessionCreateFromQuestionsForm,
 )
 from medusa_website.mcq_bank.models import Question
+from medusa_website.mcq_bank.utils import CustomBooleanWidget, truncate_text
 from medusa_website.users.models import User
 
 logger = logging.getLogger(__name__)
@@ -286,6 +287,20 @@ class QuestionListFilter(FilterSet):
         id__in=Question.objects.select_related("author").order_by("author").distinct("author").values_list("author",
                                                                                                            flat=True)))
 
+    answered = BooleanFilter(field_name="answered", label="Is answered", method="filter_answered",
+                             widget=CustomBooleanWidget)
+
+    def filter_answered(self, queryset, name, value):
+        if self.request:
+            user = self.request.user
+            if value is True:
+                queryset = queryset.filter(id__in=user.history.answered_questions())
+            elif value is False:
+                queryset = queryset.exclude(id__in=user.osce_history.completed_stations.all())
+            else:  # None
+                queryset = queryset
+        return queryset
+
 
 class QuestionListTable(tables.Table):
     class Meta:
@@ -294,8 +309,8 @@ class QuestionListTable(tables.Table):
             "id": "question-list-table",
         }
         model = Question
-        exclude = ("randomise_answer_order", "flagged_by", "is_reviewed", "reviewed_by", "explanation")
-        sequence = ("id", "author", "category", "answered", "text", "answer", "explanation", "image")
+        fields = ("id", "author", "category", "answered", "text", "answer", "is_flagged", "is_reviewed")
+        sequence = ("id", "author", "category", "answered", "text", "answer", "is_flagged", "is_reviewed")
 
     id = tables.Column(linkify=False, accessor="id", orderable=False)
     author = tables.Column(linkify=True, orderable=False)
@@ -303,9 +318,9 @@ class QuestionListTable(tables.Table):
     answered = tables.Column(linkify=False, orderable=False, empty_values=())
     text = tables.Column(linkify=False, orderable=False)
     answer = tables.Column(linkify=False, orderable=False, empty_values=(), verbose_name="Answer")
-    # explanation = tables.Column(linkify=False, orderable=False)
-    image = tables.Column(linkify=False, orderable=False)
-    is_flagged = tables.Column(linkify=False, orderable=False)
+    is_flagged = tables.Column(linkify=False, orderable=False, empty_values=())
+    is_reviewed = tables.Column(linkify=False, orderable=False, empty_values=())
+
     filterset_class = QuestionListFilter
 
     # def __init__(self, *args, **kwargs):
@@ -316,13 +331,11 @@ class QuestionListTable(tables.Table):
         correct_answers = record.correct_answers
         if len(correct_answers) == 0:
             return "ERROR - no correct answer specified!"
-        correct_text = [a.text for a in correct_answers]
-        return "\n".join(correct_text)
+        correct_text = "\n".join([a.text for a in correct_answers])
+        return truncate_text(correct_text, 50)
 
-    def render_image(self, value, record: Question):
-        return format_html(
-            f"""<a href="" onclick="window.open('{record.question_image.url}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes, width=800px, height=600px'); return false;">{value}</a>"""
-        )
+    def render_text(self, value, record: Question):
+        return truncate_text(record.text, 50)
 
     def render_id(self, value, record: Question):
         if record.editable(user=self.request.user):
@@ -335,25 +348,15 @@ class QuestionListTable(tables.Table):
             )
 
     def render_answered(self, value, record: Question):
-        return "Yes" if record.answered else "No"
+        return "True" if record.answered else "False"
 
-    #
-    # category_name = tables.Column(linkify=False, verbose_name="Category", orderable=False)
-    # cat_qs_num = tables.Column(verbose_name="Nº questions total", empty_values=(), orderable=False)
-    # attempted_num = tables.Column(verbose_name="Nº questions attempted", empty_values=(), orderable=False)
-    # cat_average_score = tables.Column(verbose_name="Attempts correct avg (%)", empty_values=(), orderable=False)
-    #
-    # def render_attempted_num(self, value, record):
-    #     return f"{value} ({record['attempted_percent'] or 0} %)"
-    #
-    # def render_cat_average_score(self, value, record):
-    #     return f"{value or 0} %"
+
+
 
 
 class QuestionListView(LoginRequiredMixin, ListView, tables.SingleTableMixin, FilterView):
     model = Question
     template_name = "mcq_bank/question_list.html"
-    # form_class = QuestionCreateForm
     context_object_name = "question"
     lookup_field = "id"
     table_class = QuestionListTable
@@ -361,15 +364,12 @@ class QuestionListView(LoginRequiredMixin, ListView, tables.SingleTableMixin, Fi
     def get_context_data(self, **kwargs):
         context = super(QuestionListView, self).get_context_data(**kwargs)
         all_questions = Question.objects.all()
-        context["filter"] = QuestionListFilter(self.request.GET, queryset=all_questions)
+        context["filter"] = QuestionListFilter(data=self.request.GET, queryset=all_questions, request=self.request)
         filtered_questions: QuerySet[Question] = context["filter"].qs
-        answered_filter = self.parse_answered_filter(self.request.GET.get("answered"))
         annotated_questions = Question.question_list_for_user(user=self.request.user, questions=filtered_questions)
-        if answered_filter is not None:
-            annotated_questions = [q for q in annotated_questions if q.answered == answered_filter]
 
         context["question_list_table"] = QuestionListTable(annotated_questions, request=self.request)
-        context["displayed_questions"] = annotated_questions
+        context["filtered_questions"] = annotated_questions
         context["quiz_create_form"] = QuizSessionCreateFromQuestionsForm(
             user=self.request.user, questions=annotated_questions
         )

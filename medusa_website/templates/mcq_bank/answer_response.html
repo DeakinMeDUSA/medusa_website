@@ -1,6 +1,5 @@
+{% load quiz_tags %}
 <div>
-
-
   <div class="">
     <p>Your answer: {{ submitted_answer.text }}
       <b>
@@ -8,7 +7,8 @@
       </b>
     </p>
   </div>
-<!-- TODO clean this up a bit! -->
+
+  <!-- TODO clean this up a bit! -->
   <table class="table table-striped table-bordered">
     <tbody>
     {% for answer in question.answers.all %}
@@ -41,12 +41,9 @@
     {% endfor %}
     </tbody>
   </table>
+  <h3>Explanation:</h3>
   {% if question.answer_image %}
-    <a href=""
-       onclick="window.open('{{ question.answer_image.url }}','targetWindow', 'toolbar=no, location=no, status=no, menubar=no, scrollbars=yes, resizable=yes'); return false;">
-      <img src="{{ question.answer_image.url }}" alt="{{ question.correct_answers.0.text }}"
-           style="max-width: 30vw; max-height: 50vh; padding: 10px"/>
-    </a>
+    {% clickable_image image_url=question.answer_image.url alt_text=question.correct_answers.0.text %}
   {% endif %}
   {{ question.explanation_as_html }}
 </div>

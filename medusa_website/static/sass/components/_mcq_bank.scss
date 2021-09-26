@@ -3,6 +3,7 @@
   padding: 0 2rem !important;
   margin-bottom: 1rem;
 }
+
 .mcq-answer {
   &.correct {
     background-color: #a1eea1;
@@ -21,4 +22,47 @@
 .session-create-div {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+
+.mcq-fields-div {
+
+  .custom-control-input:checked ~ .custom-control-label::before {
+    background-color: black !important;
+  }
+
+  .custom-radio .custom-control-input:checked ~ .custom-control-label::after {
+    background-image: unset !important;
+  }
+
+  #div_id_categories > div > div {
+    display: inline-block;
+    width: 20rem;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  select {
+    height: _size(element-height);
+  }
+
+  textarea {
+    padding: 0.75rem 1rem;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"], {
+    & + label {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  input[type="checkbox"] {
+    & + label {
+      &:before {
+        border-radius: 0 !important;
+      }
+    }
+  }
 }

@@ -6,8 +6,7 @@ from medusa_website.users.models import User
 
 class OSCEHistory(models.Model):
     """
-    History is used to track an individual signed in users score on different
-    quiz's and categories
+    History of completed OSCE station
 
     """
 

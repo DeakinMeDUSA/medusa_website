@@ -69,10 +69,12 @@ class OSCEStation(models.Model):
         help_text="Supporting notes for the station", blank=True, null=True,
     )
 
-    is_flagged = models.BooleanField(default=False, help_text="If True, has been flagged by a user")
+    is_flagged = models.BooleanField(default=False,
+                                     help_text="If True, has been flagged by a user and is awaiting review")
     flagged_by = models.ForeignKey(
         User, related_name="flagged_osce_stations", on_delete=models.PROTECT, blank=True, null=True
     )
+    flagged_message = models.TextField(null=True, blank=True, help_text="Explanation for why question was flagged.")
 
     is_reviewed = models.BooleanField(default=False, help_text="If True, has been reviewed by a staff or admin")
     reviewed_by = models.ForeignKey(
@@ -118,7 +120,7 @@ class OSCEStation(models.Model):
 
         history, created = OSCEHistory.objects.get_or_create(user=user)  # force init of history
         completed_stations = history.completed_stations.all()
-        all_stations = stations or cls.objects.all()
+        all_stations = stations if stations is not None else cls.objects.all()
         for s in all_stations:
             s.completed = True if s in completed_stations else False
         return all_stations
