@@ -20,6 +20,7 @@
 {% block content %}
 
   <p class="h4">Create new OSCE station</p>
+  {% include "messages.html" %}
   <form action="{% url 'osce_bank:osce_station_create' %}" method="post">
     {% csrf_token %}
     <div class="form-group row osce-fields-div">

@@ -18,6 +18,8 @@
 {% block content %}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
   <h2>Question list</h2>
+  {% include "messages.html" %}
+
   <p>Filter and select a question to edit/view below. Note that you can only edit MCQ questions you have authored, unless you
     have admin permission. To request edit permissions, <a href="mailto:it@medusa.org.au">email the IT Chair.</a></p>
   <form action="" method="get" class="form">

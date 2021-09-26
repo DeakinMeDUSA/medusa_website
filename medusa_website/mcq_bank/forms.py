@@ -36,7 +36,7 @@ class QuestionDetailForm(ModelForm):
     class Meta:
         model = Question
         fields = ["author", "text", "category", "question_image", "answer_image", "explanation",
-                  "randomise_answer_order"]
+                  "randomise_answer_order", "is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]
 
     author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
     explanation = forms.CharField(
@@ -60,13 +60,15 @@ class QuestionDetailForm(ModelForm):
             Field("explanation", readonly=True),
             Field("randomise_answer_order", readonly=True),
         )
+        for fieldname in ["is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]:
+            self.fields[fieldname].help_text = None
 
 
 class QuestionUpdateForm(ModelForm):
     class Meta:
         model = Question
         fields = ["author", "text", "category", "question_image", "answer_image", "explanation",
-                  "randomise_answer_order"]
+                  "randomise_answer_order", "is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]
 
     # text = forms.CharField(widget=AdminPagedownWidget())
     # explanation = MartorFormField()
@@ -79,6 +81,9 @@ class QuestionUpdateForm(ModelForm):
 
         self.helper = FormHelper(self)
         self.helper.form_id = "id-question_update"
+
+        for fieldname in ["is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]:
+            self.fields[fieldname].help_text = None
 
 
 class QuestionCreateForm(ModelForm):
@@ -186,3 +191,14 @@ class QuizSessionCreateForm(ModelForm):
         required=False,
         initial=True,
     )
+
+
+class QuestionMarkFlaggedForm(ModelForm):
+    class Meta:
+        model = Question
+        fields = ["id", "flagged_message"]
+
+    def __init__(self, *args, **kwargs):
+        super(QuestionMarkFlaggedForm, self).__init__(*args, **kwargs)
+
+        self.fields["flagged_message"].help_text = None

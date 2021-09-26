@@ -11,32 +11,82 @@
 {% endblock %}
 
 {% block css %}
-  {% stylesheet "css_core" %}
   {{ block.super }}
+  {% stylesheet "css_core" %}
 {% endblock %}
 
 {% block content %}
   <section>
     <h3>Viewing question (id: {{ question.id }})</h3>
+    {% include "messages.html" %}
 
-    {{ form.author | as_crispy_field }}
-    {{ form.category  | as_crispy_field }}
+    <div class="form-group row">
+      <div class="form-group col-md-4 mb-0">{{ form.author | as_crispy_field }}</div>
+      <div class="form-group col-md-4 mb-0">{{ form.category | as_crispy_field }}</div>
+
+    </div>
+    {{ form.text | as_crispy_field }}
     {{ form.question_image | as_crispy_field }}
+    <hr style="border: black 1px solid">
+
+    {{ form.explanation | as_crispy_field }}
     {{ form.answer_image | as_crispy_field }}
 
-    {{ form.text | as_crispy_field }}
-    {{ form.explanation | as_crispy_field }}
-    <hr>
+    <hr style="border: black 1px solid">
+    <div class="form-group row mcq-fields-div">
+
+      <div class="form-group col-md-6 mb-0">
+        <div class="form-group row mcq-fields-div" style="align-items: end">
+          {{ form.is_reviewed | as_crispy_field:"generic" }}
+          {{ form.reviewed_by | as_crispy_field:"generic" }}
+        </div>
+        <div class="form-group row mcq-fields-div" style="align-items: end">
+          {{ form.is_flagged | as_crispy_field:"generic" }}
+          {{ form.flagged_by | as_crispy_field:"generic" }}
+        </div>
+      </div>
+      <div class="form-group col-md-6 mb-0">
+        {{ form.flagged_message | as_crispy_field:"generic" }}
+      </div>
+    </div>
+    <hr style="border: black 1px solid">
     <h4>Answers</h4>
     {{ form.randomise_answer_order | as_crispy_field:"generic" }}
 
     <table>
       {% crispy answer_formset answer_formset_helper %}
     </table>
-    {% if editable %}
-      <div class="buttonHolder">
-        <a class="button" href={% url "mcq_bank:question_update" question.id %}>Edit Question/Answers</a>
-      </div>
-    {% endif %}
+    <div class="row" style="display: flex; justify-content: space-around">
+
+      {% if editable %}
+        <div class="col col-lg-auto">
+          <div class="buttonHolder">
+            <a class="button" href={% url "mcq_bank:question_update" question.id %}>Edit Question/Answers</a>
+          </div>
+        </div>
+      {% endif %}
+      {% if not question.is_flagged %}
+        <div class="col col-lg-auto">
+          <form method="GET" action="{% url 'mcq_bank:question_mark_flagged' question.id %}">
+            {% csrf_token %}
+            <input id="question" type="hidden" name="question" value="{{ osce_station.id }}">
+            <input class="button" type="submit" name="action" value="Flag as incorrect"/>
+          </form>
+        </div>
+      {% endif %}
+
+      {% if user.is_staff or user.is_superuser %}
+        {% if not question.is_reviewed %}
+          <div class="col col-lg-auto">
+            <form method="POST" action="{% url 'mcq_bank:question_mark_reviewed' question.id %}">
+              {% csrf_token %}
+              <input id="question" type="hidden" name="question" value="{{ question.id }}">
+              <input class="button" type="submit" name="action" value="Mark as reviewed"/>
+            </form>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+
   </section>
 {% endblock %}

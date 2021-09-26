@@ -24,6 +24,8 @@
       Please contribute any MCQs you might have by <a href="{% url "mcq_bank:question_create" %}">creating
       one here.</a>
     </p>
+    {% include "messages.html" %}
+
     <div class="modal fade" tabindex="-1" role="dialog" id="modal">
       <div class="modal-dialog" role="document">
         <div class="modal-content">

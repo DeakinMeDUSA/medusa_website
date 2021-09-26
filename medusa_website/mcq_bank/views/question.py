@@ -2,6 +2,7 @@ import logging
 from typing import Optional, Tuple, List
 
 import django_tables2 as tables
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import QuerySet
@@ -12,7 +13,7 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django_filters import FilterSet, ModelChoiceFilter, BooleanFilter
 from django_filters.views import FilterView
-from vanilla import ListView, UpdateView, CreateView, DetailView
+from vanilla import ListView, UpdateView, CreateView, DetailView, FormView
 
 from medusa_website.mcq_bank.forms import (
     QuestionCreateForm,
@@ -22,7 +23,7 @@ from medusa_website.mcq_bank.forms import (
     AnswerCreateFormSet,
     AnswerUpdateFormSet,
     AnswerDetailFormSet,
-    QuizSessionCreateFromQuestionsForm,
+    QuizSessionCreateFromQuestionsForm, QuestionMarkFlaggedForm,
 )
 from medusa_website.mcq_bank.models import Question
 from medusa_website.mcq_bank.utils import CustomBooleanWidget, truncate_text
@@ -379,3 +380,60 @@ class QuestionListView(LoginRequiredMixin, ListView, tables.SingleTableMixin, Fi
     def parse_answered_filter(option: Optional[str]) -> Optional[bool]:
         mapping = {"-1": None, "1": True, "0": False, None: None, "": None}
         return mapping[option]
+
+
+class QuestionMarkReviewedView(LoginRequiredMixin, UpdateView):
+    model = Question
+    context_object_name = "question"
+    lookup_field = "id"
+    fields = ["id"]
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionMarkReviewedView, self).get_context_data(**kwargs)
+        user = self.request.user
+        assert (user.is_staff or user.is_superuser), "User is not staff or superuser!"
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        self.object: Question = self.get_object()
+        user: User = request.user
+        self.object.reviewed_by = user
+        self.object.is_reviewed = True
+        self.object.save()
+
+        messages.add_message(self.request, messages.INFO, f"Question marked as reviewed by '{user.name}'")
+
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class QuestionMarkFlaggedView(LoginRequiredMixin, UpdateView, FormView):
+    model = Question
+    template_name = "mcq_bank/question_mark_flagged.html"
+    context_object_name = "question"
+    lookup_field = "id"
+    form_class = QuestionMarkFlaggedForm
+    fields = ["id"]
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionMarkFlaggedView, self).get_context_data(**kwargs)
+        user = self.request.user
+        assert (user.is_staff or user.is_superuser), "User is not staff or superuser!"
+        return context
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form(instance=self.object)
+        context = self.get_context_data(form=form)
+        return self.render_to_response(context)
+
+    def form_valid(self, form):
+        # self.object = form.save()
+        self.object: Question = self.get_object()
+        user: User = self.request.user
+        self.object.flagged_by = user
+        self.object.is_flagged = True
+        self.object.flagged_message = form.cleaned_data["flagged_message"]
+        self.object.save()
+        messages.add_message(self.request, messages.INFO, f"Question marked as flagged by '{user.name}'")
+        return HttpResponseRedirect(self.get_success_url())

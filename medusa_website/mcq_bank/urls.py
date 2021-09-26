@@ -11,9 +11,13 @@ from .views import (
     QuizSessionDetailView,
     QuizSessionEndOrContinueView,
     QuizTakeView,
+    QuestionMarkFlaggedView,
+    QuestionMarkReviewedView,
+    QuestionDetailView,
+    QuizSessionCreateFromQuestionsView,
+
 )
-from .views.question import QuestionDetailView
-from .views.session import QuizSessionCreateFromQuestionsView, complete_session
+from .views.session import complete_session
 
 app_name = "mcq_bank"
 
@@ -45,6 +49,9 @@ urlpatterns = [
     path("question/update/<int:id>", view=QuestionUpdateView.as_view(), name="question_update"),
     path("question/create", view=QuestionCreateView.as_view(), name="question_create"),
     path("question/list", view=QuestionListView.as_view(), name="question_list"),
+    path("question/mark-flagged/<int:id>", view=QuestionMarkFlaggedView.as_view(), name="question_mark_flagged"),
+    path("question/mark-review/<int:id>", view=QuestionMarkReviewedView.as_view(), name="question_mark_reviewed"),
+
     # redirect all others to index
     re_path("^$", view=QuizIndexView.as_view(), name="quiz_index"),
     re_path("^.*$", view=IndexRedirectView.as_view(), name="index_redirect"),  # redirect all others to index

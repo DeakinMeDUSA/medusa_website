@@ -2950,7 +2950,8 @@ button.fc-button.fc-button-primary.fc-next-button, button.fc-button.fc-button-pr
   height: 3rem;
 }
 .mcq-fields-div textarea {
-  padding: 0.75rem 1rem;
+  padding: 0.2rem 0.2rem;
+  height: 10rem;
 }
 .mcq-fields-div input[type=checkbox] + label,
 .mcq-fields-div input[type=radio] + label {

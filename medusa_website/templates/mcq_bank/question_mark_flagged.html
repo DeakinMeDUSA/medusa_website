@@ -1,4 +1,4 @@
-{% extends "osce_bank/base_osce_bank.html" %}
+{% extends "mcq_bank/base_mcq_bank.html" %}
 {% load pipeline %}
 {% load crispy_forms_filters %}
 {% load static %}
@@ -7,21 +7,21 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-  MeDUSA - Flag OSCE Station
+  MeDUSA - Flag Question
 {% endblock %}
 
 {% block css %}
   {{ block.super }}
-  {#  {% stylesheet "css_core" %}#}
 
 {% endblock %}
 
 {% block content %}
   <section>
-    <h3>Flag OSCE Station (id: {{ osce_station.id }})</h3>
+    <h3>Flag Question (id: {{ question.id }})</h3>
+    <!-- See https://stackoverflow.com/questions/14999134/how-to-pass-a-message-from-httpresponseredirect-in-django -->
     {% include "messages.html" %}
-    <p>Explain what is incorrect in the station so we can update it. Thanks for your help!</p>
-    <form action="{% url 'osce_bank:osce_station_mark_flagged' osce_station.id %}" method="post">
+    <p>Explain what is incorrect in the question so we can update it. Thanks for your help!</p>
+    <form action="{% url 'mcq_bank:question_mark_flagged' question.id %}" method="post">
       {% csrf_token %}
       <div class="form-group">
         {{ form.flagged_message | as_crispy_field }}

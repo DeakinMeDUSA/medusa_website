@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from vanilla import CreateView, DetailView, ListView
+from vanilla import CreateView, DetailView
 
 from medusa_website.mcq_bank.forms import (
     QuizSessionContinueOrStopForm,
@@ -11,12 +11,6 @@ from medusa_website.mcq_bank.forms import (
     QuizSessionCreateFromQuestionsForm,
 )
 from medusa_website.mcq_bank.models import QuizSession
-
-
-class QuizSessionListView(LoginRequiredMixin, ListView):
-    model = QuizSession
-    template_name = "mcq_bank/session_history.html"
-    context_object_name = "quiz_sessions"
 
 
 class QuizSessionDetailView(LoginRequiredMixin, DetailView):

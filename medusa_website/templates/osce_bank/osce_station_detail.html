@@ -19,7 +19,6 @@
 {% block content %}
   <section>
     <h3>Viewing OSCE Station (id: {{ osce_station.id }})</h3>
-    <!-- See https://stackoverflow.com/questions/14999134/how-to-pass-a-message-from-httpresponseredirect-in-django -->
     {% include "messages.html" %}
     {{ form.author | as_crispy_field }}
 

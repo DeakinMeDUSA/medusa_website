@@ -20,6 +20,7 @@
 {% block content %}
 
   <p class="h4">Update OSCE station (id: {{ osce_station.id }}) </p>
+  {% include "messages.html" %}
   <form action="{% url 'osce_bank:osce_station_update' osce_station.id %}" method="post">
     {% csrf_token %}
     <div class="form-group row osce-fields-div">

@@ -19,6 +19,8 @@
 {% block content %}
 
   <p class="h4">Create new question</p>
+  {% include "messages.html" %}
+
   <form action="{% url 'mcq_bank:question_create' %}" method="post">
     {% csrf_token %}
     <div class="form-group row">
