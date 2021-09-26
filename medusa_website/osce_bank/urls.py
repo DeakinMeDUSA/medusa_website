@@ -40,5 +40,3 @@ urlpatterns = [
     re_path("^$", view=OSCEIndexView.as_view(), name="osce_index"),
     re_path("^.*$", view=OSCEIndexRedirectView.as_view(), name="index_redirect"),  # redirect all others to index
 ]
-
-# TODO link detail view to use a modified UPdateView to keep things DRY
