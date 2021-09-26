@@ -65,6 +65,7 @@
           </div>
         </div>
       {% endif %}
+
       {% if not question.is_flagged %}
         <div class="col col-lg-auto">
           <form method="GET" action="{% url 'mcq_bank:question_mark_flagged' question.id %}">
