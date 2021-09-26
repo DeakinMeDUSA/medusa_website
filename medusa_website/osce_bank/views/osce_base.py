@@ -1,14 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import RedirectView, TemplateView
 
-from medusa_website.osce_bank.models import OSCEHistory, OSCEStation
-from medusa_website.osce_bank.views.history import CategoryProgressTable
+from medusa_website.osce_bank.models import OSCEHistory
 
 
 class OSCEIndexRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
     query_string = False
-    pattern_name = "osce_bank:index"
+    pattern_name = "osce_bank:osce_index"
 
 
 class OSCEIndexView(LoginRequiredMixin, TemplateView):
