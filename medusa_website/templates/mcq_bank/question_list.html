@@ -20,7 +20,8 @@
   <h2>Question list</h2>
   {% include "messages.html" %}
 
-  <p>Filter and select a question to edit/view below. Note that you can only edit MCQ questions you have authored, unless you
+  <p>Filter and select a question to edit/view below. Note that you can only edit MCQ questions you have authored,
+    unless you
     have admin permission. To request edit permissions, <a href="mailto:it@medusa.org.au">email the IT Chair.</a></p>
   <form action="" method="get" class="form">
     <div class="container">
@@ -29,20 +30,32 @@
           {{ filter.form.category|as_crispy_field }}
         </div>
         <div class="form-group col-md-4 mb-0">
-          {{ filter.form.author |as_crispy_field }}
+          {{ filter.form.author|as_crispy_field }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-md-4 mb-0">
+          {{ filter.form.answered|as_crispy_field }}
         </div>
         <div class="form-group col-md-4 mb-0">
-          {{ filter.form.answered |as_crispy_field }}
+          {{ filter.form.is_flagged|as_crispy_field }}
+        </div>
+        <div class="form-group col-md-4 mb-0">
+          {{ filter.form.is_reviewed|as_crispy_field }}
         </div>
       </div>
       <div class="row" style="margin-top: 10px; margin-bottom: 10px">
         <div class="form-group col-8">
           <div class="row">
             <div class="form-group col-md-4">
-              <a class="btn btn-secondary" href="{% url 'mcq_bank:question_list' %}">Reset filter(s)</a>
+              <a class="button" href="{% url 'mcq_bank:question_list' %}">Reset filter(s)</a>
             </div>
             <div class="form-group col-md-4">
-              {% bootstrap_button 'Apply filter(s)' button_type="submit" button_class="btn-primary" %}
+              <div class="buttonHolder">
+
+                <input type="submit" name="submit" value="Apply filter(s)" class="btn btn-primary">
+              </div>
+              {#              {% bootstrap_button 'Apply filter(s)' button_type="submit" button_class="btn-primary" %}#}
             </div>
           </div>
         </div>

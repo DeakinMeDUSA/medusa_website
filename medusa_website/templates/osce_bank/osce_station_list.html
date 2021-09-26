@@ -56,10 +56,12 @@
         <div class="form-group col-8">
           <div class="row">
             <div class="form-group col-md-4">
-              <a class="btn btn-secondary" href="{% url 'osce_bank:osce_station_list' %}">Reset filter(s)</a>
+              <a class="button" href="{% url 'osce_bank:osce_station_list' %}">Reset filter(s)</a>
             </div>
             <div class="form-group col-md-4">
-              {% bootstrap_button 'Apply filter(s)' button_type="submit" button_class="btn-primary" %}
+              <div class="buttonHolder">
+                <input type="submit" name="submit" value="Apply filter(s)" class="btn btn-primary">
+              </div>
             </div>
           </div>
         </div>

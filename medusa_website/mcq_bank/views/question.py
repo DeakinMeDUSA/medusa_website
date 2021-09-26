@@ -282,7 +282,7 @@ class QuestionCreateView(LoginRequiredMixin, CreateView):
 class QuestionListFilter(FilterSet):
     class Meta:
         model = Question
-        fields = ["category", "author"]
+        fields = ["category", "author", "is_reviewed", "is_flagged"]
 
     author = ModelChoiceFilter(queryset=User.objects.filter(
         id__in=Question.objects.select_related("author").order_by("author").distinct("author").values_list("author",
@@ -290,6 +290,8 @@ class QuestionListFilter(FilterSet):
 
     answered = BooleanFilter(field_name="answered", label="Is answered", method="filter_answered",
                              widget=CustomBooleanWidget)
+    is_reviewed = BooleanFilter(field_name="is_reviewed", label="Is reviewed", widget=CustomBooleanWidget)
+    is_flagged = BooleanFilter(field_name="is_flagged", label="Is flagged", widget=CustomBooleanWidget)
 
     def filter_answered(self, queryset, name, value):
         if self.request:

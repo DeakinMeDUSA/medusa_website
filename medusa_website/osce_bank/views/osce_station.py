@@ -12,6 +12,7 @@ from django_filters import FilterSet, ModelChoiceFilter, ModelMultipleChoiceFilt
 from django_filters.views import FilterView
 from vanilla import ListView, UpdateView, CreateView, DetailView, FormView
 
+from medusa_website.mcq_bank.utils import CustomBooleanWidget
 from medusa_website.osce_bank.forms import OSCEStationDetailForm, OSCEStationUpdateForm, OSCEStationCreateForm, \
     OSCEStationMarkFlaggedForm
 from medusa_website.osce_bank.models import OSCEStation, StationType, Speciality
@@ -164,7 +165,11 @@ class OSCEStationListFilter(FilterSet):
                                                                                                               flat=True)))
     types = ModelMultipleChoiceFilter(queryset=StationType.objects.all(), widget=forms.CheckboxSelectMultiple)
     specialities = ModelMultipleChoiceFilter(queryset=Speciality.objects.all(), widget=forms.CheckboxSelectMultiple)
-    completed = BooleanFilter(field_name="completed", label="Is completed", method="filter_completed")
+    completed = BooleanFilter(field_name="completed", label="Is completed", method="filter_completed",
+                              widget=CustomBooleanWidget)
+    is_reviewed = BooleanFilter(field_name="is_reviewed", label="Is reviewed", widget=CustomBooleanWidget)
+    is_flagged = BooleanFilter(field_name="is_flagged", label="Is flagged", widget=CustomBooleanWidget)
+
 
     # def __init__(self, *args, **kwargs):
     #     super(OSCEStationListFilter, self).__init__()
