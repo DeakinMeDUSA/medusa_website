@@ -1,4 +1,5 @@
 from django import template
+from django.conf import settings
 from django.utils.safestring import mark_safe
 
 from medusa_website.mcq_bank.models import Answer, Question, QuizSession
@@ -28,3 +29,17 @@ def clickable_image(image_url, alt_text, click_to_enlarge=True, max_width="30vw"
     if click_to_enlarge:
         html += "<p><i>(click to enlarge)</i></p>"
     return mark_safe(html)
+
+
+@register.tag(name="is_production")
+def is_production(*args, **kwargs):
+    return IsProductionNode()
+
+
+class IsProductionNode(template.Node):
+    def __init__(self):
+        pass
+
+    def render(self, context):
+        context['IS_PRODUCTION'] = False if settings.DEBUG else True
+        return ''

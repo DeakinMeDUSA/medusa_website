@@ -1,5 +1,6 @@
 {% load pipeline %}
 {% load static %}
+{% load quiz_tags %}
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -74,24 +75,28 @@
   <script src={% static "js/breakpoints.min.js" %}></script>
   <script src={% static "js/util.js" %}></script>
   <script src={% static "js/main.js" %}></script>
-  <script src="{% static 'modules/core/sentry-6.9.0.min.js' %}"></script>
-  <script>
-    Sentry.init({ dsn: 'https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588' })
-    Sentry.showReportDialog({
-      eventId: "{{ event_id }}",
-    })
-  </script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HDX7LQ3NH"></script>
-  <script>
-    window.dataLayer = window.dataLayer || []
+  <script src="{% static 'modules/core/sentry-6.13.2.min.js' %}"></script>
+  {% is_production %}
+  {% if IS_PRODUCTION %}
+    <script>
+      Sentry.init({ dsn: 'https://0d88ffa905984b4196939f77529e4d43@o472668.ingest.sentry.io/5506588' })
+      Sentry.showReportDialog({
+        eventId: "{{ event_id }}",
+      })
+    </script>
 
-    function gtag() {dataLayer.push(arguments)}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9HDX7LQ3NH"></script>
+    <script>
+      window.dataLayer = window.dataLayer || []
 
-    gtag('js', new Date())
+      function gtag() {dataLayer.push(arguments)}
 
-    gtag('config', 'G-9HDX7LQ3NH')
-  </script>
+      gtag('js', new Date())
+
+      gtag('config', 'G-9HDX7LQ3NH')
+    </script>
+  {% endif %}
 
 {% endblock %}
 

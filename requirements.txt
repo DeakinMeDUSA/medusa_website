@@ -66,5 +66,5 @@ django-celery-beat>=2.2.1
 pytz>=2020.4  # https://github.com/stub42/pytz
 argon2-cffi>=20.1.0  # https://github.com/hynek/argon2_cffi
 tqdm
-
+sentry-sdk>=1.4.1
 # To sort
