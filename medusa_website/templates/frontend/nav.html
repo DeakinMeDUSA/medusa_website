@@ -1,4 +1,3 @@
-
 <nav id="nav">
   <ul class="links">
     {% with url_name=request.resolver_match.url_name %}
@@ -28,13 +27,13 @@
         </li>
 
       {% else %}
-        <li class="{% if url_name == 'account_signup' %}active{% endif %}">
-          {# URL provided by django-allauth/account/urls.py #}
-          <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">Sign&nbsp;Up</a>
-        </li>
+        {#        <li class="{% if url_name == 'account_signup' %}active{% endif %}">#}
+        {# URL provided by django-allauth/account/urls.py #}
+        {#          <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">Sign&nbsp;Up</a>#}
+        {#        </li>#}
         <li class="{% if url_name == 'account_login' %}active{% endif %}">
           {# URL provided by django-allauth/account/urls.py #}
-          <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">Sign&nbsp;In</a>
+          <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">Sign&nbsp;Up/Sign&nbsp;In</a>
         </li>
       {% endif %}
     {% endwith %}
