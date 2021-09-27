@@ -1,5 +1,5 @@
 # Django stuff
-Django>=3.1.0
+Django>=3.2.7
 django-allauth>=0.44.0  # https://github.com/pennersr/django-allauth
 django-anymail>=8.1  # https://github.com/anymail/django-anymail
 django-cors-headers>=3.7.0
@@ -42,13 +42,13 @@ pytest>=6.2.4
 factory-boy>=3.2.0
 
 # Code linting, formatting
-black>=21.5b2
+black>=21.0.0
 flake8-isort>=4.0.0
 pre-commit>=2.13.0
 rich>=10.2.2
 pylint-django>=2.4.4
 markdown>=3.3.4
-martor>=1.6.3
+martor>=1.6.4
 
 # Data manipulation
 Pillow>=8.0.1  # https://github.com/python-pillow/Pillow

@@ -433,15 +433,17 @@ DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap-responsive.html"
 PAGEDOWN_IMAGE_UPLOAD_ENABLED = False
 
 # MARTOR CONFIG
+# ----------------------
+# https://github.com/agusmakmun/django-markdown-editor
 # Input: string boolean, `true/false`
 MARTOR_ENABLE_CONFIGS = {
     "emoji": "true",  # to enable/disable emoji icons.
     "imgur": "false",  # to enable/disable imgur/custom uploader.
     "mention": "false",  # to enable/disable mention
-    "jquery": "false",  # to include/revoke jquery (require for admin default django)
+    "jquery": "true",  # to include/revoke jquery (require for admin default django)
     "living": "true",  # to enable/disable live updates in preview
     "spellcheck": "false",  # to enable/disable spellcheck in form textareas
-    "hljs": "true",  # to enable/disable hljs highlighting in preview
+    "hljs": "false",  # to enable/disable hljs highlighting in preview
 }
 # To show the toolbar buttons
 MARTOR_TOOLBAR_BUTTONS = [
@@ -467,15 +469,10 @@ MARTOR_UPLOAD_URL = "/api/uploader/"  # change to local uploader
 MARTOR_ENABLE_LABEL = True
 # Maximum Upload Image in bytes
 MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
-
-# If you need to use your own themed "bootstrap" or "semantic ui" dependency
-# replace the values with the file in your static files dir
-# MARTOR_ALTERNATIVE_JS_FILE_THEME = None  # "semantic-themed/semantic.min.js"   # default None
-# MARTOR_ALTERNATIVE_CSS_FILE_THEME = None  # "semantic-themed/semantic.min.css" # default None
 # MARTOR_ALTERNATIVE_JQUERY_JS_FILE = None  # "jquery/dist/jquery.min.js"        # default None
 
-
 # TINYMCE
+# Used for HTML editing/preview for org_chart/subcommittee/
 TINYMCE_DEFAULT_CONFIG = {
     "theme": "silver",
     "height": 800,
@@ -483,13 +480,13 @@ TINYMCE_DEFAULT_CONFIG = {
     "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
                "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
                "code,help,wordcount",
-    # "toolbar": "undo redo | formatselect | "
-    #            "bold italic backcolor | alignleft aligncenter "
-    #            "alignright alignjustify | bullist numlist outdent indent | "
-    #            "removeformat | help",
+    "toolbar": "undo redo | formatselect | "
+               "bold italic backcolor | alignleft aligncenter "
+               "alignright alignjustify | bullist numlist outdent indent | "
+               "removeformat | help",
 }
 
-TINYMCE_SPELLCHECKER = True
+TINYMCE_SPELLCHECKER = False
 USE_COMPRESSOR = False
 USE_EXTRA_MEDIA = False
 USE_SPELLCHECKER = False
