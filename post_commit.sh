@@ -24,6 +24,7 @@ python manage.py collectstatic --noinput
 printf 'Running migrations ...'
 python manage.py migrate
 
-printf 'Restarting application ...'
+printf 'Restarting application and flushing cache...'
+redis-cli FLUSHDB
 sudo systemctl restart gunicorn
 echo

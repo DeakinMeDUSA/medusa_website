@@ -21,9 +21,10 @@ echo
 printf 'Running migrations ...'
 python manage.py migrate
 
-printf 'Restarting application ...'
+printf 'Restarting application and flushing cache...'
 # sudo systemctl restart gunicorn.socket gunicorn.service
 # sudo systemctl daemon-reload
+redis-cli FLUSHDB
 sudo systemctl restart gunicorn
 # sudo systemctl reload nginx
 echo
