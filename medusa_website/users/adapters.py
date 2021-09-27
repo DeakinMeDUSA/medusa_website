@@ -21,6 +21,7 @@ class AccountAdapter(DefaultAccountAdapter):
         Validates an email value. You can hook into this if you want to
         (dynamically) restrict what email addresses can be chosen.
         """
+        email = email.lower()
         try:
             for validator in self.custom_email_validators:
                 validator(email)
