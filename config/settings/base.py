@@ -329,7 +329,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_ADAPTER = "medusa_website.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "medusa_website.users.adapters.SocialAccountAdapter"
-ACCOUNT_MAX_EMAIL_ADDRESSES = 1
+ACCOUNT_MAX_EMAIL_ADDRESSES = 2
 ACCOUNT_SIGNUP_REDIRECT_URL = "frontend:resources"
 
 ### CACHING

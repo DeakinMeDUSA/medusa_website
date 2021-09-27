@@ -52,6 +52,11 @@ class MemberRecord(models.Model):
     name = CharField(blank=True, null=True, max_length=256)
     end_date = models.DateField("End date")
 
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.email = self.email.lower()
+        super(MemberRecord, self).save()
+
 
 class MemberRecordsImport(models.Model):
     """Represents a membership record from the DUSA exports"""

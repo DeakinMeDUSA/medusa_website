@@ -30,9 +30,9 @@ class MedusaMemberValidator:
         if self.validate_domain_part(domain_part) is False and self.validate_member_status(value) is False:
             raise ValidationError(self.message, code=self.code)
 
-    def validate_member_status(self, email):
+    def validate_member_status(self, email: str):
         try:
-            MemberRecord.objects.get(email=email)
+            MemberRecord.objects.get(email=email.lower())
             return True
         except MemberRecord.DoesNotExist:
             return False
