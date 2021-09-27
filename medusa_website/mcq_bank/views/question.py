@@ -88,7 +88,7 @@ class QuestionDetailView(LoginRequiredMixin, DetailView):
         form = self.get_form(instance=self.object)
 
         author_change_permission = request.user.is_staff or request.user.is_superuser
-        if author_change_permission is False:
+        if author_change_permission is False and form.fields.get("author") is not None:
             form.fields["author"].disabled = True
 
         context = self.get_context_data(form=form)
@@ -128,7 +128,7 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
         form = self.get_form(instance=self.object)
 
         author_change_permission = request.user.is_staff or request.user.is_superuser
-        if author_change_permission is False:
+        if author_change_permission is False and form.fields.get("author") is not None:
             form.fields["author"].disabled = True
 
         context = self.get_context_data(form=form)
