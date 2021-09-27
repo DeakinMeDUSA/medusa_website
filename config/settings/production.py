@@ -54,7 +54,6 @@ CACHES = {
 # https://docs.djangoproject.com/en/3.2/topics/cache/#the-per-site-cache
 MIDDLEWARE = MIDDLEWARE + [
     "django.middleware.cache.UpdateCacheMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 

@@ -2,10 +2,13 @@ from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from django.views import defaults as default_views
-
+from allauth.account import views as allauth_views
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 from medusa_website.mcq_bank.views.markdown_uploader import markdown_uploader
 from medusa_website.users import utils
 
@@ -15,7 +18,19 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path(settings.ADMIN_URL, admin.site.urls),
     # User management
     path("users/", include("medusa_website.users.urls", namespace="users")),
+
+    # Over-ride change password redirect, https://github.com/pennersr/django-allauth/issues/468
     path("accounts/", include("allauth.urls")),
+    path(
+        'account/password/change/',
+        login_required(
+            allauth_views.PasswordChangeView.as_view(
+                success_url=reverse_lazy('account_login')
+            )
+        ),
+        name='account_change_password'
+    ),
+
     # Your stuff: custom urls includes go here
     path("mcq_bank/", include("medusa_website.mcq_bank.urls", namespace="mcq_bank")),
     path("osce_bank/", include("medusa_website.osce_bank.urls", namespace="osce_bank")),
@@ -23,10 +38,6 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path("martor/", include("martor.urls")),
     url(r"^api/uploader/$", markdown_uploader, name="markdown_uploader_page"),
     path('tinymce/', include('tinymce.urls')),
-    # Catch the rest of the urls
-    # re_path(r'^(?P<path>.*)/$', view=TemplateView.as_view(template_name="frontend/index.html"),
-    #         name="catchall"),
-
 ]
 
 sitemaps = {}  # Don't really need a proper sitemap

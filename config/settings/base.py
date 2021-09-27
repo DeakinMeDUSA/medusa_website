@@ -161,6 +161,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -169,9 +170,7 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    # "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "medusa_website.utils.custom_middleware.SimpleMiddleware",
 ]
 
@@ -323,20 +322,21 @@ ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
 ACCOUNT_USERNAME_VALIDATORS = "medusa_website.users.validators.CustomEmailValidator"
 
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # TODO Setup email provider and set back to mandatory
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ADAPTER = "medusa_website.users.adapters.AccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = "medusa_website.users.adapters.SocialAccountAdapter"
-
+ACCOUNT_MAX_EMAIL_ADDRESSES = 1
+ACCOUNT_SIGNUP_REDIRECT_URL = "frontend:resources"
 # Your stuff...
 # ------------------------------------------------------------------------------
 
-CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = [""]
+CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = [""] # Over-ridden in other configs
 APPEND_SLASH = True
-CORS_ORIGIN_WHITELIST = ("http://localhost:3000",)
-CSRF_TRUSTED_ORIGINS = ["localhost:3000"]
+# CORS_ALLOWED_ORIGINS = ("http://localhost:3000",)
+CSRF_TRUSTED_ORIGINS = ["localhost:3000", ".medusa.org.au", ".medusa.org.au", "localhost:8000"]
 
 # JAVASCRIPT LOADING
 # https://django-pipeline.readthedocs.io/en/latest/configuration.html
