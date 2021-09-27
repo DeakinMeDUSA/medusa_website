@@ -65,6 +65,11 @@
           </div>
         </div>
       {% endif %}
+      <div class="col col-lg-auto">
+        <div class="buttonHolder">
+          <a class="button" href={% url "mcq_bank:question_preview" question.id %}>Preview Question</a>
+        </div>
+      </div>
 
       {% if not question.is_flagged %}
         <div class="col col-lg-auto">

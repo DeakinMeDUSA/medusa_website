@@ -21,7 +21,7 @@
 
   <p class="h4">Update OSCE station (id: {{ osce_station.id }}) </p>
   {% if messages %}{% include "messages.html" %}{% endif %}
-  <form action="{% url 'osce_bank:osce_station_update' osce_station.id %}" method="post">
+  <form action="{% url 'osce_bank:osce_station_update' osce_station.id %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group row osce-fields-div">
       <div class="form-group col-md-6 mb-0">

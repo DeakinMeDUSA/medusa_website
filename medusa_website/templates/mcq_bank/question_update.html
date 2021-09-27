@@ -20,14 +20,17 @@
   <section>
     <h3>Update Question</h3>
     {% if messages %}{% include "messages.html" %}{% endif %}
-    <form action="{% url 'mcq_bank:question_update' id=question.id %}" method="post">
+    <form action="{% url 'mcq_bank:question_update' id=question.id %}" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      {{ form.author | as_crispy_field }}
       <div class="form-group row mcq-fields-div">
-        <div class="form-group col-md-4 mb-0">{{ form.category | as_crispy_field }}</div>
-        <div class="form-group col-md-4 mb-0">{{ form.question_image | as_crispy_field }}</div>
-        <div class="form-group col-md-4 mb-0">{{ form.answer_image | as_crispy_field }}</div>
+        <div class="form-group col-md-6 mb-0">{{ form.author | as_crispy_field }}</div>
+        <div class="form-group col-md-6 mb-0">{{ form.category | as_crispy_field }}</div>
       </div>
+      <div class="form-group row mcq-fields-div">
+        <div class="form-group col-md-6 mb-0">{{ form.question_image | as_crispy_field:"generic" }}</div>
+        <div class="form-group col-md-6 mb-0">{{ form.answer_image | as_crispy_field:"generic" }}</div>
+      </div>
+
       <hr style="border: black 1px solid">
 
       <div class="form-group row mcq-fields-div">

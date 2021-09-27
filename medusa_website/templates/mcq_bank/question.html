@@ -29,12 +29,20 @@
             {% if question.question_image %}
               {% clickable_image image_url=question.question_image.url alt_text=question.text %}
             {% endif %}
-            {% if not session.current_question_answered %}
+
+            {% if not session %}
+              <!-- When previewing a question -->
+              <div class="answer-response">
+                {{ answer_response }}
+              </div>
+            {% elif not session.current_question_answered %}
+              <!-- Show form for an un-unanswered question -->
               {% crispy form %}
               <div class="answer-response">
-                <!-- This will be replaced by the answer response after submission -->
+                <!-- This will be replaced by the answer response after submission, or during preview if no session -->
               </div>
             {% else %}
+              <!-- Show the already submitted question and response -->
               {% include "mcq_bank/answer_response.html" %}
             {% endif %}
           </div>
@@ -56,16 +64,18 @@
               </form>
             </div>
           {% endif %}
-
-          <div class="col col-lg-auto">
-            {% if session.next_question_index is not None %}
-              <a class="button" style="float: right"
-                 href="{% url "mcq_bank:run_session" %}?q={{ session.next_question_index }}"> Next question</a>
-            {% else %}
-              <a class="button complete-quiz" style="float: right"
-                 href="{% url "mcq_bank:quiz_session_complete" id=session.id %}"> Complete Quiz</a>
-            {% endif %}
-          </div>
+          <!-- Check if session exists, to allow preview of questions without a session -->
+          {% if session %}
+            <div class="col col-lg-auto">
+              {% if session.next_question_index is not None %}
+                <a class="button" style="float: right"
+                   href="{% url "mcq_bank:run_session" %}?q={{ session.next_question_index }}"> Next question</a>
+              {% else %}
+                <a class="button complete-quiz" style="float: right"
+                   href="{% url "mcq_bank:quiz_session_complete" id=session.id %}"> Complete Quiz</a>
+              {% endif %}
+            </div>
+          {% endif %}
 
         </div>
 
@@ -73,7 +83,10 @@
 
 
       <div class="col-4">
-        <a class="" href="{% url "mcq_bank:quiz_session_detail" id=session.id %}"> View all questions in quiz</a>
+        <!-- Check if session exists, to allow preview of questions without a session -->
+        {% if session %}
+          <a class="" href="{% url "mcq_bank:quiz_session_detail" id=session.id %}"> View all questions in quiz</a>
+        {% endif %}
         {% include "mcq_bank/reference_ranges.html" %}
         <!-- TODO: Add scorecard for current quiz -->
 
@@ -91,11 +104,9 @@
       url: '{% url "mcq_bank:run_session" %}', // TODO fix URL make dynamic
       dataType: 'json',
       success: function (response) {
-        console.log('The server says: ' + JSON.stringify(response))
-
+        // console.log('The server says: ' + JSON.stringify(response))
         $('div.answer-response').html(response.answer_response)
         $('#id-QuestionForm').hide()
-
       },
     })
 

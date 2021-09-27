@@ -21,7 +21,7 @@
   <p class="h4">Create new question</p>
   {% if messages %}{% include "messages.html" %}{% endif %}
 
-  <form action="{% url 'mcq_bank:question_create' %}" method="post">
+  <form action="{% url 'mcq_bank:question_create' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group row">
       <div class="form-group col-md-6 mb-0">{{ form.category | as_crispy_field }}</div>

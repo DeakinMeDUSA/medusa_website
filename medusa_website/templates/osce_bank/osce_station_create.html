@@ -21,7 +21,7 @@
 
   <h2>Create new OSCE station</h2>
   {% if messages %}{% include "messages.html" %}{% endif %}
-  <form action="{% url 'osce_bank:osce_station_create' %}" method="post">
+  <form action="{% url 'osce_bank:osce_station_create' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-group row osce-fields-div">
       <div class="form-group col-md-6 mb-0">
