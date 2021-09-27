@@ -71,13 +71,36 @@
     <hr style="border: black 1px solid">
     {{ form.supporting_notes | as_crispy_field }}
     {{ form.supporting_notes_image | as_crispy_field }}
+    <hr style="border: black 1px solid">
 
-    {% if editable %}
-      <hr style="border: black 1px solid">
+    <div class="row" style="display: flex; justify-content: space-around">
+      {% if editable %}
+        <div class="buttonHolder">
+          <a class="button" href={% url "osce_bank:osce_station_update" osce_station.id %}>Edit OSCE Station</a>
+        </div>
+      {% endif %}
 
-      <div class="buttonHolder">
-        <a class="button" href={% url "osce_bank:osce_station_update" osce_station.id %}>Edit OSCE Station</a>
-      </div>
+      {% if not osce_station.is_flagged %}
+        <div class="col col-lg-auto">
+          <form method="GET" action="{% url 'osce_bank:osce_station_mark_flagged' osce_station.id %}">
+            {% csrf_token %}
+            <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
+            <input class="button" type="submit" name="action" value="Flag as incorrect"/>
+          </form>
+        </div>
+      {% endif %}
+
+      {% if user.is_staff or user.is_superuser %}
+        {% if not osce_station.is_reviewed %}
+          <div class="col col-lg-auto">
+            <form method="POST" action="{% url 'osce_bank:osce_station_mark_reviewed' osce_station.id %}">
+              {% csrf_token %}
+              <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
+              <input class="button" type="submit" name="action" value="Mark as reviewed"/>
+            </form>
+          </div>
+        {% endif %}
     {% endif %}
+    </div>
   </section>
 {% endblock %}

@@ -226,14 +226,9 @@ class OSCEStationListTable(tables.Table):
         return ", ".join(specialities)
 
     def render_id(self, value, record: OSCEStation):
-        if record.editable(user=self.request.user):
-            return format_html(
-                f'<a href="{reverse("osce_bank:osce_station_update", kwargs={"id": value})}">Edit station {value}</a>'
-            )
-        else:
-            return format_html(
-                f'<a href="{reverse("osce_bank:osce_station_detail", kwargs={"id": value})}">View station {value}</a>'
-            )
+        return format_html(
+            f'<a href="{reverse("osce_bank:osce_station_detail", kwargs={"id": value})}">View/edit station {value}</a>'
+        )
 
 
 class OSCEStationListView(LoginRequiredMixin, ListView, FilterView):

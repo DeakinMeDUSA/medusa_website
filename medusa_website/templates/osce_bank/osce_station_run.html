@@ -78,9 +78,7 @@
         <div class="col col-lg-auto">
           <form method="POST" action="{% url 'osce_bank:osce_station_run' osce_station.id %}">
             {% csrf_token %}
-            {#        {{ form.id | as_crispy_field}}#}
             <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
-
             <input class="button" type="submit" name="action" value="Complete OSCE Station"/>
           </form>
         </div>
