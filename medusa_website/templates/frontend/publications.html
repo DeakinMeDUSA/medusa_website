@@ -13,7 +13,7 @@
 
   <!-- Post -->
   <section>
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
     <header class="major">
       <h1>Publications</h1>
       <p>MeDUSA publishes material throughout the year, covering the survival of medical school (MeDUSA Survival Guide)

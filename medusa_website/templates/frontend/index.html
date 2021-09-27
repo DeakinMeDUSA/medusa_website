@@ -25,7 +25,7 @@
 {% endblock %}
 
 {% block content %}
-  {% include "messages.html" %}
+  {% if messages %}{% include "messages.html" %}{% endif %}
   <!-- Juicer Feed -->
   <section>
     <ul class="juicer-feed" data-feed-id="medusa-deakin" data-per="20" data-columns="3" data-filter="instagram"

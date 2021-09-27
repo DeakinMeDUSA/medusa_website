@@ -18,7 +18,7 @@
 {% block content %}
   <section>
     <h3>Viewing question (id: {{ question.id }})</h3>
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
 
     <div class="form-group row">
       <div class="form-group col-md-4 mb-0">{{ form.author | as_crispy_field }}</div>

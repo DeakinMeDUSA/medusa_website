@@ -13,7 +13,7 @@
 
   <!-- Post -->
   <section>
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
     <header class="major">
       <h1>Resources</h1>
       <p>Members Only resources are shown below

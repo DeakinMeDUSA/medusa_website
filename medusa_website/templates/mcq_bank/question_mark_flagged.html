@@ -19,7 +19,7 @@
   <section>
     <h3>Flag Question (id: {{ question.id }})</h3>
     <!-- See https://stackoverflow.com/questions/14999134/how-to-pass-a-message-from-httpresponseredirect-in-django -->
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
     <p>Explain what is incorrect in the question so we can update it. Thanks for your help!</p>
     <form action="{% url 'mcq_bank:question_mark_flagged' question.id %}" method="post">
       {% csrf_token %}

@@ -5,7 +5,6 @@ https://docs.djangoproject.com/en/3.2/topics/cache/#template-fragment-caching
 -->
 {% load cache %}
 {% cache 5 message_cache %}
-  {% if messages %}
     <ul class="messages">
       {% for message in messages %}
         <li>
@@ -17,5 +16,4 @@ https://docs.djangoproject.com/en/3.2/topics/cache/#template-fragment-caching
         </li>
       {% endfor %}
     </ul>
-  {% endif %}
 {% endcache %}

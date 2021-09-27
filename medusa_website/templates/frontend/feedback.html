@@ -8,7 +8,7 @@
 
   <!-- Post -->
   <section>
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
     <header class="major">
       <h1>Feedback</h1>
       <p>Please add any feedback below or email <a href="mailto:it@medusa.org.au">it@medusa.org.au</a>

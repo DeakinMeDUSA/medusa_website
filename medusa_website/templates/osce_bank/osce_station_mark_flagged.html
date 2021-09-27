@@ -19,7 +19,7 @@
 {% block content %}
   <section>
     <h3>Flag OSCE Station (id: {{ osce_station.id }})</h3>
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
     <p>Explain what is incorrect in the station so we can update it. Thanks for your help!</p>
     <form action="{% url 'osce_bank:osce_station_mark_flagged' osce_station.id %}" method="post">
       {% csrf_token %}

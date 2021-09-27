@@ -11,7 +11,7 @@
 
 {% block content %}
   <h2>Create new Quiz session</h2>
-  {% include "messages.html" %}
+  {% if messages %}{% include "messages.html" %}{% endif %}
 
 
   {% if has_current_session %}

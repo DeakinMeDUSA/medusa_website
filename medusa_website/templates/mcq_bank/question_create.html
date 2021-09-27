@@ -19,7 +19,7 @@
 {% block content %}
 
   <p class="h4">Create new question</p>
-  {% include "messages.html" %}
+  {% if messages %}{% include "messages.html" %}{% endif %}
 
   <form action="{% url 'mcq_bank:question_create' %}" method="post">
     {% csrf_token %}

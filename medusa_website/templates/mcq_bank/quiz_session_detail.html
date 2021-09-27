@@ -12,7 +12,7 @@
 {% block content %}
   <section>
     <h2>Quiz Session ID: {{ quiz_session.id }}</h2>
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
 
 
     {% if is_current %}

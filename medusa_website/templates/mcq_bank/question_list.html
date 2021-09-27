@@ -18,7 +18,7 @@
 {% block content %}
   <link rel="stylesheet" href={% static "modules/tablesorter/dist/css/theme.metro-dark.min.css" %}>
   <h2>Question list</h2>
-  {% include "messages.html" %}
+  {% if messages %}{% include "messages.html" %}{% endif %}
 
   <p>Filter and select a question to edit/view below. Note that you can only edit MCQ questions you have authored,
     unless you

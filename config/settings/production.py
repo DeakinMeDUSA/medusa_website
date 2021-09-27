@@ -35,7 +35,7 @@ CACHES = {
         "BACKEND": "django_redis.cache.RedisCache",
         # "LOCATION": env("REDIS_URL"),
         "LOCATION": "redis://127.0.0.1:6379/1",
-        "TIMEOUT": 30,  #
+        "TIMEOUT": CACHE_MIDDLEWARE_SECONDS,  #
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             # Mimicing memcache behavior.
@@ -52,16 +52,6 @@ CACHES = {
 #     }
 # }
 
-# https://docs.djangoproject.com/en/3.2/topics/cache/#the-per-site-cache
-MIDDLEWARE = MIDDLEWARE + [
-    "django.middleware.cache.UpdateCacheMiddleware",
-    "django.middleware.cache.FetchFromCacheMiddleware",
-]
-
-# https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-CACHE_MIDDLEWARE_ALIAS
-CACHE_MIDDLEWARE_ALIAS = "default"
-CACHE_MIDDLEWARE_KEY_PREFIX = ""
-CACHE_MIDDLEWARE_SECONDS = 60  # in seconds
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"

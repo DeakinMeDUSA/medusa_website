@@ -19,7 +19,7 @@
 {% block content %}
   <section>
     <h3>Viewing OSCE Station (id: {{ osce_station.id }})</h3>
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
     {{ form.author | as_crispy_field }}
 
     <div class="form-group row osce-fields-div">

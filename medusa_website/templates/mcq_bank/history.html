@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block content %}
-  {% include "messages.html" %}
+  {% if messages %}{% include "messages.html" %}{% endif %}
   <h2>Category Progress</h2>
   {% render_table category_progress_table %}
 

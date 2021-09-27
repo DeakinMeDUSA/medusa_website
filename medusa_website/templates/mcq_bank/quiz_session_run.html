@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-  {% include "messages.html" %}
+  {% if messages %}{% include "messages.html" %}{% endif %}
 
   {% crispy form %}
 

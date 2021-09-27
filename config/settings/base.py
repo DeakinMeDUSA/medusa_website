@@ -161,6 +161,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
+    "django.middleware.cache.UpdateCacheMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -172,6 +173,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "medusa_website.utils.custom_middleware.SimpleMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 # STATIC
@@ -329,11 +331,21 @@ ACCOUNT_ADAPTER = "medusa_website.users.adapters.AccountAdapter"
 SOCIALACCOUNT_ADAPTER = "medusa_website.users.adapters.SocialAccountAdapter"
 ACCOUNT_MAX_EMAIL_ADDRESSES = 1
 ACCOUNT_SIGNUP_REDIRECT_URL = "frontend:resources"
+
+### CACHING
+# https://docs.djangoproject.com/en/3.2/ref/settings/#std:setting-CACHE_MIDDLEWARE_ALIAS
+CACHE_MIDDLEWARE_ALIAS = "default"
+CACHE_MIDDLEWARE_KEY_PREFIX = ""
+CACHE_MIDDLEWARE_SECONDS = 60  # in seconds
+
+# MESSAGES
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 # Your stuff...
 # ------------------------------------------------------------------------------
 
 CORS_ALLOW_ALL_ORIGINS = True
-ALLOWED_HOSTS = [""] # Over-ridden in other configs
+ALLOWED_HOSTS = [""]  # Over-ridden in other configs
 APPEND_SLASH = True
 # CORS_ALLOWED_ORIGINS = ("http://localhost:3000",)
 CSRF_TRUSTED_ORIGINS = ["localhost:3000", ".medusa.org.au", ".medusa.org.au", "localhost:8000"]

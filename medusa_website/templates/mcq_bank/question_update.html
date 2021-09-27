@@ -19,7 +19,7 @@
 {% block content %}
   <section>
     <h3>Update Question</h3>
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
     <form action="{% url 'mcq_bank:question_update' id=question.id %}" method="post">
       {% csrf_token %}
       {{ form.author | as_crispy_field }}

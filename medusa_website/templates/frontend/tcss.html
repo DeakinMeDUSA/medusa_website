@@ -13,7 +13,7 @@
 
   <!-- Post -->
   <section>
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
     <header class="major">
       <h1>TCSS Info</h1>
       <p>Travel and Conference Support Scheme (TCSS)</p>

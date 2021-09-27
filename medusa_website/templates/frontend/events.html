@@ -14,7 +14,7 @@
 
   <!-- Post -->
   <section class="">
-    {% include "messages.html" %}
+    {% if messages %}{% include "messages.html" %}{% endif %}
     <header class="major">
       <h1>Events</h1>
       <p><a
