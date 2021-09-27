@@ -73,10 +73,6 @@ def validate_answer_formset(answer_formset: AnswerCreateFormSet) -> Tuple[bool, 
         return True, answer_formset, complete_answer_forms
 
 
-def editable(user: User, question: Question):
-    return user.is_staff or question.author == user
-
-
 class QuestionDetailView(LoginRequiredMixin, DetailView):
     model = Question
     template_name = "mcq_bank/question_detail.html"
@@ -109,7 +105,7 @@ class QuestionDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # context["question"].refresh_from_db()
-        context["editable"] = editable(self.request.user, question=context["question"])
+        context["editable"] = self.get_object().editable(self.request.user)
         context["answer_formset_helper"] = AnswerFormSetHelper()
         if context.get("answer_formset") is None:
             context["answer_formset"] = kwargs.get("answer_formset") or AnswerDetailFormSet(
@@ -151,7 +147,6 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
             updated_question: Question = form.save(commit=False)
             updated_question.author = form.instance.author or orig_author
             updated_question.save()
-            return HttpResponseRedirect(self.get_success_url())
         else:
             return self.form_invalid(form)
 
@@ -178,21 +173,21 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
         return get_object_or_404(queryset, **lookup)
 
     def get_template_names(self):
-        if editable(self.request.user, self.get_object()):
+        if self.get_object().editable(self.request.user):
             self.template_name = "mcq_bank/question_update.html"
         else:
             self.template_name = "mcq_bank/question_detail.html"
         return super(QuestionUpdateView, self).get_template_names()
 
     def get_form_class(self):
-        if self.request.method == "GET" and editable(self.request.user, self.get_object()) is False:
+        if self.request.method == "GET" and self.get_object().editable(self.request.user) is False:
             return QuestionDetailForm
         else:
             return QuestionUpdateForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["editable"] = editable(self.request.user, question=self.get_object())
+        context["editable"] = self.get_object().editable(self.request.user)
         context["question"] = context.get("question") or self.get_object()
 
         context["answer_formset_helper"] = AnswerFormSetHelper()
@@ -341,14 +336,9 @@ class QuestionListTable(tables.Table):
         return truncate_text(record.text, 50)
 
     def render_id(self, value, record: Question):
-        if record.editable(user=self.request.user):
-            return format_html(
-                f'<a href="{reverse("mcq_bank:question_update", kwargs={"id": value})}">Edit question {value}</a>'
-            )
-        else:
-            return format_html(
-                f'<a href="{reverse("mcq_bank:question_detail", kwargs={"id": value})}">View question {value}</a>'
-            )
+        return format_html(
+            f'<a href="{reverse("mcq_bank:question_detail", kwargs={"id": value})}">View/edit question {value}</a>'
+        )
 
     def render_answered(self, value, record: Question):
         return "True" if record.answered else "False"

@@ -158,7 +158,8 @@ class OSCEStation(models.Model):
             return mark_safe("<i>No supporting notes provided</i>")
 
     def editable(self, user: User):
-        return user.is_staff or user.is_superuser or (user == self.author)
+        # return user.is_staff or user.is_superuser or (user == self.author)
+        return True
 
     def get_absolute_url(self):
         return reverse("osce_bank:osce_station_detail", kwargs={"id": self.id})
