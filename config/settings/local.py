@@ -3,7 +3,9 @@ import logging
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
+from medusa_website.utils.general import traces_sampler
 from .base import *  # noqa
 from .base import env
 
@@ -52,23 +54,6 @@ DEBUG_TOOLBAR_CONFIG = {
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 
-# Sentry
-# ------------------------------------------------------------------------------
-# SENTRY_DSN = env("SENTRY_DSN")
-# SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
-#
-# sentry_logging = LoggingIntegration(
-#     level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
-#     event_level=logging.WARNING,  # Send errors as events
-# )
-# integrations = [sentry_logging, DjangoIntegration()]
-# sentry_sdk.init(
-#     dsn=SENTRY_DSN,
-#     integrations=integrations,
-#     environment="development",
-#     traces_sample_rate=env.float("SENTRY_TRACES_SAMPLE_RATE", default=0.0),
-# )
-
 # Your stuff...
 # ------------------------------------------------------------------------------
 CRISPY_FAIL_SILENTLY = False
@@ -85,3 +70,22 @@ CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 
 # CACHING
 CACHE_MIDDLEWARE_SECONDS = 1  # Still check caching behaviour but only 1 sec
+
+#
+# # Sentry
+# # ------------------------------------------------------------------------------
+# SENTRY_DSN = env("SENTRY_DSN")
+# SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
+#
+# sentry_logging = LoggingIntegration(
+#     level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
+#     event_level=logging.WARNING,  # Send errors as events
+# )
+# integrations = [sentry_logging, DjangoIntegration(), RedisIntegration()]
+# sentry_sdk.init(
+#     dsn=SENTRY_DSN,
+#     integrations=integrations,
+#     environment=env("SENTRY_ENVIRONMENT", default="production"),
+#     traces_sampler=traces_sampler,
+#     send_default_pii=True,
+# )
