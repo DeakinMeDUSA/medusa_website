@@ -60,7 +60,5 @@ class MemberRecordsImportAdmin(admin.ModelAdmin):
 class MemberRecordAdmin(admin.ModelAdmin):
     list_display = ["email", "name", "end_date"]
     list_display_links = ["email", "name"]
-    readonly_fields = ("email",)
-
     fields = ["email", "name", "end_date"]
     search_fields = ["email", "name"]
