@@ -3278,6 +3278,10 @@ Test out these customization files live
   max-height: 0;
 }
 
+.modal-backdrop {
+  z-index: unset !important;
+}
+
 /* Wrapper */
 #wrapper {
   -moz-transition: opacity 0.5s ease;

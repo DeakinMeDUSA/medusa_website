@@ -1,0 +1,4 @@
+// Over-rides for various css classes that break the website, usually from bootstrap :(
+.modal-backdrop {
+  z-index: unset !important;
+}
