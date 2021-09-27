@@ -18,11 +18,10 @@
       <li class="{% if url_name == 'publications' %}active{% endif %}">
         <a href="{% url "frontend:publications" %}">Publications</a>
       </li>
+      <li class="{% if url_name == 'resources' %}active{% endif %}">
+        <a href="{% url "frontend:resources" %}">Resources</a>
+      </li>
       {% if request.user.is_authenticated %}
-        <li class="{% if url_name == 'resources' %}active{% endif %}">
-          <a href="{% url "frontend:resources" %}">Resources</a>
-        </li>
-
         <li class="{% if url_name == 'detail' %}active{% endif %}">
           {# URL provided by django-allauth/account/urls.py #}
           <a class="nav-link" href="{% url 'users:detail' request.user.email %}"><i class="fas fa-user"></i>&nbsp;&nbsp;Profile</a>

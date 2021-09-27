@@ -18,21 +18,13 @@
     </div>
 
     {% if object == request.user %}
-      <!-- Action buttons -->
-      {#      <div class="row">#}
 
-      {#        <div class="col-sm-12">#}
       <ul>
         <li><a class="btn btn-primary" href="{% url 'users:update' %}" role="button">Change user details</a></li>
-        <li><a class="btn btn-primary" href="{% url 'account_email' %}" role="button">E-Mail</a></li>
+        <li><a class="btn btn-primary" href="{% url 'account_change_password' %}" role="button">Change password</a></li>
+
         <li><a href="{% url 'account_logout' %}">Sign&nbsp;Out</a></li>
       </ul>
-
-
-      {#        </div>#}
-
-      {#      </div>#}
-      <!-- End Action buttons -->
     {% endif %}
 
 
