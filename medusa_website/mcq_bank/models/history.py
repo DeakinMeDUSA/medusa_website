@@ -120,7 +120,7 @@ class History(models.Model):
     def quiz_sessions(self) -> QuerySet["QuizSession"]:
         return self.user.quiz_sessions.all()
 
-    def answered_questions(self, questions: Optional[QuerySet] = None):
+    def answered_questions(self, questions: Optional[QuerySet] = None) -> QuerySet:
         from medusa_website.mcq_bank.models import Question, Record
 
         questions = questions or Question.objects

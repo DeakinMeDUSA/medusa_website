@@ -25,7 +25,7 @@ from medusa_website.mcq_bank.forms import (
     AnswerDetailFormSet,
     QuizSessionCreateFromQuestionsForm, QuestionMarkFlaggedForm,
 )
-from medusa_website.mcq_bank.models import Question
+from medusa_website.mcq_bank.models import Question, History
 from medusa_website.mcq_bank.utils import CustomBooleanWidget, truncate_text
 from medusa_website.users.models import User
 
@@ -291,10 +291,12 @@ class QuestionListFilter(FilterSet):
     def filter_answered(self, queryset, name, value):
         if self.request:
             user = self.request.user
+            history, created = History.objects.get_or_create(user=user)  # force init of history
+
             if value is True:
-                queryset = queryset.filter(id__in=user.history.answered_questions())
+                queryset = queryset.filter(id__in=history.answered_questions())
             elif value is False:
-                queryset = queryset.exclude(id__in=user.osce_history.completed_stations.all())
+                queryset = queryset.exclude(id__in=history.answered_questions())
             else:  # None
                 queryset = queryset
         return queryset
@@ -342,9 +344,6 @@ class QuestionListTable(tables.Table):
 
     def render_answered(self, value, record: Question):
         return "True" if record.answered else "False"
-
-
-
 
 
 class QuestionListView(LoginRequiredMixin, ListView, tables.SingleTableMixin, FilterView):

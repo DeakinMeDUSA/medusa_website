@@ -178,10 +178,13 @@ class OSCEStationListFilter(FilterSet):
     def filter_completed(self, queryset, name, value):
         if self.request:
             user = self.request.user
+            from medusa_website.osce_bank.models import OSCEHistory # force init of history
+            osce_history, created = OSCEHistory.objects.get_or_create(user=user)  # force init of history
+
             if value is True:
-                queryset = queryset.filter(id__in=user.osce_history.completed_stations.all())
+                queryset = queryset.filter(id__in=osce_history.completed_stations.all())
             elif value is False:
-                queryset = queryset.exclude(id__in=user.osce_history.completed_stations.all())
+                queryset = queryset.exclude(id__in=osce_history.completed_stations.all())
             else:  # None
                 queryset = queryset
         return queryset
