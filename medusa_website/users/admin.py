@@ -69,6 +69,7 @@ class UserAdmin(cuUserAdmin):
     list_display = ["email", "name", "last_login", "date_joined", "is_superuser", "is_staff", "is_medusa"]
     search_fields = ["email", "name"]
     readonly_fields = ["all_emails"]
+    list_filter = ["is_active", "is_staff", "is_superuser", "is_medusa", "groups"]
     actions = [set_staff_status, set_medusa_status, set_name_from_memberlist]
 
 
