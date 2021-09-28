@@ -9,6 +9,7 @@ from martor.models import MartorField
 from memoize import memoize
 
 from medusa_website.mcq_bank.models.category import Category
+from medusa_website.mcq_bank.utils import truncate_text
 from medusa_website.users.models import User
 
 
@@ -57,14 +58,13 @@ class Question(models.Model):
     )
     flagged_message = models.TextField(null=True, blank=True, help_text="Explanation for why the question was flagged.")
 
-
     is_reviewed = models.BooleanField(default=False, help_text="If True, has been reviewed by a staff or admin")
     reviewed_by = models.ForeignKey(
         User, related_name="reviewed_questions", on_delete=models.PROTECT, blank=True, null=True
     )
 
-    def __str__(self):
-        return self.text
+    def __repr__(self):
+        return fr"<Question id: {self.id}, author: '{self.author}', text: '{truncate_text(self.text)}'"
 
     @classmethod
     def create_with_auth(cls, question_text: str, author: User, image: Union[bytes, str], category: str):
