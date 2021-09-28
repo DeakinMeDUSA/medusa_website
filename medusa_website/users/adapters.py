@@ -6,6 +6,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.http import HttpRequest
+from nameparser import HumanName
 
 from medusa_website.users.validators import CustomEmailValidator
 
@@ -29,6 +30,32 @@ class AccountAdapter(DefaultAccountAdapter):
             raise forms.ValidationError(errmsg)
         return email
 
+    def save_user(self, request, user, form, commit=True):
+        """
+        Saves a new `User` instance using information provided in the
+        signup form.
+        """
+        from medusa_website.users.models import User
+        from medusa_website.users.models import MemberRecord
+
+        user: User = super(AccountAdapter, self).save_user(request, user, form, commit=False)
+
+        # Try to get first and last name's from MemberRecords
+        try:
+            member_record = MemberRecord.objects.get(email=user.email)
+            member_name = HumanName(member_record.name)
+            member_name.capitalize(force=True)
+            user.name = member_name
+        except MemberRecord.DoesNotExist:
+            pass
+
+        user_part, domain_part = user.email.rsplit("@", 1)
+        if domain_part == "medusa.org.au":
+            user.is_medusa = True
+
+        if commit:
+            user.save()
+        return user
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def is_open_for_signup(self, request: HttpRequest, sociallogin: Any):

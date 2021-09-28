@@ -3,7 +3,7 @@
 from django.contrib import admin
 from imagekit.admin import AdminThumbnail
 
-from .models import Answer, Category, History, Question, Record
+from .models import Answer, Category, History, Question, Record, QuizSession
 
 
 class AnswerInline(admin.TabularInline):
@@ -51,6 +51,13 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Record)
 class RecordAdmin(admin.ModelAdmin):
     search_fields = ("user",)
+
+
+@admin.register(QuizSession)
+class QuizSessionAdmin(admin.ModelAdmin):
+    search_fields = ("user", "id")
+    list_display = ["id", "user", "started", "finished", "complete"]
+    list_filter = ["user", "started", "finished", "complete"]
 
 
 @admin.register(History)

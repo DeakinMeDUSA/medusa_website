@@ -3,28 +3,66 @@ from itertools import islice
 import openpyxl
 import pandas as pd
 from allauth.account.models import EmailAddress
-from cuser.models import AbstractCUser, CUser
+from cuser.models import AbstractCUser, CUser, CUserManager
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+from django.core.mail import send_mail
 from django.db import models
-from django.db.models import CharField, EmailField, IntegerField, ManyToManyField
+from django.db.models import CharField, EmailField, ManyToManyField
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
 
 
-class User(AbstractCUser):
+class User(AbstractBaseUser, PermissionsMixin):
     """Default user for MeDUSA Website."""
 
-    #: First and last name do not cover name patterns around the globe
-    name = CharField(_("Name of User"), blank=True, max_length=255)
-    graduation_year = IntegerField(verbose_name="Year of Graduation", null=True, blank=True)
+    email = models.EmailField(
+        "Email address",
+        unique=True,
+        error_messages={
+            'unique': "A user with that email address already exists.",
+        },
+    )
+    # First and last name do not cover name patterns around the globe
+    name = CharField("Name of User", blank=True, max_length=255)
 
-    REQUIRED_FIELDS = ["name", "graduation_year"]
+    is_staff = models.BooleanField(
+        "Staff status",
+        default=False,
+        help_text='Designates whether the user can log into this admin site.',
+    )
+    is_active = models.BooleanField(
+        "Active",
+        default=True,
+        help_text="Designates whether this user should be treated as active. "
+                  "Unselect this instead of deleting accounts.",
+    )
+    is_medusa = models.BooleanField(
+        "Is a medusa.org.au user",
+        default=False,
+        help_text="Designates whether this user is associated with a medusa.org.au email address.",
+    )
+
+    date_joined = models.DateTimeField("Date joined", default=timezone.now)
+
+    objects = CUserManager()
+
+    EMAIL_FIELD = 'email'
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ["name"]
+
+    def clean(self):
+        super().clean()
+        self.email = self.__class__.objects.normalize_email(self.email)
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        """Send an email to this user."""
+        send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def get_absolute_url(self):
         """Get url for user's detail view.
-
         Returns:
             str: URL for user detail.
-
         """
         return reverse("users:detail", kwargs={"email": self.email})
 
@@ -47,6 +85,8 @@ class User(AbstractCUser):
         return EmailAddress.objects.filter(user=self).all()
 
 
+
+
 class MemberRecord(models.Model):
     email = EmailField(primary_key=True, unique=True)
     name = CharField(blank=True, null=True, max_length=256)
@@ -62,7 +102,7 @@ class MemberRecordsImport(models.Model):
     """Represents a membership record from the DUSA exports"""
 
     members = ManyToManyField(MemberRecord, blank=True, related_name="member_record_imports")
-    import_dt = models.DateTimeField(_("import time"), auto_now_add=True)
+    import_dt = models.DateTimeField("Import time", auto_now_add=True)
     report_date = models.DateField(help_text="Date the report was generated", unique=True)
     file = models.FileField(upload_to="dusa_reports/%Y", null=True, blank=True)
 

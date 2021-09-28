@@ -22,7 +22,7 @@ user_detail_view = UserDetailView.as_view()
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
-    fields = ["name", "email", "graduation_year"]
+    fields = ["name", "email"]
 
     def get_success_url(self):
         return reverse("users:detail", kwargs={"email": self.request.user.email})
