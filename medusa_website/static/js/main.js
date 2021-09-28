@@ -248,9 +248,15 @@
     var resultDiv = $('.subcommittee-result')
     var toggleDiv = $(divToggleId)
 
-    var addAndShowResult = function (){
+    var addAndShowResult = function () {
       resultDiv.removeClass('empty')
-      resultDiv[0].replaceChildren(toggleDiv.clone()[0]) // Make sure to clone so we keep the original DOM
+      if (resultDiv[0].hasChildNodes()) {
+        if (resultDiv[0].children[0] !== undefined) {
+          resultDiv[0].children[0].remove()
+
+        }
+      }
+      resultDiv[0].appendChild(toggleDiv.clone()[0])
       resultDiv.show()
       resultDiv.children().animate({ opacity: 'toggle', height: 'toggle' }, '500')
     }
@@ -274,15 +280,14 @@
 
   })
 
-  $('.js-captcha-refresh').click(function(){
-      $form = $(this).parents('form');
+  $('.js-captcha-refresh').click(function () {
+    $form = $(this).parents('form')
 
-      $.getJSON($(this).data('url'), {}, function(json) {
-          // This should update your captcha image src and captcha hidden input
-      });
+    $.getJSON($(this).data('url'), {}, function (json) {
+      // This should update your captcha image src and captcha hidden input
+    })
 
-      return false;
-  });
-
+    return false
+  })
 
 })(jQuery)
