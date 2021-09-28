@@ -383,8 +383,6 @@ class QuestionMarkReviewedView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super(QuestionMarkReviewedView, self).get_context_data(**kwargs)
         user = self.request.user
-        assert (user.is_staff or user.is_superuser), "User is not staff or superuser!"
-
         return context
 
     def post(self, request, *args, **kwargs):
@@ -410,7 +408,6 @@ class QuestionMarkFlaggedView(LoginRequiredMixin, UpdateView, FormView):
     def get_context_data(self, **kwargs):
         context = super(QuestionMarkFlaggedView, self).get_context_data(**kwargs)
         user = self.request.user
-        assert (user.is_staff or user.is_superuser), "User is not staff or superuser!"
         return context
 
     def get(self, request, *args, **kwargs):

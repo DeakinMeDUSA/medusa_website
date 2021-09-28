@@ -274,9 +274,6 @@ class OSCEStationMarkReviewedView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(OSCEStationMarkReviewedView, self).get_context_data(**kwargs)
-        user = self.request.user
-        assert (user.is_staff or user.is_superuser), "User is not staff or superuser!"
-
         return context
 
     def post(self, request, *args, **kwargs):
@@ -302,7 +299,6 @@ class OSCEStationMarkFlaggedView(LoginRequiredMixin, UpdateView, FormView):
     def get_context_data(self, **kwargs):
         context = super(OSCEStationMarkFlaggedView, self).get_context_data(**kwargs)
         user = self.request.user
-        assert (user.is_staff or user.is_superuser), "User is not staff or superuser!"
         return context
 
     def get(self, request, *args, **kwargs):
