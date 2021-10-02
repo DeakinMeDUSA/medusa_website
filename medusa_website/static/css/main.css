@@ -2961,6 +2961,17 @@ button.fc-button.fc-button-primary.fc-next-button, button.fc-button.fc-button-pr
   border-radius: 0 !important;
 }
 
+.flagged_message_div {
+  color: #000000;
+  background-color: #ffd7bf;
+  box-sizing: border-box;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
 .osce-start-button {
   padding: 0 2rem !important;
   margin-bottom: 1rem;

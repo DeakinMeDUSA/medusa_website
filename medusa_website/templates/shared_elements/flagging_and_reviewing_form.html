@@ -1,0 +1,19 @@
+{% load crispy_forms_filters %}
+{% if not user.is_reviewer %}
+  <i>Only reviewers can edit this section, if you would like to become a reviewer, contact it@medusa.org.au</i>
+{% endif %}
+<div class="form-group row mcq-fields-div">
+  <div class="form-group col-md-6 mb-0">
+    <div class="form-group row mcq-fields-div" style="align-items: center">
+      {{ form.is_reviewed | as_crispy_field:"generic" }}
+      {{ form.reviewed_by | as_crispy_field:"generic" }}
+    </div>
+    <div class="form-group row mcq-fields-div" style="align-items: center">
+      {{ form.is_flagged | as_crispy_field:"generic" }}
+      {{ form.flagged_by | as_crispy_field:"generic" }}
+    </div>
+  </div>
+  <div class="form-group col-md-6 mb-0">
+    {{ form.flagged_message | as_crispy_field:"generic" }}
+  </div>
+</div>

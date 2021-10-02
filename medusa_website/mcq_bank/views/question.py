@@ -83,14 +83,8 @@ class QuestionDetailView(LoginRequiredMixin, DetailView):
 
     #
     def get(self, request, *args, **kwargs):
-
         self.object = self.get_object()
         form = self.get_form(instance=self.object)
-
-        author_change_permission = request.user.is_staff or request.user.is_superuser
-        if author_change_permission is False and form.fields.get("author") is not None:
-            form.fields["author"].disabled = True
-
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
@@ -131,6 +125,14 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
         if author_change_permission is False and form.fields.get("author") is not None:
             form.fields["author"].disabled = True
 
+        if not request.user.is_reviewer():
+            form.fields["author"].disabled = True
+            form.fields["is_flagged"].disabled = True
+            form.fields["flagged_by"].disabled = True
+            form.fields["flagged_message"].disabled = True
+            form.fields["is_reviewed"].disabled = True
+            form.fields["reviewed_by"].disabled = True
+
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
@@ -157,7 +159,7 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
 
         return self.formset_valid(form, answer_formset)
 
-    def get_object(self, queryset=None):
+    def get_object(self, queryset=None) -> Question:
         """
         Returns the object the view is displaying.
         """
@@ -189,6 +191,7 @@ class QuestionUpdateView(LoginRequiredMixin, UpdateView):
         context = super().get_context_data(**kwargs)
         context["editable"] = self.get_object().editable(self.request.user)
         context["question"] = context.get("question") or self.get_object()
+        context["user"] = self.request.user
 
         context["answer_formset_helper"] = AnswerFormSetHelper()
         if context.get("answer_formset") is None:
@@ -376,13 +379,9 @@ class QuestionListView(LoginRequiredMixin, ListView, tables.SingleTableMixin, Fi
 class QuestionMarkReviewedView(LoginRequiredMixin, UpdateView):
     model = Question
     context_object_name = "question"
+    object_name_formatted = "Question"
     lookup_field = "id"
     fields = ["id"]
-
-    def get_context_data(self, **kwargs):
-        context = super(QuestionMarkReviewedView, self).get_context_data(**kwargs)
-        user = self.request.user
-        return context
 
     def post(self, request, *args, **kwargs):
         self.object: Question = self.get_object()
@@ -390,9 +389,8 @@ class QuestionMarkReviewedView(LoginRequiredMixin, UpdateView):
         self.object.reviewed_by = user
         self.object.is_reviewed = True
         self.object.save()
-
-        messages.add_message(self.request, messages.INFO, f"Question marked as reviewed by '{user.name}'")
-
+        messages.add_message(self.request, messages.INFO,
+                             f"{self.object_name_formatted} marked as reviewed by '{user.name}'")
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -400,14 +398,10 @@ class QuestionMarkFlaggedView(LoginRequiredMixin, UpdateView, FormView):
     model = Question
     template_name = "mcq_bank/question_mark_flagged.html"
     context_object_name = "question"
+    object_name_formatted = "Question"
     lookup_field = "id"
     form_class = QuestionMarkFlaggedForm
     fields = ["id"]
-
-    def get_context_data(self, **kwargs):
-        context = super(QuestionMarkFlaggedView, self).get_context_data(**kwargs)
-        user = self.request.user
-        return context
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -417,11 +411,10 @@ class QuestionMarkFlaggedView(LoginRequiredMixin, UpdateView, FormView):
 
     def form_valid(self, form):
         # self.object = form.save()
-        self.object: Question = self.get_object()
+        self.object = self.get_object()
         user: User = self.request.user
         self.object.flagged_by = user
         self.object.is_flagged = True
         self.object.flagged_message = form.cleaned_data["flagged_message"]
         self.object.save()
-        messages.add_message(self.request, messages.INFO, f"Question marked as flagged by '{user.name}'")
         return HttpResponseRedirect(self.get_success_url())

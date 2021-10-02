@@ -67,3 +67,15 @@
     }
   }
 }
+
+.flagged_message_div {
+  color: #000000;
+  background-color: #ffd7bf;
+  //border: 1px solid black;
+  box-sizing: border-box;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  font-style: italic;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+}

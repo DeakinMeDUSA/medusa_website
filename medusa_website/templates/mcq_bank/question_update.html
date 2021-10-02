@@ -31,28 +31,13 @@
         <div class="form-group col-md-6 mb-0">{{ form.answer_image | as_crispy_field:"generic" }}</div>
       </div>
 
-      <hr style="border: black 1px solid">
-
-      <div class="form-group row mcq-fields-div">
-        <div class="form-group col-md-6 mb-0">
-          <div class="form-group row mcq-fields-div" style="align-items: end">
-            {{ form.is_reviewed | as_crispy_field:"generic" }}
-            {{ form.reviewed_by | as_crispy_field:"generic" }}
-          </div>
-          <div class="form-group row mcq-fields-div" style="align-items: end">
-            {{ form.is_flagged | as_crispy_field:"generic" }}
-            {{ form.flagged_by | as_crispy_field:"generic" }}
-          </div>
-        </div>
-        <div class="form-group col-md-6 mb-0">
-          {{ form.flagged_message | as_crispy_field:"generic" }}
-        </div>
-      </div>
-      <hr style="border: black 1px solid">
+      {% include "shared_elements/hr_thick.html" %}
+      {% include "shared_elements/flagging_and_reviewing_form.html" %}
+      {% include "shared_elements/hr_thick.html" %}
 
       {{ form.text | as_crispy_field }}
       {{ form.explanation|as_crispy_field }}
-      <hr style="border: black 1px solid">
+      {% include "shared_elements/hr_thick.html" %}
 
       <h4>Answers</h4>
       <p>Provide at least two answers, and leave any un-needed answer fields blank.</p>
@@ -61,12 +46,24 @@
       <table>
         {% crispy answer_formset answer_formset_helper %}
       </table>
-
       <button type="button" class="button" value="Add more answers" id="add-answer"
               style="margin-bottom: 15px">Add more answers
       </button>
-      <div class="buttonHolder">
-        <input type="submit" name="submit" value="Update" class="button">
+      {% include "shared_elements/hr_thick.html" with margin_bottom="2rem" %}
+
+      <div class="row">
+        <div class="col-md-4 mb-0">
+          <input type="submit" name="submit" value="Update" class="button">
+        </div>
+        {% if user.is_reviewer and not question.is_reviewed %}
+          <div class="col-md-4 mb-0">
+            <form method="POST" action="{% url 'mcq_bank:question_mark_reviewed' question.id %}">
+              {% csrf_token %}
+              <input id="question" type="hidden" name="question" value="{{ question.id }}">
+              <input class="button" type="submit" name="action" value="Mark as reviewed"/>
+            </form>
+          </div>
+        {% endif %}
       </div>
     </form>
   </section>

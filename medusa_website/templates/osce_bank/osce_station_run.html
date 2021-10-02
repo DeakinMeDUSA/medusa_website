@@ -13,6 +13,9 @@
     <h2>{{ osce_station.title }}</h2>
     {% if messages %}{% include "messages.html" %}{% endif %}
     <hr>
+    {% if osce_station.is_flagged %}
+      {% include "shared_elements/is_flagged_notice.html" with flag_message=osce_station.flagged_message %}
+    {% endif %}
     <div class="osce-stem">
       <h2>Stem:</h2>
       <!-- OSCE Stem and image -->

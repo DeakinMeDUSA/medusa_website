@@ -111,7 +111,7 @@ class OSCEStationCreateForm(ModelForm):
 class OSCEStationUpdateForm(OSCEStationCreateForm):
     class Meta:
         model = OSCEStation
-        fields = ["title", "level", "types", "specialities", "stem", "patient_script", "marking_guide",
+        fields = ["title", "author", "level", "types", "specialities", "stem", "patient_script", "marking_guide",
                   "supporting_notes", "stem_image", "marking_guide_image", "supporting_notes_image",
                   "is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]
 

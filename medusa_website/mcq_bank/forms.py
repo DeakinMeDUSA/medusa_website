@@ -46,22 +46,6 @@ class QuestionDetailForm(ModelForm):
     question_image = forms.ImageField(label="Question Image", disabled=True, widget=ImageDisplayWidget)
     answer_image = forms.ImageField(label="Answer Image", disabled=True, widget=ImageDisplayWidget)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields.values():
-            field.disabled = True
-            field.help_text = None
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Field("author", readonly=True),
-            Field("text", readonly=True),
-            Field("category", readonly=True),
-            Field("image", readonly=True),
-            Field("explanation", readonly=True),
-            Field("randomise_answer_order", readonly=True),
-        )
-        for fieldname in ["is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]:
-            self.fields[fieldname].help_text = None
 
 
 class QuestionUpdateForm(ModelForm):

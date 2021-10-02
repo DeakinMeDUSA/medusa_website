@@ -1,0 +1,9 @@
+<!--
+A thicker horizontal line seperator with thinner margins than default
+Useful in forms
+-->
+<hr style="
+  border: black 1px solid;
+  margin-bottom: {% if margin_bottom %}{{ margin_bottom }}{% else %}0.5rem{% endif %};
+  margin-top: 0.5rem;
+  ">

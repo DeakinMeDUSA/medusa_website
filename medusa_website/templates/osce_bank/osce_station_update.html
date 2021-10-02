@@ -25,8 +25,19 @@
     {% csrf_token %}
     <div class="form-group row osce-fields-div">
       <div class="form-group col-md-6 mb-0">
-        {{ form.title | as_crispy_field:"generic" }}
-        {{ form.level | as_crispy_field:"generic" }}
+        <div class="form-group row" style="width: 100%">
+          <div class="form-group col-md-12 mb-0">
+            {{ form.title | as_crispy_field }}
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="form-group col-md-6 mb-0">
+            {{ form.level | as_crispy_field:"generic" }}
+          </div>
+          <div class="form-group col-md-6 mb-0">
+            {{ form.author | as_crispy_field }}
+          </div>
+        </div>
 
       </div>
       <div class="form-group col-md-6 mb-0">
@@ -41,24 +52,9 @@
       </div>
     </div>
 
-    <hr style="border: black 1px solid">
-    <div class="form-group row osce-fields-div">
-
-      <div class="form-group col-md-6 mb-0">
-        <div class="form-group row osce-fields-div" style="align-items: end">
-          {{ form.is_reviewed | as_crispy_field:"generic" }}
-          {{ form.reviewed_by | as_crispy_field:"generic" }}
-        </div>
-        <div class="form-group row osce-fields-div" style="align-items: end">
-          {{ form.is_flagged | as_crispy_field:"generic" }}
-          {{ form.flagged_by | as_crispy_field:"generic" }}
-        </div>
-      </div>
-      <div class="form-group col-md-6 mb-0">
-        {{ form.flagged_message | as_crispy_field:"generic" }}
-      </div>
-    </div>
-    <hr style="border: black 1px solid">
+    {% include "shared_elements/hr_thick.html" %}
+    {% include "shared_elements/flagging_and_reviewing_form.html" %}
+    {% include "shared_elements/hr_thick.html" %}
 
 
     {{ form.stem | as_crispy_field }}
@@ -70,13 +66,24 @@
       <div class="form-group col-md-4 mb-0">{{ form.stem_image | as_crispy_field }}</div>
       <div class="form-group col-md-4 mb-0">{{ form.marking_guide_image | as_crispy_field }}</div>
       <div class="form-group col-md-4 mb-0">{{ form.supporting_notes_image | as_crispy_field }}</div>
-
     </div>
 
-    <div class="buttonHolder">
-
-      <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+    <div class="row">
+      <div class="col-md-4 mb-0">
+        <input type="submit" name="submit" value="Update" class="btn btn-primary">
+      </div>
+      {% if user.is_reviewer and not osce_station.is_reviewed %}
+        <div class="col-md-4 mb-0">
+          <form method="POST" action="{% url 'osce_bank:osce_station_mark_reviewed' osce_station.id %}">
+            {% csrf_token %}
+            <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
+            <input class="button" type="submit" name="action" value="Mark as reviewed"/>
+          </form>
+        </div>
+      {% endif %}
     </div>
+
+
   </form>
 {% endblock %}
 

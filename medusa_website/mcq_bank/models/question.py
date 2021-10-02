@@ -183,3 +183,6 @@ class Question(models.Model):
     def editable(self, user: User):
         # return user.is_staff or user.is_superuser or (user == self.author)
         return True
+
+    def reviewable(self, user: User):
+        return user.is_staff or user.is_superuser

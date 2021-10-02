@@ -2,7 +2,6 @@ import logging
 
 import django_tables2 as tables
 from django import forms
-from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
@@ -10,9 +9,10 @@ from django.urls import reverse
 from django.utils.html import format_html
 from django_filters import FilterSet, ModelChoiceFilter, ModelMultipleChoiceFilter, BooleanFilter
 from django_filters.views import FilterView
-from vanilla import ListView, UpdateView, CreateView, DetailView, FormView
+from vanilla import ListView, UpdateView, CreateView, DetailView
 
 from medusa_website.mcq_bank.utils import CustomBooleanWidget
+from medusa_website.mcq_bank.views import QuestionMarkFlaggedView, QuestionMarkReviewedView
 from medusa_website.osce_bank.forms import OSCEStationDetailForm, OSCEStationUpdateForm, OSCEStationCreateForm, \
     OSCEStationMarkFlaggedForm
 from medusa_website.osce_bank.models import OSCEStation, StationType, Speciality
@@ -73,6 +73,14 @@ class OSCEStationUpdateView(LoginRequiredMixin, UpdateView):
         if author_change_permission is False and form.fields.get("author") is not None:
             form.fields["author"].disabled = True
 
+        if not request.user.is_reviewer():
+            form.fields["author"].disabled = True
+            form.fields["is_flagged"].disabled = True
+            form.fields["flagged_by"].disabled = True
+            form.fields["flagged_message"].disabled = True
+            form.fields["is_reviewed"].disabled = True
+            form.fields["reviewed_by"].disabled = True
+
         context = self.get_context_data(form=form)
         return self.render_to_response(context)
 
@@ -113,6 +121,8 @@ class OSCEStationUpdateView(LoginRequiredMixin, UpdateView):
         osce_station: OSCEStation = self.get_object()
         context["editable"] = osce_station.editable(self.request.user)
         context["osce_station"] = osce_station
+        context["user"] = self.request.user
+
         return context
 
     def fix_missing_author(self, form):
@@ -170,7 +180,6 @@ class OSCEStationListFilter(FilterSet):
     is_reviewed = BooleanFilter(field_name="is_reviewed", label="Is reviewed", widget=CustomBooleanWidget)
     is_flagged = BooleanFilter(field_name="is_flagged", label="Is flagged", widget=CustomBooleanWidget)
 
-
     # def __init__(self, *args, **kwargs):
     #     super(OSCEStationListFilter, self).__init__()
     #     if kwargs.get("request")
@@ -178,7 +187,7 @@ class OSCEStationListFilter(FilterSet):
     def filter_completed(self, queryset, name, value):
         if self.request:
             user = self.request.user
-            from medusa_website.osce_bank.models import OSCEHistory # force init of history
+            from medusa_website.osce_bank.models import OSCEHistory  # force init of history
             osce_history, created = OSCEHistory.objects.get_or_create(user=user)  # force init of history
 
             if value is True:
@@ -269,54 +278,20 @@ class OSCEStationListEditView(OSCEStationListView):
         return context
 
 
-class OSCEStationMarkReviewedView(LoginRequiredMixin, UpdateView):
+class OSCEStationMarkReviewedView(QuestionMarkReviewedView):
     model = OSCEStation
     context_object_name = "osce_station"
+    object_name_formatted = "OSCE Station"
     lookup_field = "id"
     fields = ["id"]
 
-    def get_context_data(self, **kwargs):
-        context = super(OSCEStationMarkReviewedView, self).get_context_data(**kwargs)
-        return context
 
-    def post(self, request, *args, **kwargs):
-        self.object: OSCEStation = self.get_object()
-        user: User = request.user
-        self.object.reviewed_by = user
-        self.object.is_reviewed = True
-        self.object.save()
-
-        messages.add_message(self.request, messages.INFO, f"OSCE Station marked as reviewed by '{user.name}'")
-
-        return HttpResponseRedirect(self.get_success_url())
-
-
-class OSCEStationMarkFlaggedView(LoginRequiredMixin, UpdateView, FormView):
+class OSCEStationMarkFlaggedView(QuestionMarkFlaggedView):
     model = OSCEStation
     template_name = "osce_bank/osce_station_mark_flagged.html"
     context_object_name = "osce_station"
+    object_name_formatted = "OSCE Station"
+
     lookup_field = "id"
     form_class = OSCEStationMarkFlaggedForm
     fields = ["id"]
-
-    def get_context_data(self, **kwargs):
-        context = super(OSCEStationMarkFlaggedView, self).get_context_data(**kwargs)
-        user = self.request.user
-        return context
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.get_form(instance=self.object)
-        context = self.get_context_data(form=form)
-        return self.render_to_response(context)
-
-    def form_valid(self, form):
-        # self.object = form.save()
-        self.object: OSCEStation = self.get_object()
-        user: User = self.request.user
-        self.object.flagged_by = user
-        self.object.is_flagged = True
-        self.object.flagged_message = form.cleaned_data["flagged_message"]
-        self.object.save()
-        messages.add_message(self.request, messages.INFO, f"OSCE Station marked as flagged by '{user.name}'")
-        return HttpResponseRedirect(self.get_success_url())

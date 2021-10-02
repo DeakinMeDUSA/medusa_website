@@ -15,6 +15,9 @@
       <div class="col-8">
 
         {% if question %}
+          {% if question.is_flagged %}
+            {% include "shared_elements/is_flagged_notice.html" with flag_message=question.flagged_message %}
+          {% endif %}
           <div class="question-toanswer">
             {% if session %}
               <div style="float: right;">
@@ -75,6 +78,17 @@
                    href="{% url "mcq_bank:quiz_session_complete" id=session.id %}"> Complete Quiz</a>
               {% endif %}
             </div>
+          {% else %}
+            <!-- If not in a session, show review button if required -->
+            {% if user.is_reviewer and not osce_station.is_reviewed %}
+              <div class="col col-lg-auto">
+                <form method="POST" action="{% url 'mcq_bank:question_mark_reviewed' question.id %}">
+                  {% csrf_token %}
+                  <input id="question" type="hidden" name="question" value="{{ question.id }}">
+                  <input class="button" type="submit" name="action" value="Mark as reviewed"/>
+                </form>
+              </div>
+            {% endif %}
           {% endif %}
 
         </div>

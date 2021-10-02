@@ -1,5 +1,6 @@
 from cuser.admin import UserAdmin as cuUserAdmin
 from django.contrib import admin
+from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.translation import gettext_lazy as _
 from nameparser import HumanName
@@ -20,6 +21,14 @@ def set_medusa_status(modeladmin, request, queryset: QuerySet[User]):
     for user in queryset:
         user.is_medusa = True
         user.save()
+
+
+@admin.action(description="Set selected users to be in the Reviewers group")
+def set_reviewer_status(modeladmin, request, queryset: QuerySet[User]):
+    reviewers_group = Group.objects.get(name="ContentReviewers")
+    for user in queryset:
+        reviewers_group.user_set.add(user)
+    reviewers_group.save()
 
 
 @admin.action(description="Set user's name from memberlist if member record exists")
@@ -66,11 +75,15 @@ class UserAdmin(cuUserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    list_display = ["email", "name", "last_login", "date_joined", "is_superuser", "is_staff", "is_medusa"]
+    list_display = ["email", "name", "last_login", "date_joined", "is_superuser", "is_staff", "is_medusa",
+                    "groups_list"]
     search_fields = ["email", "name"]
     readonly_fields = ["all_emails"]
     list_filter = ["is_active", "is_staff", "is_superuser", "is_medusa", "groups"]
-    actions = [set_staff_status, set_medusa_status, set_name_from_memberlist]
+    actions = [set_staff_status, set_medusa_status, set_name_from_memberlist, set_reviewer_status]
+
+    def groups_list(self, obj):
+        return ", ".join([g.name for g in obj.groups.all()])
 
 
 @admin.register(MemberRecordsImport)

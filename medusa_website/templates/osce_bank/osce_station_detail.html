@@ -21,6 +21,9 @@
     {% if messages %}{% include "messages.html" %}{% endif %}
     <h3>Viewing OSCE Station (id: {{ osce_station.id }})</h3>
     <!-- Edit / Flag / review buttons -->
+    {% if osce_station.is_flagged %}
+      {% include "shared_elements/is_flagged_notice.html" with flag_message=osce_station.flagged_message %}
+    {% endif %}
     <div class="row" style="display: flex; justify-content: space-around">
       {% if editable %}
         <div class="buttonHolder">
@@ -38,16 +41,14 @@
         </div>
       {% endif %}
 
-      {% if user.is_staff or user.is_superuser %}
-        {% if not osce_station.is_reviewed %}
-          <div class="col col-lg-auto">
-            <form method="POST" action="{% url 'osce_bank:osce_station_mark_reviewed' osce_station.id %}">
-              {% csrf_token %}
-              <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
-              <input class="button" type="submit" name="action" value="Mark as reviewed"/>
-            </form>
-          </div>
-        {% endif %}
+      {% if user.is_reviewer and not osce_station.is_reviewed %}
+        <div class="col col-lg-auto">
+          <form method="POST" action="{% url 'osce_bank:osce_station_mark_reviewed' osce_station.id %}">
+            {% csrf_token %}
+            <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
+            <input class="button" type="submit" name="action" value="Mark as reviewed"/>
+          </form>
+        </div>
       {% endif %}
     </div>
     {{ form.author | as_crispy_field }}
@@ -70,7 +71,7 @@
       </div>
     </div>
 
-    <hr style="border: black 1px solid">
+    {% include "shared_elements/hr_thick.html" %}
     <div class="form-group row osce-fields-div">
 
       <div class="form-group col-md-6 mb-0">
@@ -87,21 +88,21 @@
         {{ form.flagged_message | as_crispy_field:"generic" }}
       </div>
     </div>
-    <hr style="border: black 1px solid">
+    {% include "shared_elements/hr_thick.html" %}
 
     {{ form.stem | as_crispy_field }}
     {{ form.stem_image | as_crispy_field }}
-    <hr style="border: black 1px solid">
+    {% include "shared_elements/hr_thick.html" %}
 
 
     {{ form.patient_script | as_crispy_field }}
-    <hr style="border: black 1px solid">
+    {% include "shared_elements/hr_thick.html" %}
     {{ form.marking_guide | as_crispy_field }}
     {{ form.marking_guide_image | as_crispy_field }}
-    <hr style="border: black 1px solid">
+    {% include "shared_elements/hr_thick.html" %}
     {{ form.supporting_notes | as_crispy_field }}
     {{ form.supporting_notes_image | as_crispy_field }}
-    <hr style="border: black 1px solid">
+    {% include "shared_elements/hr_thick.html" %}
 
     <div class="row" style="display: flex; justify-content: space-around">
       {% if editable %}
@@ -120,16 +121,14 @@
         </div>
       {% endif %}
 
-      {% if user.is_staff or user.is_superuser %}
-        {% if not osce_station.is_reviewed %}
-          <div class="col col-lg-auto">
-            <form method="POST" action="{% url 'osce_bank:osce_station_mark_reviewed' osce_station.id %}">
-              {% csrf_token %}
-              <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
-              <input class="button" type="submit" name="action" value="Mark as reviewed"/>
-            </form>
-          </div>
-        {% endif %}
+      {% if user.is_reviewer and not osce_station.is_reviewed %}
+        <div class="col col-lg-auto">
+          <form method="POST" action="{% url 'osce_bank:osce_station_mark_reviewed' osce_station.id %}">
+            {% csrf_token %}
+            <input id="osce_station" type="hidden" name="osce_station" value="{{ osce_station.id }}">
+            <input class="button" type="submit" name="action" value="Mark as reviewed"/>
+          </form>
+        </div>
       {% endif %}
     </div>
   </section>
