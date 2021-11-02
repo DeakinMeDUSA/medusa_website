@@ -1,6 +1,7 @@
 name: Deploy
 on:
   [ push,  pull_request ]
+if: github.ref == 'refs/heads/main'
 jobs:
   deploy_ssh:
     runs-on: ubuntu-latest
