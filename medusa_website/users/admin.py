@@ -7,6 +7,7 @@ from nameparser import HumanName
 
 from medusa_website.users.forms import UserChangeForm, UserCreationForm
 from .models import MemberRecord, MemberRecordsImport, User
+from .models.contribution import Contribution
 
 
 @admin.action(description="Set selected users to staff (is_staff = True)")
@@ -100,3 +101,13 @@ class MemberRecordAdmin(admin.ModelAdmin):
     list_display_links = ["email", "name"]
     fields = ["email", "name", "end_date"]
     search_fields = ["email", "name"]
+
+
+@admin.register(Contribution)
+class ContributionAdmin(admin.ModelAdmin):
+    list_display = ["user", "contrib_type", "title", "completed_date", "submitted_date", "reviewed_by", "is_reviewed"]
+    list_display_links = ["user", "reviewed_by"]
+    list_filter = ["contrib_type", "reviewed_by", "is_reviewed"]
+    fields = ["user", "contrib_type", "title", "completed_date", "submitted_date", "reviewed_by", "is_reviewed"]
+    search_fields = ["user", "title"]
+    readonly_fields = ["submitted_date"]

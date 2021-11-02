@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 from django.db import IntegrityError
 
-from medusa_website.org_chart.models import SubCommittee, CommitteeMember
+from medusa_website.org_chart.models import SubCommittee, CommitteePosition
 
 EXCEL_FILE = Path(r"I:\GitHub\medusa_website\medusa_website\org_chart\OrgChart.xlsx")
 assert EXCEL_FILE.exists()
@@ -30,7 +30,7 @@ for mem_raw in all_people:
     except SubCommittee.DoesNotExist as exc:
         print(f"Could not create Member due to SubCommittee.DoesNotExist {mem_raw}")
         raise exc
-    member = CommitteeMember(**mem_raw.__dict__)
+    member = CommitteePosition(**mem_raw.__dict__)
     try:
         member.save()
     except IntegrityError:

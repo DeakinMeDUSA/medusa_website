@@ -2,11 +2,11 @@
 
 from django.contrib import admin
 
-from .models import CommitteeMember, SubCommittee
+from .models import CommitteePosition, SubCommittee
 
 
 class CommitteeMemberInline(admin.TabularInline):
-    model = CommitteeMember
+    model = CommitteePosition
 
 
 @admin.register(SubCommittee)
@@ -18,7 +18,7 @@ class SubCommitteeAdmin(admin.ModelAdmin):
     inlines = [CommitteeMemberInline]
 
 
-@admin.register(CommitteeMember)
+@admin.register(CommitteePosition)
 class CommitteeMemberAdmin(admin.ModelAdmin):
     list_display = [
         "email",

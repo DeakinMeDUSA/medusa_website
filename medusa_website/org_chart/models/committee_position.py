@@ -15,7 +15,7 @@ class SubCommittee(models.Model):
         return self.__repr__()
 
 
-class CommitteeMember(models.Model):
+class CommitteePosition(models.Model):
     name = models.CharField(max_length=128, help_text="Name of the current holder of the position")
     position = models.CharField(max_length=128, help_text="Name of the position", unique=True)
     email = models.EmailField(help_text="Must be a medusa.org.au email, not the personal email of the position holder")
