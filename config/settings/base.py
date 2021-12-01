@@ -106,7 +106,6 @@ THIRD_PARTY_APPS = [
     "colorfield",
     "tinymce",
     "memoize",
-    "django_celery_beat"
 ]
 
 LOCAL_APPS = [
@@ -493,9 +492,3 @@ USE_SPELLCHECKER = False
 USE_FILEBROWSER = False
 
 GOOGLE_RECAPTCHA_SECRET_KEY = env("GOOGLE_RECAPTCHA_SECRET_KEY", default=None)
-
-# CELERY
-CELERY_TIMEZONE = "Australia/Melbourne"
-CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = "redis://localhost:6379/0"

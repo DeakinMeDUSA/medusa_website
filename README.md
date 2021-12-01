@@ -6,6 +6,29 @@ Website for MeDUSA, Deakin University's medical student society, [hosted here](h
 License
 :   MIT
 
+
+Installation
+------------
+With `python` ≥ 3.8 installed:
+```shell
+poetry install
+```
+
+Usage
+-----
+
+To activate the virtualenv
+```shell
+poetry shell
+```
+
+To get a django console
+```shell
+poetry shell
+python start_console.py
+```
+
+
 Settings
 --------
 

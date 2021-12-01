@@ -63,10 +63,6 @@ PIPELINE["PIPELINE_COLLECTOR_ENABLED"] = False
 # STATICFILES_STORAGE = 'pipeline.storage.NonPackagingPipelineStorage'
 
 
-# CELERY
-CELERY_ALWAYS_EAGER = True
-CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
-
 
 # CACHING
 CACHE_MIDDLEWARE_SECONDS = 1  # Still check caching behaviour but only 1 sec
