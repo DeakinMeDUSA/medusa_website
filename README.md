@@ -13,6 +13,26 @@ With `python` ≥ 3.8 installed:
 ```shell
 poetry install
 ```
+Setting up database, run `psql` then:
+```postgresql
+CREATE ROLE medusa_it LOGIN SUPERUSER
+```
+Open psql with new user:
+```shell
+psql postgres -U medusa_it
+```
+And create a new database:
+```postgresql
+CREATE DATABASE medusa_website;
+GRANT ALL PRIVILEGES ON DATABASE medusa_website TO medusa_it;
+```
+Then run migrations
+```shell
+python manage.py migrate
+```
+
+
+
 
 Usage
 -----
