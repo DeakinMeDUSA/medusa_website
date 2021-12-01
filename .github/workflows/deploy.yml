@@ -4,6 +4,7 @@ on:
 jobs:
   deploy_ssh:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: Deploy via SSH script
         uses: garygrossgarten/github-action-ssh@release
