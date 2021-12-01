@@ -180,6 +180,7 @@ typings/
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
+.idea/csv-plugin.xml
 
 # Custom sensitive
 .idea/deployment.xml
