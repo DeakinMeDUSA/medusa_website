@@ -304,7 +304,7 @@ $sortDescWhite : url(data:image/gif;base64,R0lGODlhFQAEAIAAAP///////yH5BAEAAAEAL
 	}
 	/* hidden filter row */
 	.tablesorter-filter-row.hideme td {
-		padding: $filterRowHiddenHeight * 0.5;
+		padding: $filterRowHiddenHeight / 2;
 		margin: 0;
 		line-height: 0;
 		cursor: pointer;

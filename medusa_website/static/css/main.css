@@ -1967,7 +1967,7 @@ input[type=radio] + label:before {
 }
 input[type=checkbox]:checked + label:before,
 input[type=radio]:checked + label:before {
-  content: "\f00c";
+  content: "";
 }
 
 input[type=checkbox] + label:before {
@@ -2572,11 +2572,11 @@ table.alt tbody tr td {
   line-height: inherit;
 }
 .pagination .previous:before {
-  content: "\f104";
+  content: "";
   margin-right: 0.9375em;
 }
 .pagination .next:before {
-  content: "\f105";
+  content: "";
   float: right;
   margin-left: 0.9375em;
 }
@@ -2889,7 +2889,7 @@ table.alt tbody tr td {
   padding: 8px;
   grid-template-columns: 2% 96% 2%;
   grid-template-rows: 4% 92% 4%;
-  box-shadow: 2px 5px 15px 0 #17161694;
+  box-shadow: 2px 5px 15px 0px #17161694;
   border-radius: 3px;
   text-align: left;
 }
@@ -4367,7 +4367,7 @@ body.is-preload #intro:not(.hidden) + #header + #nav {
   font-weight: 900;
 }
 #navPanelToggle:before {
-  content: "\f0c9";
+  content: "";
   margin-right: 0.5rem;
 }
 #navPanelToggle.alt {
@@ -4470,7 +4470,7 @@ body.is-preload #intro:not(.hidden) + #header + #nav {
   font-weight: 900;
 }
 #navPanel .close:before {
-  content: "\f00d";
+  content: "";
   font-size: 1.25rem;
 }
 #navPanel .close:hover {

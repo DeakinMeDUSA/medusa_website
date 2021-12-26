@@ -6,9 +6,7 @@
 
 /* Pagination */
 
-	@use "sass:math";
-
-.pagination {
+	.pagination {
 		@include vendor('display', 'inline-flex');
 		@include vendor('user-select', 'none');
 		cursor: default;
@@ -54,7 +52,7 @@
 		.previous {
 			&:before {
 				content: '\f104';
-				margin-right: math.div(0.75em, 0.8);
+				margin-right: (0.75em / 0.8);
 			}
 		}
 
@@ -62,7 +60,7 @@
 			&:before {
 				content: '\f105';
 				float: right;
-				margin-left: math.div(0.75em, 0.8);
+				margin-left: (0.75em / 0.8);
 			}
 		}
 
