@@ -16,7 +16,7 @@ Installation
 * [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 * [sass](https://sass-lang.com/install)
 * [postgresql](https://www.postgresql.org/download/)
-*
+* [redis](https://redis.io/topics/quickstart)
 
 ### Install
 
@@ -32,22 +32,18 @@ Install node requirements
 npm install
 ```
 
-Create database, where `db_user` is the name of your user account:
+Create database, where `postgres` is the default postgres account:
 
 ```shell
-sudo -u postgres psql
-# Inside of psql shell
-postgres=# create database medusa_website;
-postgres=# create user db_user with encrypted password 'db_pass';
-postgres=# grant all privileges on database mydb to db_user;
+createdb -u postgres medusa_website 
 ```
 
 After creating, in the top level `.env` file, set the values to what you just used:
 
 ```shell
 DATABASE_URL="postgres://localhost/medusa_website"
-DATABASE_USER="db_user"
-DATABASE_PASSWORD="db_pass"
+DATABASE_USER="postgres"
+DATABASE_PASSWORD="postgres"
 ```
 
 Run migrations:

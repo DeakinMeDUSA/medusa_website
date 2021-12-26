@@ -345,3 +345,4 @@ db.sqlite3
 server.log
 temp/
 *credentials.json
+backups/

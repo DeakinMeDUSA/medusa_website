@@ -5,26 +5,43 @@ source "$HOME"/.poetry/env
 
 cd "$HOME"/medusa_website || exit
 
-printf 'Fetching changes from Git ...'
+printf '\nRunning backup script'
+printf '\n%80s\n' | tr ' ' -
+./scripts/backup_db.sh
+echo
+exit
+
+printf '\nFetching changes from Git'
+printf '\n%80s\n' | tr ' ' -
 git fetch --all
 git reset --hard origin/main
 echo
 
-printf 'Updating Python dependencies ...'
+printf '\nUpdating Python dependencies'
+printf '\n%80s\n' | tr ' ' -
 poetry install
 echo
 
-printf 'Updating Node.js dependencies ...'
+printf '\nUpdating Node.js dependencies'
+printf '\n%80s\n' | tr ' ' -
 npm install
 echo
 
-printf 'Collecting static files ...'
+printf '\nCollecting static files'
+printf '\n%80s\n' | tr ' ' -
 poetry run python ./manage.py collectstatic --noinput
 
-printf 'Running migrations ...'
+printf '\nRunning migrations'
+printf '\n%80s\n' | tr ' ' -
 poetry run python ./manage.py migrate
 
-printf 'Restarting application and flushing cache...'
+printf '\nRestarting application and flushing cache'
+printf '\n%80s\n' | tr ' ' -
+# sudo systemctl restart gunicorn.socket gunicorn.service
+# sudo systemctl daemon-reload
 redis-cli FLUSHDB
 sudo systemctl restart gunicorn
+# sudo systemctl reload nginx
 echo
+
+
