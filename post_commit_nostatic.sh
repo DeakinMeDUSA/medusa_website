@@ -5,7 +5,6 @@ set -euo pipefail # Exit on any non-zero exit code, and error on use of undefine
 source "$HOME"/.poetry/env
 
 cd "$HOME"/medusa_website || exit
-poetry shell
 echo
 
 printf 'Fetching changes from Git ...'
@@ -22,7 +21,7 @@ npm install
 echo
 
 printf 'Running migrations ...'
-python manage.py migrate
+poetry run python ./manage.py migrate
 
 printf 'Restarting application and flushing cache...'
 # sudo systemctl restart gunicorn.socket gunicorn.service
