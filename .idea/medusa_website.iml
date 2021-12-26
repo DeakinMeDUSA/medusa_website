@@ -16,10 +16,10 @@
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/db" />
       <excludeFolder url="file://$MODULE_DIR$/medusa_website/static/css" />
-      <excludeFolder url="file://$MODULE_DIR$/db_backup" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/static" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/backups" />
     </content>
     <orderEntry type="jdk" jdkName="Poetry (medusa_website)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
