@@ -1,11 +1,14 @@
 name: Deploy
 on:
   [ push,  pull_request ]
+
 jobs:
   deploy_ssh:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
       - name: Deploy via SSH script
         uses: garygrossgarten/github-action-ssh@release
         with:
