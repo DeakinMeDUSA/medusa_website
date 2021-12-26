@@ -11,7 +11,6 @@ printf '\nRunning backup script'
 printf '\n%80s\n' | tr ' ' -
 ./scripts/backup_db.sh
 echo
-exit
 
 printf '\nFetching changes from Git'
 printf '\n%80s\n' | tr ' ' -
