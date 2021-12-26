@@ -1,8 +1,9 @@
+#!/bin/bash
 # To run after a commit to the main branch
+set -euo pipefail # Exit on any non-zero exit code, and error on use of undefined var
 
-# shellcheck disable=SC2164
-cd ~/medusa_website
-source ~/.virtualenvs/medusa_website/bin/activate
+cd ~/medusa_website || exit
+poetry shell
 echo
 
 printf 'Fetching changes from Git ...'
@@ -11,7 +12,7 @@ git reset --hard origin/main
 echo
 
 printf 'Updating Python dependencies ...'
-pip install -r requirements_prod.txt
+poetry install
 echo
 
 printf 'Updating Node.js dependencies ...'
