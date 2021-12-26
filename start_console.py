@@ -1,7 +1,9 @@
 ﻿import logging
-import sys
-from pathlib import Path
 import os
+# noinspection PyUnresolvedReferences
+import sys
+# noinspection PyUnresolvedReferences
+from pathlib import Path
 
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 import django
@@ -9,11 +11,13 @@ import django
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 django.setup()
 logger = logging.getLogger(__name__)
-from medusa_website.mcq_bank.models import *
+# noinspection PyUnresolvedReferences
+import medusa_website.mcq_bank.models
 from medusa_website.users.models import User
+# noinspection PyUnresolvedReferences
 from rich import inspect
 from rich.console import Console
-from django.urls import reverse
+# noinspection PyUnresolvedReferences
 from django.conf import settings
 
 user = User.objects.get(id=1)
