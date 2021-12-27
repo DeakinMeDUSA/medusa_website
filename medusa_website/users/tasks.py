@@ -19,6 +19,7 @@ def get_and_import_latest_memberlist_report():
     latest_report = members_report_emails[0]
     new_import = get_and_import_memberlist(gmail, latest_report)
     logger.info(f"Successfully imported and wrote latest member report to {new_import.file.path}")
+    return new_import.file.path
 
 
 def get_and_import_memberlist(gmail: GmailBackend, members_report_email: Dict) -> MemberRecordsImport:

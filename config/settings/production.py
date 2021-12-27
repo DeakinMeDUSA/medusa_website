@@ -138,7 +138,7 @@ LOGGING = {
         "logfile": {
             "class": "logging.FileHandler",
             "filename": str(ROOT_DIR / "logs/server.log"),
-            "level": "WARNING",
+            "level": "INFO",
             "formatter": "verbose",
         },
     },
