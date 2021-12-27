@@ -107,6 +107,7 @@ THIRD_PARTY_APPS = [
     "tinymce",
     "memoize",
     "django_celery_results",
+    "django_celery_beat",
 ]
 
 LOCAL_APPS = [
@@ -502,3 +503,4 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 10 * 60
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "django-db"
+CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
