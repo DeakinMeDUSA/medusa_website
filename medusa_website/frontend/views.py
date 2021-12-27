@@ -1,19 +1,17 @@
-import logging
-
 import requests
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect
-from vanilla import TemplateView, FormView
-
 from medusa_website.frontend.forms import ContactForm
 from medusa_website.frontend.models import Sponsor, Supporter, OfficialDocumentation, Publication, group_docs_by_year, \
     ElectiveReport, ConferenceReport
 from medusa_website.org_chart.models import SubCommittee
+from medusa_website.utils.general import get_pretty_logger
+from vanilla import TemplateView, FormView
 
-logger = logging.getLogger(__name__)
+logger = get_pretty_logger(__name__)
 
 
 class AboutView(TemplateView):

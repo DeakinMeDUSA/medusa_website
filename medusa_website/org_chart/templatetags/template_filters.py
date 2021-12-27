@@ -1,9 +1,10 @@
-import logging
 from typing import Dict
 
 from django import template
 
-logger = logging.getLogger(__name__)
+from medusa_website.utils.general import get_pretty_logger
+
+logger = get_pretty_logger(__name__)
 
 register = template.Library()
 

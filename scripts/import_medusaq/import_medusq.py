@@ -4,23 +4,25 @@ import sys
 
 from django.db import IntegrityError
 
+from medusa_website.utils.general import get_pretty_logger
+
 os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 import django
 
 sys.path.append("I:/GitHub/medusa_website")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 django.setup()
-logger = logging.getLogger(__name__)
+logger = get_pretty_logger(__name__)
 
-# %%
 import csv
 from pathlib import Path
 
-from medusa_website.mcq_bank.models import Question, Answer, Category
+from bs4 import UnicodeDammit
+
+from medusa_website.mcq_bank.models import Answer, Category, Question
 
 # IMPORT_FILE = Path(r"I:\GitHub\medusa_website\scripts\import_medusaq\McqData20201017034440.csv")
 from medusa_website.users.models import User
-from bs4 import UnicodeDammit
 
 user = User.objects.get(id=1)
 

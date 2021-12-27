@@ -1,5 +1,3 @@
-import logging
-
 import django_tables2 as tables
 from django import forms
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,12 +5,20 @@ from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import format_html
-from django_filters import BooleanFilter, FilterSet, ModelChoiceFilter, ModelMultipleChoiceFilter
+from django_filters import (
+    BooleanFilter,
+    FilterSet,
+    ModelChoiceFilter,
+    ModelMultipleChoiceFilter,
+)
 from django_filters.views import FilterView
 from vanilla import CreateView, DetailView, ListView, UpdateView
 
 from medusa_website.mcq_bank.utils import CustomBooleanWidget
-from medusa_website.mcq_bank.views import QuestionMarkFlaggedView, QuestionMarkReviewedView
+from medusa_website.mcq_bank.views import (
+    QuestionMarkFlaggedView,
+    QuestionMarkReviewedView,
+)
 from medusa_website.osce_bank.forms import (
     OSCEStationCreateForm,
     OSCEStationDetailForm,
@@ -21,8 +27,9 @@ from medusa_website.osce_bank.forms import (
 )
 from medusa_website.osce_bank.models import OSCEStation, Speciality, StationType
 from medusa_website.users.models import User
+from medusa_website.utils.general import get_pretty_logger
 
-logger = logging.getLogger(__name__)
+logger = get_pretty_logger(__name__)
 
 
 class OSCEStationDetailView(LoginRequiredMixin, DetailView):
@@ -197,7 +204,9 @@ class OSCEStationListFilter(FilterSet):
     def filter_completed(self, queryset, name, value):
         if self.request:
             user = self.request.user
-            from medusa_website.osce_bank.models import OSCEHistory  # force init of history
+            from medusa_website.osce_bank.models import (
+                OSCEHistory,  # force init of history
+            )
 
             osce_history, created = OSCEHistory.objects.get_or_create(user=user)  # force init of history
 

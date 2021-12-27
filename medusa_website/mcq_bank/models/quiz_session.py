@@ -11,8 +11,9 @@ from medusa_website.mcq_bank.models.answer import Answer
 from medusa_website.mcq_bank.models.question import Question
 from medusa_website.mcq_bank.models.record import Record
 from medusa_website.users.models import User
+from medusa_website.utils.general import get_pretty_logger
 
-logger = logging.getLogger(__name__)
+logger = get_pretty_logger(__name__)
 
 
 class QuizSessionExists(RuntimeError):

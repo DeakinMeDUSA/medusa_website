@@ -29,9 +29,9 @@ from medusa_website.mcq_bank.forms import (
 from medusa_website.mcq_bank.models import History, Question
 from medusa_website.mcq_bank.utils import CustomBooleanWidget, truncate_text
 from medusa_website.users.models import User
+from medusa_website.utils.general import get_pretty_logger
 
-logger = logging.getLogger(__name__)
-
+logger = get_pretty_logger(__name__)
 
 # TODO fix Question_create javascript to add answers again
 

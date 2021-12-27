@@ -1,4 +1,23 @@
-from typing import Dict
+import logging
+import subprocess
+from pathlib import Path
+from typing import Dict, Union
+
+import colorlog
+
+
+def get_pretty_logger(name: str):
+    handler = colorlog.StreamHandler()
+    handler.setFormatter(colorlog.ColoredFormatter("%(log_color)s%(asctime)s - %(name)s - %(levelname)s - %(message)s"))
+
+    _logger = colorlog.getLogger(name)
+    _logger.addHandler(handler)
+    _logger.setLevel(logging.DEBUG)
+    _logger.propagate = True
+    return _logger
+
+
+logger = get_pretty_logger(__name__)
 
 
 def traces_sampler(sampling_context: Dict):
@@ -9,3 +28,17 @@ def traces_sampler(sampling_context: Dict):
     if sampling_context.get("wsgi_environ", {}).get("PATH_INFO") == "/martor/markdownify/":
         return 0.0
     return 1.0
+
+
+def run_cmd(cmd: str, cwd: Union[Path, str] = None, capture_output=False):
+    from django.conf import settings
+
+    if isinstance(cwd, Path):
+        cwd = str(cwd.absolute())
+    cwd = cwd or settings.ROOT_DIR
+    logger.debug(f"Running cmd: \n{cmd}")
+    r = subprocess.run(cmd, cwd=cwd, shell=True, capture_output=capture_output)
+    if r.returncode != 0:
+        logger.error(r.stderr.decode())
+        raise Exception(f"Exception raised when calling cmd: {cmd}\n{r.stderr.decode()}")
+    return r

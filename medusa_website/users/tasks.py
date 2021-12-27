@@ -1,5 +1,5 @@
 import io
-import logging
+from pathlib import Path
 from typing import Dict
 
 from django.conf import settings
@@ -8,8 +8,9 @@ from django.core.files import File
 from medusa_website import celery_app as app
 from medusa_website.gmailapi_backend.mail import GmailBackend
 from medusa_website.users.models import MemberRecordsImport
+from medusa_website.utils.general import get_pretty_logger, run_cmd
 
-logger = logging.getLogger(__name__)
+logger = get_pretty_logger(__name__)
 
 
 @app.task
@@ -39,3 +40,12 @@ def get_and_import_memberlist(gmail: GmailBackend, members_report_email: Dict) -
             new_import.save()
             new_import.import_memberlist()
         return new_import
+
+
+@app.task()
+def backup_db_and_media():
+    from django.conf import settings
+
+    backup_script_path = Path(settings.ROOT_DIR, "scripts/backup_db.sh")
+    run_cmd(cmd=str(backup_script_path), cwd=settings.ROOT_DIR, capture_output=False)
+    logger.info(f"Backup completed")
