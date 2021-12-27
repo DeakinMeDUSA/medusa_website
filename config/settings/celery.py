@@ -12,7 +12,7 @@ LOGGING = {
         },
         "logfile": {
             "class": "logging.FileHandler",
-            "filename": str(ROOT_DIR / "celery_server.log"),
+            "filename": str(ROOT_DIR / "logs/celery_server.log"),
             "level": "DEBUG",
             "formatter": "verbose",
         },
