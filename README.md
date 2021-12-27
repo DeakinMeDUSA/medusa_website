@@ -64,6 +64,12 @@ poetry run pre-commit run --all-files
 python start_console.py
 ```
 
+To run celery worker
+
+```shell
+poetry run celery -A medusa_website worker --loglevel=INFO
+```
+
 Settings
 --------
 
@@ -108,3 +114,48 @@ To run the tests, check your test coverage, and generate an HTML coverage report
 Moved
 to [Live reloading and SASS compilation](http://cookiecutter-django.readthedocs.io/en/latest/live-reloading-and-sass-compilation.html)
 .
+
+
+
+## Other scripts used
+
+`gunicorn.service`
+```text
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=medusa_it
+Group=www-data
+WorkingDirectory=/home/medusa_it/medusa_website
+ExecStart=/home/medusa_it/.cache/pypoetry/virtualenvs/medusa-website-GIn7jO6M-py3.9/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/gunicorn.sock \
+          config.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+```
+And `celery.service`
+```text
+[Unit]
+Description=Celery Beat Service
+After=network.target
+
+[Service]
+Type=simple
+User=celery
+Group=celery
+EnvironmentFile=/etc/conf.d/celery
+WorkingDirectory=/home/medusa_it/medusa_website
+ExecStart=/bin/sh -c '${CELERY_BIN} -A ${CELERY_APP} beat  \
+    --pidfile=${CELERYBEAT_PID_FILE} \
+    --logfile=${CELERYBEAT_LOG_FILE} --loglevel=${CELERYD_LOG_LEVEL}'
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```

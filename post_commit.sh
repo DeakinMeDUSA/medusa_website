@@ -39,6 +39,9 @@ printf '\n%80s\n' | tr ' ' -
 # sudo systemctl restart gunicorn.socket gunicorn.service
 # sudo systemctl daemon-reload
 redis-cli FLUSHDB
+
+# Restart web and celery services
 sudo systemctl restart gunicorn
+sudo systemctl restart celery.service
 # sudo systemctl reload nginx
 echo
