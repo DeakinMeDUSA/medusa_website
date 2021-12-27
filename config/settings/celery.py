@@ -1,4 +1,4 @@
-from .production import ROOT_DIR
+from .production import *  # Need starred import here to import all vars so that celery can find tasks
 
 LOGGING = {
     "version": 1,
