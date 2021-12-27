@@ -42,5 +42,3 @@ redis-cli FLUSHDB
 sudo systemctl restart gunicorn
 # sudo systemctl reload nginx
 echo
-
-

@@ -1,4 +1,4 @@
-exclude: 'docs|node_modules|migrations|.git|.tox|.idea|frontend|min.css|.*\.js|.*\.csv|svg'
+exclude: 'docs|node_modules|migrations|.git|.tox|.idea|frontend|min.css|.*\.js|.*\.csv|.*\.svg'
 default_stages: [commit]
 fail_fast: true
 
