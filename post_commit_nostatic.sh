@@ -41,5 +41,6 @@ redis-cli FLUSHDB
 # Restart web and celery services
 sudo systemctl restart gunicorn
 sudo systemctl restart celery.service
+sudo systemctl restart celerybeat.service
 # sudo systemctl reload nginx
 echo
