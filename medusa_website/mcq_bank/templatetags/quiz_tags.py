@@ -41,5 +41,5 @@ class IsProductionNode(template.Node):
         pass
 
     def render(self, context):
-        context['IS_PRODUCTION'] = False if settings.DEBUG else True
-        return ''
+        context["IS_PRODUCTION"] = False if settings.DEBUG else True
+        return ""

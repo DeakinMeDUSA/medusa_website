@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
 
 import django_tables2 as tables
 from django.contrib import messages
@@ -11,21 +11,22 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.utils.html import format_html
-from django_filters import FilterSet, ModelChoiceFilter, BooleanFilter
+from django_filters import BooleanFilter, FilterSet, ModelChoiceFilter
 from django_filters.views import FilterView
-from vanilla import ListView, UpdateView, CreateView, DetailView, FormView
+from vanilla import CreateView, DetailView, FormView, ListView, UpdateView
 
 from medusa_website.mcq_bank.forms import (
+    AnswerCreateFormSet,
+    AnswerDetailFormSet,
+    AnswerFormSetHelper,
+    AnswerUpdateFormSet,
     QuestionCreateForm,
     QuestionDetailForm,
+    QuestionMarkFlaggedForm,
     QuestionUpdateForm,
-    AnswerFormSetHelper,
-    AnswerCreateFormSet,
-    AnswerUpdateFormSet,
-    AnswerDetailFormSet,
-    QuizSessionCreateFromQuestionsForm, QuestionMarkFlaggedForm,
+    QuizSessionCreateFromQuestionsForm,
 )
-from medusa_website.mcq_bank.models import Question, History
+from medusa_website.mcq_bank.models import History, Question
 from medusa_website.mcq_bank.utils import CustomBooleanWidget, truncate_text
 from medusa_website.users.models import User
 
@@ -282,12 +283,18 @@ class QuestionListFilter(FilterSet):
         model = Question
         fields = ["category", "author", "is_reviewed", "is_flagged"]
 
-    author = ModelChoiceFilter(queryset=User.objects.filter(
-        id__in=Question.objects.select_related("author").order_by("author").distinct("author").values_list("author",
-                                                                                                           flat=True)))
+    author = ModelChoiceFilter(
+        queryset=User.objects.filter(
+            id__in=Question.objects.select_related("author")
+            .order_by("author")
+            .distinct("author")
+            .values_list("author", flat=True)
+        )
+    )
 
-    answered = BooleanFilter(field_name="answered", label="Is answered", method="filter_answered",
-                             widget=CustomBooleanWidget)
+    answered = BooleanFilter(
+        field_name="answered", label="Is answered", method="filter_answered", widget=CustomBooleanWidget
+    )
     is_reviewed = BooleanFilter(field_name="is_reviewed", label="Is reviewed", widget=CustomBooleanWidget)
     is_flagged = BooleanFilter(field_name="is_flagged", label="Is flagged", widget=CustomBooleanWidget)
 
@@ -389,8 +396,9 @@ class QuestionMarkReviewedView(LoginRequiredMixin, UpdateView):
         self.object.reviewed_by = user
         self.object.is_reviewed = True
         self.object.save()
-        messages.add_message(self.request, messages.INFO,
-                             f"{self.object_name_formatted} marked as reviewed by '{user.name}'")
+        messages.add_message(
+            self.request, messages.INFO, f"{self.object_name_formatted} marked as reviewed by '{user.name}'"
+        )
         return HttpResponseRedirect(self.get_success_url())
 
 

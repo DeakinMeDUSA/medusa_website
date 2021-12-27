@@ -26,7 +26,7 @@ class CustomBooleanWidget(BooleanWidget):
         self.choices = (("", "---------"), ("true", "Yes"), ("false", "No"))
 
 
-def truncate_text(text: str, max_length: int=50):
+def truncate_text(text: str, max_length: int = 50):
     if len(text) > max_length:
         return f"{text[0:max_length]} ..."
     else:

@@ -4,18 +4,18 @@ from .views import (
     HistoryView,
     IndexRedirectView,
     QuestionCreateView,
+    QuestionDetailView,
     QuestionListView,
+    QuestionMarkFlaggedView,
+    QuestionMarkReviewedView,
+    QuestionPreviewView,
     QuestionUpdateView,
     QuizIndexView,
+    QuizSessionCreateFromQuestionsView,
     QuizSessionCreateView,
     QuizSessionDetailView,
     QuizSessionEndOrContinueView,
     QuizTakeView,
-    QuestionMarkFlaggedView,
-    QuestionMarkReviewedView,
-    QuestionDetailView,
-    QuizSessionCreateFromQuestionsView, QuestionPreviewView,
-
 )
 from .views.session import complete_session
 
@@ -52,7 +52,6 @@ urlpatterns = [
     path("question/mark-flagged/<int:id>", view=QuestionMarkFlaggedView.as_view(), name="question_mark_flagged"),
     path("question/mark-review/<int:id>", view=QuestionMarkReviewedView.as_view(), name="question_mark_reviewed"),
     path("question/preview/<int:id>", view=QuestionPreviewView.as_view(), name="question_preview"),
-
     # redirect all others to index
     re_path("^$", view=QuizIndexView.as_view(), name="quiz_index"),
     re_path("^.*$", view=IndexRedirectView.as_view(), name="index_redirect"),  # redirect all others to index

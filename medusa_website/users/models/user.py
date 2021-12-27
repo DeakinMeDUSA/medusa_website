@@ -1,7 +1,7 @@
 from allauth.account.models import EmailAddress
 from cuser.models import CUserManager
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, Group
+from django.contrib.auth.models import Group, PermissionsMixin
 from django.core.mail import send_mail
 from django.db import models
 from django.db.models import CharField
@@ -16,7 +16,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         "Email address",
         unique=True,
         error_messages={
-            'unique': "A user with that email address already exists.",
+            "unique": "A user with that email address already exists.",
         },
     )
     # First and last name do not cover name patterns around the globe
@@ -25,13 +25,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(
         "Staff status",
         default=False,
-        help_text='Designates whether the user can log into this admin site.',
+        help_text="Designates whether the user can log into this admin site.",
     )
     is_active = models.BooleanField(
         "Active",
         default=True,
         help_text="Designates whether this user should be treated as active. "
-                  "Unselect this instead of deleting accounts.",
+        "Unselect this instead of deleting accounts.",
     )
     is_medusa = models.BooleanField(
         "Is a medusa.org.au user",
@@ -43,8 +43,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = CUserManager()
 
-    EMAIL_FIELD = 'email'
-    USERNAME_FIELD = 'email'
+    EMAIL_FIELD = "email"
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name"]
 
     def clean(self):

@@ -106,7 +106,7 @@ THIRD_PARTY_APPS = [
     "colorfield",
     "tinymce",
     "memoize",
-    "django_celery_beat"
+    "django_celery_results",
 ]
 
 LOCAL_APPS = [
@@ -233,9 +233,9 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 "medusa_website.utils.context_processors.settings_context",
             ],
-            'libraries': {
-                'template_filters': 'medusa_website.org_chart.templatetags.template_filters',
-            }
+            "libraries": {
+                "template_filters": "medusa_website.org_chart.templatetags.template_filters",
+            },
         },
     }
 ]
@@ -276,7 +276,7 @@ EMAIL_SUBJECT_PREFIX = env("DJANGO_EMAIL_SUBJECT_PREFIX", default="[MeDUSA Websi
 # Gmail-specific settings
 MEMBERLIST_EMAIL = "it@medusa.org.au"
 GMAIL_CREDENTIALS_PATH = Path(env("GMAIL_CREDENTIALS_PATH")).resolve()
-GMAIL_SCOPES = ['https://mail.google.com/']
+GMAIL_SCOPES = ["https://mail.google.com/"]
 
 # ADMIN
 # ------------------------------------------------------------------------------
@@ -339,7 +339,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX = ""
 CACHE_MIDDLEWARE_SECONDS = 60  # in seconds
 
 # MESSAGES
-MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+MESSAGE_STORAGE = "django.contrib.messages.storage.session.SessionStorage"
 
 # Your stuff...
 # ------------------------------------------------------------------------------
@@ -394,8 +394,10 @@ PIPELINE = {
             "output_filename": "pipeline/css/core.css",
         },
         "css_tablesorter": {
-            "source_filenames": ("modules/tablesorter/dist/css/scss/*.scss",
-                                 "modules/tablesorter/dist/css/theme.metro-dark.min.css"),
+            "source_filenames": (
+                "modules/tablesorter/dist/css/scss/*.scss",
+                "modules/tablesorter/dist/css/theme.metro-dark.min.css",
+            ),
             "output_filename": "pipeline/css/tablesorter.css",
         },
         "css_juicer": {
@@ -476,14 +478,14 @@ MAX_IMAGE_UPLOAD_SIZE = 5242880  # 5MB
 TINYMCE_DEFAULT_CONFIG = {
     "theme": "silver",
     "height": 800,
-    "menubar": 'edit view insert format tools table tc help',
+    "menubar": "edit view insert format tools table tc help",
     "plugins": "advlist,autolink,lists,link,image,charmap,print,preview,anchor,"
-               "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
-               "code,help,wordcount",
+    "searchreplace,visualblocks,code,fullscreen,insertdatetime,media,table,paste,"
+    "code,help,wordcount",
     "toolbar": "undo redo | formatselect | "
-               "bold italic backcolor | alignleft aligncenter "
-               "alignright alignjustify | bullist numlist outdent indent | "
-               "removeformat | help",
+    "bold italic backcolor | alignleft aligncenter "
+    "alignright alignjustify | bullist numlist outdent indent | "
+    "removeformat | help",
 }
 
 TINYMCE_SPELLCHECKER = False
@@ -497,5 +499,6 @@ GOOGLE_RECAPTCHA_SECRET_KEY = env("GOOGLE_RECAPTCHA_SECRET_KEY", default=None)
 # CELERY
 CELERY_TIMEZONE = "Australia/Melbourne"
 CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_TASK_TIME_LIMIT = 10 * 60
 CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "django-db"

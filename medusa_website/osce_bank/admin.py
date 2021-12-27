@@ -1,7 +1,7 @@
 from django.contrib import admin
 from imagekit.admin import AdminThumbnail
 
-from .models import OSCEStation, StationType, OSCEHistory, Level, Speciality
+from .models import Level, OSCEHistory, OSCEStation, Speciality, StationType
 
 
 @admin.register(OSCEStation)
@@ -19,7 +19,11 @@ class OSCEStationAdmin(admin.ModelAdmin):
         "is_reviewed",
     ]
     readonly_fields = (
-        "id", "stem_image_thumbnail", "marking_guide_image_thumbnail", "supporting_notes_image_thumbnail")
+        "id",
+        "stem_image_thumbnail",
+        "marking_guide_image_thumbnail",
+        "supporting_notes_image_thumbnail",
+    )
     fields = [
         "title",
         "level",

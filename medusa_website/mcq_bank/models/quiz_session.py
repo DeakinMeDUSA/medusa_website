@@ -47,8 +47,9 @@ class QuizSession(models.Model):
     complete = models.BooleanField(default=False, verbose_name="Complete")
     started = models.DateTimeField(auto_now_add=True, verbose_name="Session Started")
     finished = models.DateTimeField(null=True, blank=True, verbose_name="Session Ended")
-    current_question_index = models.IntegerField(blank=False, null=False, default=0,
-                                                 verbose_name="Index of the question currently being answered")
+    current_question_index = models.IntegerField(
+        blank=False, null=False, default=0, verbose_name="Index of the question currently being answered"
+    )
 
     def increment_question_index(self, save=True):
         self.current_question_index += 1
@@ -198,7 +199,7 @@ class QuizSession(models.Model):
             questions = questions.order_by("?")
 
         max_n = max_n if max_n <= questions.count() else questions.count()
-        selected_qs = questions[0: max_n + 1]
+        selected_qs = questions[0 : max_n + 1]
 
         if selected_qs.count() < 1:
             raise RuntimeError("Cannot create Quiz Session without any questions!")

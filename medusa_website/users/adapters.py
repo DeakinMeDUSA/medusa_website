@@ -35,8 +35,7 @@ class AccountAdapter(DefaultAccountAdapter):
         Saves a new `User` instance using information provided in the
         signup form.
         """
-        from medusa_website.users.models import User
-        from medusa_website.users.models import MemberRecord
+        from medusa_website.users.models import MemberRecord, User
 
         user: User = super(AccountAdapter, self).save_user(request, user, form, commit=False)
 
@@ -56,6 +55,7 @@ class AccountAdapter(DefaultAccountAdapter):
         if commit:
             user.save()
         return user
+
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def is_open_for_signup(self, request: HttpRequest, sociallogin: Any):

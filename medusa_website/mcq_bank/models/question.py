@@ -27,8 +27,10 @@ class Question(models.Model):
     )
     author = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
     question_image = models.ImageField(
-        null=True, blank=True, verbose_name="Question Image",
-        help_text="Upload an image to be shown in the question prompt"
+        null=True,
+        blank=True,
+        verbose_name="Question Image",
+        help_text="Upload an image to be shown in the question prompt",
     )
     answer_image = models.ImageField(
         null=True, blank=True, verbose_name="Answer Image", help_text="Upload an image to be shown with the answers"
@@ -43,7 +45,9 @@ class Question(models.Model):
 
     explanation = MartorField(
         help_text="Explanation to be shown after the question has been answered",
-        verbose_name="Explanation", null=True, blank=True
+        verbose_name="Explanation",
+        null=True,
+        blank=True,
     )
 
     randomise_answer_order = models.BooleanField(

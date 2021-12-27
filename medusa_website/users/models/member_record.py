@@ -11,8 +11,7 @@ class MemberRecord(models.Model):
     name = CharField(blank=True, null=True, max_length=256)
     end_date = models.DateField("End date")
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.email = self.email.lower()
         super(MemberRecord, self).save()
 
@@ -38,10 +37,7 @@ class MemberRecordsImport(models.Model):
         for idx, row in df.iterrows():
             member, created = MemberRecord.objects.update_or_create(
                 email=row["Email"],
-                defaults={
-                    "email": row["Email"],
-                    "name": row["Full Name"],
-                    "end_date": row["End Date"]}
+                defaults={"email": row["Email"], "name": row["Full Name"], "end_date": row["End Date"]},
             )
             member.member_record_imports.add(self)
             member.save()

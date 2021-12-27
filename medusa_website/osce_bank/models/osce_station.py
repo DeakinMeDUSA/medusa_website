@@ -13,7 +13,7 @@ from medusa_website.users.models import User
 
 class Level(models.Model):
     class Meta:
-        ordering = ('level',)
+        ordering = ("level",)
 
     level = models.CharField(help_text="The year level appropriate for the OSCE station", max_length=128, unique=True)
 
@@ -23,7 +23,7 @@ class Level(models.Model):
 
 class StationType(models.Model):
     class Meta:
-        ordering = ('station_type',)
+        ordering = ("station_type",)
 
     station_type = models.CharField(help_text="The type of OSCE station, e.g. Examination", max_length=128, unique=True)
 
@@ -35,11 +35,11 @@ class Speciality(models.Model):
     class Meta:
         verbose_name = "Speciality"
         verbose_name_plural = "Specialities"
-        ordering = ('speciality',)
+        ordering = ("speciality",)
 
-    speciality = models.CharField(help_text="A speciality for the Station/MCQ OSCEStation e.g. Cardiology",
-                                  max_length=128,
-                                  unique=True)
+    speciality = models.CharField(
+        help_text="A speciality for the Station/MCQ OSCEStation e.g. Cardiology", max_length=128, unique=True
+    )
 
     def __str__(self):
         return self.speciality
@@ -63,14 +63,19 @@ class OSCEStation(models.Model):
         help_text="Patient script for the person acting as patient",
     )
     marking_guide = MartorField(
-        help_text="Marking guide for the station", blank=True, null=True,
+        help_text="Marking guide for the station",
+        blank=True,
+        null=True,
     )
     supporting_notes = MartorField(
-        help_text="Supporting notes for the station", blank=True, null=True,
+        help_text="Supporting notes for the station",
+        blank=True,
+        null=True,
     )
 
-    is_flagged = models.BooleanField(default=False,
-                                     help_text="If True, has been flagged by a user and is awaiting review")
+    is_flagged = models.BooleanField(
+        default=False, help_text="If True, has been flagged by a user and is awaiting review"
+    )
     flagged_by = models.ForeignKey(
         User, related_name="flagged_osce_stations", on_delete=models.PROTECT, blank=True, null=True
     )
@@ -82,16 +87,22 @@ class OSCEStation(models.Model):
     )
 
     stem_image = models.ImageField(
-        null=True, blank=True, verbose_name="Stem image",
-        help_text="Upload an image to be shown in the OSCE station stem"
+        null=True,
+        blank=True,
+        verbose_name="Stem image",
+        help_text="Upload an image to be shown in the OSCE station stem",
     )
     marking_guide_image = models.ImageField(
-        null=True, blank=True, verbose_name="Marking Guide image",
-        help_text="Upload an image to be shown with the marking guide"
+        null=True,
+        blank=True,
+        verbose_name="Marking Guide image",
+        help_text="Upload an image to be shown with the marking guide",
     )
     supporting_notes_image = models.ImageField(
-        null=True, blank=True, verbose_name="Further Notes image",
-        help_text="Upload an image to be shown alongside the supporting notes"
+        null=True,
+        blank=True,
+        verbose_name="Further Notes image",
+        help_text="Upload an image to be shown alongside the supporting notes",
     )
 
     def __str__(self):

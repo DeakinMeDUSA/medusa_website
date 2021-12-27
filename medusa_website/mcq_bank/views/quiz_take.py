@@ -8,8 +8,9 @@ from django.views.generic import FormView
 from vanilla import DetailView
 
 from medusa_website.mcq_bank.models import Answer, History, Question, QuizSession
-from ..forms import QuestionForm
+
 from ...users.models import User
+from ..forms import QuestionForm
 
 
 class QuizTakeView(LoginRequiredMixin, FormView, DetailView):
@@ -78,14 +79,15 @@ class QuizTakeView(LoginRequiredMixin, FormView, DetailView):
 
     def render_answer_response(self, request, submitted_answer) -> str:
         context = {
-            'submitted_answer': submitted_answer,
-            'question': submitted_answer.question,
+            "submitted_answer": submitted_answer,
+            "question": submitted_answer.question,
         }
         return loader.render_to_string("mcq_bank/answer_response.html", context=context, request=request)
 
 
 class QuestionPreviewView(LoginRequiredMixin, FormView, DetailView):
     """Preview a MCQ question  in the same template as during a quiz"""
+
     lookup_field = "id"
     model = Question
     form_class = QuestionForm
@@ -115,8 +117,9 @@ class QuestionPreviewView(LoginRequiredMixin, FormView, DetailView):
     #     return dict(kwargs, question=self.question)
 
     def form_valid(self, form):
-        answer_response = self.render_answer_response(request=self.request,
-                                                      submitted_answer=self.get_submitted_answer())
+        answer_response = self.render_answer_response(
+            request=self.request, submitted_answer=self.get_submitted_answer()
+        )
         return JsonResponse({"answer_response": answer_response})
 
     def get_submitted_answer(self) -> Answer:
@@ -127,14 +130,15 @@ class QuestionPreviewView(LoginRequiredMixin, FormView, DetailView):
         context = super(QuestionPreviewView, self).get_context_data(**kwargs)
         context["question"] = self.question
         context["submitted_answer"] = self.get_submitted_answer()
-        context["answer_response"] = self.render_answer_response(self.request,
-                                                                 submitted_answer=self.get_submitted_answer())
+        context["answer_response"] = self.render_answer_response(
+            self.request, submitted_answer=self.get_submitted_answer()
+        )
 
         return context
 
     def render_answer_response(self, request, submitted_answer) -> str:
         context = {
-            'submitted_answer': submitted_answer,
-            'question': submitted_answer.question,
+            "submitted_answer": submitted_answer,
+            "question": submitted_answer.question,
         }
         return loader.render_to_string("mcq_bank/answer_response.html", context=context, request=request)

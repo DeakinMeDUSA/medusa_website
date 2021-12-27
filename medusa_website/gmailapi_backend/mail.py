@@ -5,7 +5,7 @@ import base64
 import datetime
 import logging
 from pathlib import Path
-from typing import Dict, Tuple, Optional
+from typing import Dict, Optional, Tuple
 
 import dateparser
 from django.conf import settings
@@ -27,7 +27,7 @@ class GmailBackend(BaseEmailBackend):
         self.account_email = account_email or settings.DEFAULT_FROM_EMAIL
         self.credentials = self.authenticate(self.account_email)
         self.user_id = "me"
-        self.service = build('gmail', 'v1', credentials=self.credentials, cache_discovery=False)
+        self.service = build("gmail", "v1", credentials=self.credentials, cache_discovery=False)
 
     def authenticate(self, account_email: str) -> Credentials:
         def refresh_cred(cred: Credentials):
@@ -79,7 +79,7 @@ class GmailBackend(BaseEmailBackend):
     def get_messages(self, subject: str, latest_first=True):
         def get_items(request_id, response, exception):
             if exception is not None:
-                print(f'An error occurred for request_id {request_id}: {exception}')
+                print(f"An error occurred for request_id {request_id}: {exception}")
             else:
                 returned_messages.extend(response["messages"])
 
@@ -90,12 +90,12 @@ class GmailBackend(BaseEmailBackend):
             query += f"subject:{subject} "
 
         print(f"Getting messages with query:\n{query}")
-        results = self.service.users().messages().list(userId='me', q=query).execute()
+        results = self.service.users().messages().list(userId="me", q=query).execute()
         messages_inital = results["messages"]
 
         if messages_inital != []:
             batch = self.service.new_batch_http_request(callback=get_items)
-            batch._batch_uri = 'https://www.googleapis.com/batch/gmail/v1'
+            batch._batch_uri = "https://www.googleapis.com/batch/gmail/v1"
 
             for msg in messages_inital:
                 batch.add(self.service.users().threads().get(userId="me", id=msg["id"]))
@@ -109,15 +109,20 @@ class GmailBackend(BaseEmailBackend):
         return returned_messages
 
     def get_attachment_for_message(self, msg: Dict) -> Tuple[Optional[bytes], Optional[Path]]:
-        for part in msg['payload']['parts']:
-            if part['filename']:
-                attachment_id = part['body']['attachmentId']
+        for part in msg["payload"]["parts"]:
+            if part["filename"]:
+                attachment_id = part["body"]["attachmentId"]
                 # try:
                 print(f"attachment_id = {attachment_id}")
-                attachment = self.service.users().messages().attachments().get(userId='me', messageId=msg['id'],
-                                                                               id=attachment_id).execute()
-                file_data = base64.urlsafe_b64decode(attachment['data'].encode('UTF-8'))
-                return file_data, Path(part['filename'])
+                attachment = (
+                    self.service.users()
+                    .messages()
+                    .attachments()
+                    .get(userId="me", messageId=msg["id"], id=attachment_id)
+                    .execute()
+                )
+                file_data = base64.urlsafe_b64decode(attachment["data"].encode("UTF-8"))
+                return file_data, Path(part["filename"])
         else:
             return None, None
 

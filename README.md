@@ -35,7 +35,7 @@ npm install
 Create database, where `postgres` is the default postgres account:
 
 ```shell
-createdb -u postgres medusa_website 
+createdb -u postgres medusa_website
 ```
 
 After creating, in the top level `.env` file, set the values to what you just used:
@@ -51,6 +51,11 @@ Run migrations:
 ```shell
 python shell # To activate virtualenv
 python manage.py migrate
+```
+
+Setup pre-commit:
+```shell
+poetry run pre-commit run --all-files
 ```
 
 ### Check install worked

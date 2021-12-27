@@ -25,7 +25,11 @@ from medusa_website.osce_bank.models import OSCEStation
 from medusa_website.users.models import User
 
 
-class OSCERunView(DetailView, FormView, LoginRequiredMixin, ):
+class OSCERunView(
+    DetailView,
+    FormView,
+    LoginRequiredMixin,
+):
     template_name = "osce_bank/osce_station_run.html"
     model = OSCEStation
     context_object_name = "osce_station"

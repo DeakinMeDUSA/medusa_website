@@ -12,7 +12,8 @@ class CommitteeMemberInline(admin.TabularInline):
 @admin.register(SubCommittee)
 class SubCommitteeAdmin(admin.ModelAdmin):
     list_display = [
-        "id", "title",
+        "id",
+        "title",
     ]
     search_fields = ("title",)
     inlines = [CommitteeMemberInline]

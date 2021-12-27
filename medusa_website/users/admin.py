@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from nameparser import HumanName
 
 from medusa_website.users.forms import UserChangeForm, UserCreationForm
+
 from .models import MemberRecord, MemberRecordsImport, User
 
 
@@ -75,8 +76,16 @@ class UserAdmin(cuUserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    list_display = ["email", "name", "last_login", "date_joined", "is_superuser", "is_staff", "is_medusa",
-                    "groups_list"]
+    list_display = [
+        "email",
+        "name",
+        "last_login",
+        "date_joined",
+        "is_superuser",
+        "is_staff",
+        "is_medusa",
+        "groups_list",
+    ]
     search_fields = ["email", "name"]
     readonly_fields = ["all_emails"]
     list_filter = ["is_active", "is_staff", "is_superuser", "is_medusa", "groups"]

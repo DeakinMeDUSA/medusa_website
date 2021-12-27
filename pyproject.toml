@@ -1,6 +1,6 @@
 [tool.black]
 line-length = 120
-target-version = ['py39']
+target-version = ['py38']
 extend-exclude = '''
 # A regex preceded with ^/ will apply only to files and directories
 # in the root of the project.
@@ -64,7 +64,6 @@ Wand = ">=0.6.6"
 dateparser = ">=1.0.0"
 nameparser = "^1.0.6"
 celery = ">=5.1.2"
-django-celery-beat = ">=2.2.1"
 pytz = ">=2020.4"
 argon2-cffi = ">=20.1.0"
 tqdm = "^4.62.3"
@@ -74,6 +73,7 @@ hiredis = ">=2.0.0"
 psycopg2 = ">=2.8.6"
 redis = ">=3.5.3"
 whitenoise = ">=5.2.0"
+django-celery-results = "^2.2.0"
 
 [tool.poetry.dev-dependencies]
 

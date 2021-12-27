@@ -1,15 +1,14 @@
 from bootstrap_modal_forms.forms import BSModalModelForm
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Field
-from crispy_forms.layout import Layout, ButtonHolder, Submit
+from crispy_forms.layout import ButtonHolder, Div, Field, Layout, Submit
 from django import forms
 from django.forms import Form
 from django.forms.models import ModelForm, inlineformset_factory
 from django.forms.widgets import CheckboxSelectMultiple, RadioSelect
 
-from medusa_website.mcq_bank.models import Category, Question, QuizSession, Answer
+from medusa_website.mcq_bank.models import Answer, Category, Question, QuizSession
 from medusa_website.users.models import User
-from medusa_website.utils.widgets import AuthorNameWidget, RenderMarkdownWidget, ImageDisplayWidget
+from medusa_website.utils.widgets import AuthorNameWidget, ImageDisplayWidget, RenderMarkdownWidget
 
 
 class QuestionForm(forms.Form):
@@ -35,8 +34,20 @@ class QuestionForm(forms.Form):
 class QuestionDetailForm(ModelForm):
     class Meta:
         model = Question
-        fields = ["author", "text", "category", "question_image", "answer_image", "explanation",
-                  "randomise_answer_order", "is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]
+        fields = [
+            "author",
+            "text",
+            "category",
+            "question_image",
+            "answer_image",
+            "explanation",
+            "randomise_answer_order",
+            "is_flagged",
+            "is_reviewed",
+            "flagged_by",
+            "reviewed_by",
+            "flagged_message",
+        ]
 
     author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
     explanation = forms.CharField(
@@ -47,12 +58,23 @@ class QuestionDetailForm(ModelForm):
     answer_image = forms.ImageField(label="Answer Image", disabled=True, widget=ImageDisplayWidget)
 
 
-
 class QuestionUpdateForm(ModelForm):
     class Meta:
         model = Question
-        fields = ["author", "text", "category", "question_image", "answer_image", "explanation",
-                  "randomise_answer_order", "is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]
+        fields = [
+            "author",
+            "text",
+            "category",
+            "question_image",
+            "answer_image",
+            "explanation",
+            "randomise_answer_order",
+            "is_flagged",
+            "is_reviewed",
+            "flagged_by",
+            "reviewed_by",
+            "flagged_message",
+        ]
 
     # text = forms.CharField(widget=AdminPagedownWidget())
     # explanation = MartorFormField()

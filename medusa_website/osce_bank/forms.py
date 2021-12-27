@@ -1,12 +1,12 @@
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, ButtonHolder, Submit
+from crispy_forms.layout import ButtonHolder, Layout, Submit
 from django import forms
 from django.forms import Form
 from django.forms.models import ModelForm
 
 from medusa_website.osce_bank.models import OSCEStation, Speciality, StationType
 from medusa_website.users.models import User
-from medusa_website.utils.widgets import AuthorNameWidget, RenderMarkdownWidget, ImageDisplayWidget
+from medusa_website.utils.widgets import AuthorNameWidget, ImageDisplayWidget, RenderMarkdownWidget
 
 
 class OSCEStationForm(forms.Form):
@@ -28,14 +28,28 @@ class OSCEStationForm(forms.Form):
 class OSCEStationDetailForm(ModelForm):
     class Meta:
         model = OSCEStation
-        fields = ["author", "title", "level", "types", "specialities", "stem", "patient_script", "marking_guide",
-                  "supporting_notes", "stem_image", "marking_guide_image", "supporting_notes_image",
-                  "is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]
+        fields = [
+            "author",
+            "title",
+            "level",
+            "types",
+            "specialities",
+            "stem",
+            "patient_script",
+            "marking_guide",
+            "supporting_notes",
+            "stem_image",
+            "marking_guide_image",
+            "supporting_notes_image",
+            "is_flagged",
+            "is_reviewed",
+            "flagged_by",
+            "reviewed_by",
+            "flagged_message",
+        ]
 
     author = forms.CharField(label="Author", max_length=80, disabled=True, widget=AuthorNameWidget)
-    stem = forms.CharField(
-        label="Stem", disabled=True, widget=RenderMarkdownWidget(css_class="form-control")
-    )
+    stem = forms.CharField(label="Stem", disabled=True, widget=RenderMarkdownWidget(css_class="form-control"))
     patient_script = forms.CharField(
         label="Patient Script", disabled=True, widget=RenderMarkdownWidget(css_class="form-control")
     )
@@ -46,13 +60,11 @@ class OSCEStationDetailForm(ModelForm):
         label="Supporting Notes", disabled=True, widget=RenderMarkdownWidget(css_class="form-control")
     )
     specialities = forms.ModelMultipleChoiceField(
-        queryset=Speciality.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        disabled=True)
+        queryset=Speciality.objects.all(), widget=forms.CheckboxSelectMultiple, disabled=True
+    )
     types = forms.ModelMultipleChoiceField(
-        queryset=StationType.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        disabled=True)
+        queryset=StationType.objects.all(), widget=forms.CheckboxSelectMultiple, disabled=True
+    )
 
     stem_image = forms.ImageField(label="Stem Image", disabled=True, widget=ImageDisplayWidget)
     marking_guide_image = forms.ImageField(label="Marking Guide Image", disabled=True, widget=ImageDisplayWidget)
@@ -68,13 +80,11 @@ class OSCEStationDetailForm(ModelForm):
 
 class OSCEStationListForm(ModelForm):
     specialities = forms.ModelMultipleChoiceField(
-        queryset=Speciality.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True)
+        queryset=Speciality.objects.all(), widget=forms.CheckboxSelectMultiple, required=True
+    )
     types = forms.ModelMultipleChoiceField(
-        queryset=StationType.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True)
+        queryset=StationType.objects.all(), widget=forms.CheckboxSelectMultiple, required=True
+    )
 
     class Meta:
         model = OSCEStation
@@ -83,18 +93,27 @@ class OSCEStationListForm(ModelForm):
 
 class OSCEStationCreateForm(ModelForm):
     specialities = forms.ModelMultipleChoiceField(
-        queryset=Speciality.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True)
+        queryset=Speciality.objects.all(), widget=forms.CheckboxSelectMultiple, required=True
+    )
     types = forms.ModelMultipleChoiceField(
-        queryset=StationType.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True)
+        queryset=StationType.objects.all(), widget=forms.CheckboxSelectMultiple, required=True
+    )
 
     class Meta:
         model = OSCEStation
-        fields = ["title", "level", "types", "specialities", "stem", "patient_script", "marking_guide",
-                  "supporting_notes", "stem_image", "marking_guide_image", "supporting_notes_image"]
+        fields = [
+            "title",
+            "level",
+            "types",
+            "specialities",
+            "stem",
+            "patient_script",
+            "marking_guide",
+            "supporting_notes",
+            "stem_image",
+            "marking_guide_image",
+            "supporting_notes_image",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -111,9 +130,25 @@ class OSCEStationCreateForm(ModelForm):
 class OSCEStationUpdateForm(OSCEStationCreateForm):
     class Meta:
         model = OSCEStation
-        fields = ["title", "author", "level", "types", "specialities", "stem", "patient_script", "marking_guide",
-                  "supporting_notes", "stem_image", "marking_guide_image", "supporting_notes_image",
-                  "is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]
+        fields = [
+            "title",
+            "author",
+            "level",
+            "types",
+            "specialities",
+            "stem",
+            "patient_script",
+            "marking_guide",
+            "supporting_notes",
+            "stem_image",
+            "marking_guide_image",
+            "supporting_notes_image",
+            "is_flagged",
+            "is_reviewed",
+            "flagged_by",
+            "reviewed_by",
+            "flagged_message",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -123,8 +158,17 @@ class OSCEStationUpdateForm(OSCEStationCreateForm):
         self.helper.form_tag = False
         self.helper.label_class = "font-weight-bold .text-warning"
 
-        for fieldname in ["stem", "patient_script", "marking_guide", "supporting_notes",
-                          "is_flagged", "is_reviewed", "flagged_by", "reviewed_by", "flagged_message"]:
+        for fieldname in [
+            "stem",
+            "patient_script",
+            "marking_guide",
+            "supporting_notes",
+            "is_flagged",
+            "is_reviewed",
+            "flagged_by",
+            "reviewed_by",
+            "flagged_message",
+        ]:
             self.fields[fieldname].help_text = None
 
 

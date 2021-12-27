@@ -82,7 +82,6 @@ class History(models.Model):
 
         return cat_progress
 
-
     @property
     def session_history(
         self,

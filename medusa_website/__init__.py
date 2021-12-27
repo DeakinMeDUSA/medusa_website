@@ -4,4 +4,4 @@ __version_info__ = tuple([int(num) if num.isdigit() else num for num in __versio
 # Django starts so that shared_task will use this app.
 from .celery import app as celery_app
 
-__all__ = ('celery_app',)
+__all__ = ("celery_app",)

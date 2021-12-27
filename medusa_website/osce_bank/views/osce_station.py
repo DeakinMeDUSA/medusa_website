@@ -7,15 +7,19 @@ from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils.html import format_html
-from django_filters import FilterSet, ModelChoiceFilter, ModelMultipleChoiceFilter, BooleanFilter
+from django_filters import BooleanFilter, FilterSet, ModelChoiceFilter, ModelMultipleChoiceFilter
 from django_filters.views import FilterView
-from vanilla import ListView, UpdateView, CreateView, DetailView
+from vanilla import CreateView, DetailView, ListView, UpdateView
 
 from medusa_website.mcq_bank.utils import CustomBooleanWidget
 from medusa_website.mcq_bank.views import QuestionMarkFlaggedView, QuestionMarkReviewedView
-from medusa_website.osce_bank.forms import OSCEStationDetailForm, OSCEStationUpdateForm, OSCEStationCreateForm, \
-    OSCEStationMarkFlaggedForm
-from medusa_website.osce_bank.models import OSCEStation, StationType, Speciality
+from medusa_website.osce_bank.forms import (
+    OSCEStationCreateForm,
+    OSCEStationDetailForm,
+    OSCEStationMarkFlaggedForm,
+    OSCEStationUpdateForm,
+)
+from medusa_website.osce_bank.models import OSCEStation, Speciality, StationType
 from medusa_website.users.models import User
 
 logger = logging.getLogger(__name__)
@@ -170,13 +174,19 @@ class OSCEStationListFilter(FilterSet):
         fields = ["author", "level", "types", "specialities", "is_flagged", "is_reviewed"]
         # form = OSCEStationListForm
 
-    author = ModelChoiceFilter(queryset=User.objects.filter(
-        id__in=OSCEStation.objects.select_related("author").order_by("author").distinct("author").values_list("author",
-                                                                                                              flat=True)))
+    author = ModelChoiceFilter(
+        queryset=User.objects.filter(
+            id__in=OSCEStation.objects.select_related("author")
+            .order_by("author")
+            .distinct("author")
+            .values_list("author", flat=True)
+        )
+    )
     types = ModelMultipleChoiceFilter(queryset=StationType.objects.all(), widget=forms.CheckboxSelectMultiple)
     specialities = ModelMultipleChoiceFilter(queryset=Speciality.objects.all(), widget=forms.CheckboxSelectMultiple)
-    completed = BooleanFilter(field_name="completed", label="Is completed", method="filter_completed",
-                              widget=CustomBooleanWidget)
+    completed = BooleanFilter(
+        field_name="completed", label="Is completed", method="filter_completed", widget=CustomBooleanWidget
+    )
     is_reviewed = BooleanFilter(field_name="is_reviewed", label="Is reviewed", widget=CustomBooleanWidget)
     is_flagged = BooleanFilter(field_name="is_flagged", label="Is flagged", widget=CustomBooleanWidget)
 
@@ -188,6 +198,7 @@ class OSCEStationListFilter(FilterSet):
         if self.request:
             user = self.request.user
             from medusa_website.osce_bank.models import OSCEHistory  # force init of history
+
             osce_history, created = OSCEHistory.objects.get_or_create(user=user)  # force init of history
 
             if value is True:
@@ -207,10 +218,17 @@ class OSCEStationListTable(tables.Table):
         }
         model = OSCEStation
         exclude = (
-            "stem", "patient_script", "marking_guide", "supporting_notes", "flagged_by", "reviewed_by", "stem_image",
-            "marking_guide_image", "supporting_notes_image")
-        sequence = (
-            "id", "title", "level", "types", "specialities", "author", "is_flagged", "is_reviewed")
+            "stem",
+            "patient_script",
+            "marking_guide",
+            "supporting_notes",
+            "flagged_by",
+            "reviewed_by",
+            "stem_image",
+            "marking_guide_image",
+            "supporting_notes_image",
+        )
+        sequence = ("id", "title", "level", "types", "specialities", "author", "is_flagged", "is_reviewed")
 
     id = tables.Column(linkify=False, accessor="id", orderable=False)
     title = tables.Column(linkify=True, orderable=False)
@@ -255,11 +273,13 @@ class OSCEStationListView(LoginRequiredMixin, ListView, FilterView):
     def get_context_data(self, **kwargs):
         context = super(OSCEStationListView, self).get_context_data(**kwargs)
         all_osce_stations = OSCEStation.objects.all()
-        context["filter"] = OSCEStationListFilter(data=self.request.GET, request=self.request,
-                                                  queryset=all_osce_stations)
+        context["filter"] = OSCEStationListFilter(
+            data=self.request.GET, request=self.request, queryset=all_osce_stations
+        )
         filtered_osce_stations: QuerySet[OSCEStation] = context["filter"].qs
-        annotated_osce_stations = OSCEStation.station_list_for_user(user=self.request.user,
-                                                                    stations=filtered_osce_stations)
+        annotated_osce_stations = OSCEStation.station_list_for_user(
+            user=self.request.user, stations=filtered_osce_stations
+        )
         context["filtered_osce_stations"] = annotated_osce_stations
         return context
 
@@ -273,8 +293,9 @@ class OSCEStationListEditView(OSCEStationListView):
 
     def get_context_data(self, **kwargs):
         context = super(OSCEStationListEditView, self).get_context_data(**kwargs)
-        context["osce_station_list_table"] = OSCEStationListTable(context["filtered_osce_stations"],
-                                                                  request=self.request)
+        context["osce_station_list_table"] = OSCEStationListTable(
+            context["filtered_osce_stations"], request=self.request
+        )
         return context
 
 
