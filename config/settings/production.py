@@ -137,23 +137,23 @@ LOGGING = {
         },
         "logfile": {
             "class": "logging.FileHandler",
-            "filename": "server.log",
+            "filename": str(ROOT_DIR / "server.log"),
             "level": "DEBUG",
             "formatter": "verbose",
         },
     },
-    "root": {"level": "INFO", "handlers": ["console"]},
+    "root": {"level": "INFO", "handlers": ["console", "logfile"]},
     "loggers": {
         "django": {
-            "handlers": ["logfile"],
+            "handlers": ["logfile", "logfile"],
         },
         "django.db.backends": {
             "level": "ERROR",
-            "handlers": ["console"],
+            "handlers": ["console", "logfile"],
             "propagate": False,
         },
         # Errors logged by the SDK itself
-        "sentry_sdk": {"level": "ERROR", "handlers": ["console"], "propagate": False},
+        "sentry_sdk": {"level": "ERROR", "handlers": ["console", "logfile"], "propagate": False},
         "django.security.DisallowedHost": {
             "level": "ERROR",
             "handlers": ["console"],
