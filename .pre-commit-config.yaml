@@ -1,4 +1,4 @@
-exclude: 'docs|node_modules|migrations|.git|.tox|.idea|frontend'
+exclude: 'docs|node_modules|migrations|.git|.tox|.idea|frontend|min.css|.*\.js|.*\.csv|svg'
 default_stages: [commit]
 fail_fast: true
 
@@ -9,6 +9,9 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
+      - id: mixed-line-ending
+        args: [ '--fix=lf' ]
+        description: Forces to replace line ending by the UNIX 'lf' character.
 
   - repo: https://github.com/psf/black
     rev: 20.8b1
