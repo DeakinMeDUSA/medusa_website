@@ -40,7 +40,11 @@ def run_cmd(cmd: str, cwd: Union[Path, str] = None, capture_output=False):
     r = subprocess.run(cmd, cwd=cwd, shell=True, capture_output=capture_output, timeout=30)
     if r.returncode != 0:
         logger.error(r.stderr.decode())
-        raise Exception(f"Exception raised when calling cmd: {cmd}\n{r.stderr.decode()}")
+        raise Exception(
+            f"Exception raised when calling cmd: {cmd}\n"
+            f"stderr: {r.stderr.decode() if r.stderr else 'None'}\n"
+            f"stdout: {r.stdout.decode() if r.stdout else 'None'}"
+        )
     if capture_output:
-        logger.info(f"Captured output\n{r.stdout}")
+        logger.info(f"Captured output\n{r.stdout.decode()}")
     return r
