@@ -37,8 +37,10 @@ def run_cmd(cmd: str, cwd: Union[Path, str] = None, capture_output=False):
         cwd = str(cwd.absolute())
     cwd = cwd or settings.ROOT_DIR
     logger.debug(f"Running cmd: \n{cmd}")
-    r = subprocess.run(cmd, cwd=cwd, shell=True, capture_output=capture_output)
+    r = subprocess.run(cmd, cwd=cwd, shell=True, capture_output=capture_output, timeout=30)
     if r.returncode != 0:
         logger.error(r.stderr.decode())
         raise Exception(f"Exception raised when calling cmd: {cmd}\n{r.stderr.decode()}")
+    if capture_output:
+        logger.info(f"Captured output\n{r.stdout}")
     return r

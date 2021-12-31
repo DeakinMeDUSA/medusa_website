@@ -47,5 +47,5 @@ def backup_db_and_media():
     from django.conf import settings
 
     backup_script_path = Path(settings.ROOT_DIR, "scripts/backup_db.sh")
-    run_cmd(cmd=str(backup_script_path), cwd=settings.ROOT_DIR, capture_output=False)
+    run_cmd(cmd=str(backup_script_path), cwd=settings.ROOT_DIR, capture_output=True)
     logger.info(f"Backup completed")

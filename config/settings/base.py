@@ -527,3 +527,4 @@ CELERY_TASK_TIME_LIMIT = 10 * 60
 CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "django-db"
 CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+CELERY_WORKER_REDIRECT_STDOUTS_LEVEL = "INFO"

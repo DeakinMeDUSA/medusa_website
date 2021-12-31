@@ -12,13 +12,14 @@ mkdir -p "$DB_BACKUPS_DIR"
 cd "$DB_BACKUPS_DIR"
 CURRENT_DATE="$(date +'%Y-%m-%d')"
 echo "Backing up db to $DB_BACKUPS_DIR/$CURRENT_DATE.sql"
-pg_dump medusa_website > "$CURRENT_DATE.sql"
+export PGPASSWORD="$DATABASE_PASSWORD"
+pg_dump medusa_website -U "$DATABASE_USER" -h localhost > "$CURRENT_DATE.sql"
 
 
 echo "Backing up media files to $MEDIA_BACKUP_DIR"
 mkdir -p "$MEDIA_BACKUP_DIR"
 cd "$MEDUSA_WEBSITE_ROOT"
 # https://devhints.io/rsync
-rsync -rtvh "$MEDUSA_WEBSITE_ROOT/medusa_website/media" "$MEDIA_BACKUP_DIR"
+rsync -rtvh "$MEDUSA_WEBSITE_ROOT/medusa_website/media" "$MEDIA_BACKUP_DIR" --delete --delete-excluded
 
 echo "Backup complete!"
