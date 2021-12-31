@@ -30,21 +30,31 @@ def traces_sampler(sampling_context: Dict):
     return 1.0
 
 
-def run_cmd(cmd: str, cwd: Union[Path, str] = None, capture_output=False):
+def run_cmd(cmd: str, cwd: Union[Path, str] = None, capture_output=False, check=True, shell=True, timeout=30):
     from django.conf import settings
 
+    cwd = cwd or settings.ROOT_DIR
     if isinstance(cwd, Path):
         cwd = str(cwd.absolute())
-    cwd = cwd or settings.ROOT_DIR
+
     logger.debug(f"Running cmd: \n{cmd}")
-    r = subprocess.run(cmd, cwd=cwd, shell=True, capture_output=capture_output, timeout=30)
-    if r.returncode != 0:
-        logger.error(r.stderr.decode())
+    r = subprocess.run(
+        cmd,
+        cwd=cwd,
+        check=check,
+        text=True,
+        shell=shell,
+        capture_output=capture_output,
+        timeout=timeout,
+        executable="/bin/bash",
+    )
+    if r.returncode != 0 and check is False:
+        logger.error(r.stderr)
         raise Exception(
             f"Exception raised when calling cmd: {cmd}\n"
-            f"stderr: {r.stderr.decode() if r.stderr else 'None'}\n"
-            f"stdout: {r.stdout.decode() if r.stdout else 'None'}"
+            f"stderr: {r.stderr if r.stderr else 'None'}\n"
+            f"stdout: {r.stdout if r.stdout else 'None'}"
         )
     if capture_output:
-        logger.info(f"Captured output\n{r.stdout.decode()}")
+        logger.info(f"Captured output\n{r.stdout}")
     return r
