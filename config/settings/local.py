@@ -89,7 +89,7 @@ sentry_sdk.init(
     environment=env("SENTRY_ENVIRONMENT", default="development"),
     traces_sampler=traces_sampler,
     send_default_pii=True,
-    debug=True,
+    debug=False,
     sample_rate=1.0,
     with_locals=True,
 )
