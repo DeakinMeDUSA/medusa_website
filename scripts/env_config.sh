@@ -1,9 +1,12 @@
 #!/bin/bash
-set -euo pipefail # Exit on any non-zero exit code, and error on use of undefined var
+#set -euo pipefail # Exit on any non-zero exit code, and error on use of undefined var
 
 # Load .env file
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+export enable_trap_debug=1
+source "$SCRIPT_DIR/trap.bash"
 PARENT_PARENT_DIR="$(dirname "$SCRIPT_DIR")"
+
 export PATH="$HOME/.poetry/bin:$PATH"
 
 if test -f "$PARENT_PARENT_DIR/.env"; then
