@@ -46,6 +46,12 @@ def get_and_import_memberlist(gmail: GmailBackend, members_report_email: Dict) -
 def backup_db_and_media():
     from django.conf import settings
 
+    env_config_script_path = Path(settings.ROOT_DIR, "scripts/env_config.sh")
     backup_script_path = Path(settings.ROOT_DIR, "scripts/backup_db.sh")
-    run_cmd(cmd=str(backup_script_path), cwd=settings.ROOT_DIR, capture_output=True)
+    assert env_config_script_path.exists()
+    assert backup_script_path.exists()
+    logger.info(f"settings.ROOT_DIR = {settings.ROOT_DIR}")
+    r1 = run_cmd(cmd=str(env_config_script_path), cwd=settings.ROOT_DIR, capture_output=True)
+    r2 = run_cmd(cmd=str(backup_script_path), cwd=settings.ROOT_DIR, capture_output=True)
     logger.info(f"Backup completed")
+    return r2
