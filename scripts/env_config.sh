@@ -3,8 +3,9 @@
 
 # Load .env file
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+echo "Using SCRIPT_DIR = $SCRIPT_DIR"
 export enable_trap_debug=1
-source "$SCRIPT_DIR/trap.bash"
+source "$SCRIPT_DIR/lib.trap.sh"
 PARENT_PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 
 export PATH="$HOME/.poetry/bin:$PATH"

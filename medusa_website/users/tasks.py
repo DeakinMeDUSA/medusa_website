@@ -51,7 +51,7 @@ def backup_db_and_media():
     assert env_config_script_path.exists()
     assert backup_script_path.exists()
     logger.info(f"settings.ROOT_DIR = {settings.ROOT_DIR}")
-    r1 = run_cmd(cmd=str(env_config_script_path), cwd=settings.ROOT_DIR, capture_output=True)
-    r2 = run_cmd(cmd=str(backup_script_path), cwd=settings.ROOT_DIR, capture_output=True)
+    r1 = run_cmd(cmd=f'"{env_config_script_path}"', cwd=settings.ROOT_DIR, capture_output=True)
+    r2 = run_cmd(cmd=f'"{backup_script_path}"', cwd=settings.ROOT_DIR, capture_output=True)
     logger.info(f"Backup completed")
     return r2
