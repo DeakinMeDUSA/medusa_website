@@ -5,15 +5,21 @@ set -euo pipefail # Exit on any non-zero exit code, and error on use of undefine
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 PARENT_PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 export PATH="$HOME/.poetry/bin:$PATH"
-set -o allexport; source "$PARENT_PARENT_DIR/.env"; set +o allexport
 
-# Set VENV and REPO variables if not defined previously
-if [ -z "${MEDUSA_WEBSITE_VENV-}" ]; then
-  MEDUSA_WEBSITE_VENV="$(poetry env info -p)"
+if test -f "$PARENT_PARENT_DIR/.env"; then
+  set -o allexport; source "$PARENT_PARENT_DIR/.env"; set +o allexport
+else
+  echo "NO .env FILE FOUND at $PARENT_PARENT_DIR/.env"
 fi
 
 if [ -z "${MEDUSA_WEBSITE_ROOT-}" ]; then
   MEDUSA_WEBSITE_ROOT="/home/$USER/medusa_website"
+fi
+
+cd "$MEDUSA_WEBSITE_ROOT"  # So that poetry env works
+# Set VENV and REPO variables if not defined previously
+if [ -z "${MEDUSA_WEBSITE_VENV-}" ]; then
+  MEDUSA_WEBSITE_VENV="$(poetry env info -p)"
 fi
 
 echo "Using MEDUSA_WEBSITE_VENV = $MEDUSA_WEBSITE_VENV"
