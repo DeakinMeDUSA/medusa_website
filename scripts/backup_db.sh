@@ -19,6 +19,6 @@ echo "Backing up media files to $MEDIA_BACKUP_DIR"
 mkdir -p "$MEDIA_BACKUP_DIR"
 cd "$MEDUSA_WEBSITE_ROOT"
 # https://devhints.io/rsync
-rsync -rtvh "$MEDUSA_WEBSITE_ROOT/medusa_website/media" "$MEDIA_BACKUP_DIR" --delete --delete-excluded
+rsync -rtvh "$MEDUSA_WEBSITE_ROOT/medusa_website/media/" "$MEDIA_BACKUP_DIR" --delete --delete-excluded
 
 echo "Backup complete!"
