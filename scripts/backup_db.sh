@@ -11,10 +11,9 @@ MEDIA_BACKUP_DIR="$MEDUSA_WEBSITE_ROOT/backups/media"
 mkdir -p "$DB_BACKUPS_DIR"
 cd "$DB_BACKUPS_DIR"
 CURRENT_DATE="$(date +'%Y-%m-%d')"
-echo "Backing up db to $DB_BACKUPS_DIR/$CURRENT_DATE.sql"
+echo "Backing up db to $DB_BACKUPS_DIR/$CURRENT_DATE.dump"
 export PGPASSWORD="$DATABASE_PASSWORD"
-pg_dump medusa_website -U "$DATABASE_USER" -h localhost > "$CURRENT_DATE.sql"
-
+pg_dump -c medusa_website -U "$DATABASE_USER" -h localhost --format=t --file="$CURRENT_DATE.dump"
 
 echo "Backing up media files to $MEDIA_BACKUP_DIR"
 mkdir -p "$MEDIA_BACKUP_DIR"
