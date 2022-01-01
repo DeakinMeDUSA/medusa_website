@@ -143,7 +143,6 @@ sentry_sdk.init(
 # ------------------------------------------------------------------------------
 DEBUG = False
 
-PIPELINE["SHOW_ERRORS_INLINE"] = True
 
 # CELERY
 CELERY_TASK_ALWAYS_EAGER = False

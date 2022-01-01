@@ -338,11 +338,13 @@ db/
 .idea/medusa_website.iml
 .idea/misc.xml
 
+# Compiled CSS files
 *.css.map
+/medusa_website/static/sass/*.css
+
 .env
 /db_backup
-db.sqlite3
-server.log
 temp/
 *credentials.json
 backups/
+

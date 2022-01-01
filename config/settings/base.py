@@ -108,6 +108,7 @@ THIRD_PARTY_APPS = [
     "memoize",
     "django_celery_results",
     "django_celery_beat",
+    "sass_processor",
 ]
 
 LOCAL_APPS = [
@@ -192,6 +193,7 @@ STATICFILES_DIRS = [
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "sass_processor.finders.CssFinder",
     "pipeline.finders.PipelineFinder",
 ]
 # STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
@@ -376,9 +378,10 @@ CSRF_TRUSTED_ORIGINS = ["localhost:3000", ".medusa.org.au", ".medusa.org.au", "l
 
 # JAVASCRIPT LOADING
 # https://django-pipeline.readthedocs.io/en/latest/configuration.html
+
 PIPELINE = {
-    # "PIPELINE_ENABLED": False,
     "PIPELINE_COLLECTOR_ENABLED": True,
+    "SHOW_ERRORS_INLINE": True,
     "CSS_COMPRESSOR": "pipeline.compressors.yuglify.YuglifyCompressor",
     "JS_COMPRESSOR": "pipeline.compressors.yuglify.YuglifyCompressor",
     "YUGLIFY_BINARY": env("YUGLIFY_BINARY", default=None),
@@ -528,3 +531,11 @@ CELERY_BROKER_URL = "redis://localhost:6379/0"
 CELERY_RESULT_BACKEND = "django-db"
 CELERYBEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_WORKER_REDIRECT_STDOUTS_LEVEL = "INFO"
+
+# SASS PROCESSOR
+SASS_PRECISION = 8
+SASS_PROCESSOR_STORAGE = "django.contrib.staticfiles.storage.FileSystemStorage"
+SASS_PROCESSOR_STORAGE_OPTIONS = {
+    "location": STATIC_ROOT,
+    "base_url": STATIC_URL,
+}

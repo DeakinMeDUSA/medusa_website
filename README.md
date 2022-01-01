@@ -23,8 +23,8 @@ Installation
 
 * [Python 3.9](https://www.python.org/downloads/)
 * [Poetry](https://python-poetry.org/docs/)
+* [node, install via nvm](https://github.com/nvm-sh/nvm)
 * [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
-* [sass](https://sass-lang.com/install)
 * [postgresql](https://www.postgresql.org/download/)
 * [redis](https://redis.io/topics/quickstart)
 

@@ -2,7 +2,6 @@
   "name": "medusa_website",
   "version": "1.0.0",
   "description": "MeDUSA Website",
-  "main": "index.js",
   "directories": {
     "doc": "docs"
   },
@@ -14,8 +13,8 @@
     "url": "git+https://github.com/DeakinMeDUSA/medusa_website.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Chris Culhane (cfculhane@gmail.com)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/DeakinMeDUSA/medusa_website/issues"
   },
