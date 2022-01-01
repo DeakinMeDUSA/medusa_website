@@ -12,3 +12,7 @@ else
 fi
 echo "Attempting import of file $DB_TO_IMPORT"
 pg_restore --dbname medusa_website --no-owner --clean "$DB_TO_IMPORT"
+
+MEDIA_BACKUP_DIR="$MEDUSA_WEBSITE_ROOT/backups/media"
+echo "Copying media from $MEDUSA_WEBSITE_ROOT/backups/media"
+rsync -rtvh "$MEDIA_BACKUP_DIR/" "$MEDUSA_WEBSITE_ROOT/medusa_website/media"
