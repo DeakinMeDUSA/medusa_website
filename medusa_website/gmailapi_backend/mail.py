@@ -3,6 +3,7 @@ Email backend that uses the GMail API via OAuth2 authentication.
 """
 import base64
 import datetime
+import re
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 
@@ -25,7 +26,7 @@ class GmailBackend(BaseEmailBackend):
     def __init__(self, account_email: str = None, fail_silently=False, **kwargs):
         super().__init__(fail_silently=fail_silently, **kwargs)
 
-        self.account_email = account_email or settings.DEFAULT_FROM_EMAIL
+        self.account_email = self.clean_email_from_from_email(account_email or settings.DEFAULT_FROM_EMAIL)
         self.credentials = self.authenticate(self.account_email)
         self.user_id = "me"
         self.service = build("gmail", "v1", credentials=self.credentials, cache_discovery=False)
@@ -134,3 +135,12 @@ class GmailBackend(BaseEmailBackend):
                 return dateparser.parse(header["value"].replace(" (UTC)", ""))
         else:  # no-return
             raise RuntimeError(f"Could not find date for msg id {msg['id']}")
+
+    @staticmethod
+    def clean_email_from_from_email(from_email: str):
+        """Extracts the email from a str of the format MeDUSA Website <website@medusa.org.au>"""
+        try:
+            email = re.findall(pattern=r"<\S+@\S+>", string=from_email, flags=re.UNICODE)[0].strip("<>")
+            return email
+        except IndexError:
+            return from_email
