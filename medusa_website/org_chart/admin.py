@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from .models import CommitteeMemberRecord, CommitteeRole, SubCommittee
+from .models import CommitteeRole, CommitteeRoleRecord, SubCommittee
 
 
 class CommitteeRoleInline(admin.TabularInline):
@@ -10,8 +10,8 @@ class CommitteeRoleInline(admin.TabularInline):
     extra = 0
 
 
-class CommitteeMemberRecordInline(admin.TabularInline):
-    model = CommitteeMemberRecord
+class CommitteeRoleRecordInline(admin.TabularInline):
+    model = CommitteeRoleRecord
     extra = 0
 
 
@@ -32,11 +32,11 @@ class CommitteeRoleAdmin(admin.ModelAdmin):
         "position",
         "email",
     )
-    inlines = [CommitteeMemberRecordInline]
+    inlines = [CommitteeRoleRecordInline]
 
 
-@admin.register(CommitteeMemberRecord)
-class CommitteeMemberRecordAdmin(admin.ModelAdmin):
+@admin.register(CommitteeRoleRecord)
+class CommitteeRoleRecordAdmin(admin.ModelAdmin):
     list_display = ["role", "user", "year"]
     search_fields = (
         "role__position",

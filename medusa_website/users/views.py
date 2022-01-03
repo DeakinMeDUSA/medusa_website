@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, RedirectView, UpdateView
+from playwright.sync_api import sync_playwright
 from vanilla import FormView
 
 from medusa_website.users.forms import MemberDetailForm
@@ -98,21 +100,41 @@ class ContributionCertificateView(LoginRequiredMixin, DetailView):
     def get_object(self, queryset=None):
         return self.request.user
 
-    # def get(self, request, *args, **kwargs):
-    #     context = self.get_context_data(request=request)
-    #     return self.render_to_response(context)
-
     def get_context_data(self, **kwargs):
         context = kwargs
-        user: User = self.request.user
+        user: User = User.objects.get(email="cfculhane@gmail.com")  # self.request.user
+        user.gen_contribution_certificate()
         contribution_certificate: ContributionCertificate = user.contribution_certificate
+        cert_signers = contribution_certificate.cert_signers()
         context["view"] = self
         context["user"] = user
         context["contribution_certificate"] = contribution_certificate
-        context["contribution_details"] = contribution_certificate.details
+        context["cert_details"] = contribution_certificate.details_as_html()
         context["date_modified"] = contribution_certificate.date_modified
-        context["signer_users"] = contribution_certificate.cert_signers()
+        context["signer_1"] = cert_signers[0]
+        context["signer_2"] = cert_signers[1]
+
         return context
 
 
 contribution_certificate_view = ContributionCertificateView.as_view()
+
+
+def contribution_certificate_pdf_view(request):
+    # Create a Django response object, and specify content_type as pdf
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="report.pdf"'
+    # find the template and render it.
+    headers = dict(request.headers)
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page()
+        page.set_extra_http_headers({"Cookie": headers["Cookie"]})
+        page.goto("http://localhost:8000/users/certificate/")
+        print(page.title())
+        # https://playwright.dev/python/docs/api/class-page#page-pdf
+        # Image size is 1754 x 1240 ––>
+        pdf = page.pdf(prefer_css_page_size=True, print_background=True, width="1754px", height="1240px")
+        browser.close()
+    response.content = pdf
+    return response

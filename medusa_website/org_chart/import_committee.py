@@ -23,8 +23,8 @@ import pandas as pd
 from django.conf import settings
 
 from medusa_website.org_chart.models import (
-    CommitteeMemberRecord,
     CommitteeRole,
+    CommitteeRoleRecord,
     SubCommittee,
 )
 from medusa_website.users.models import MemberRecord, User
@@ -50,10 +50,10 @@ for m in mems:
     except AttributeError:
         logger.warning(f"IGNORING invalid row - {m}")
         continue
-    logger.info(f"{'-' * 45}\nCreating/Updating CommitteeMemberRecord for {name}")
+    logger.info(f"{'-' * 45}\nCreating/Updating CommitteeRoleRecord for {name}")
     try:
         try:
-            user = User.objects.get(email=m["Medusa Member Email"])
+            user = User.objects.get(email=m["Medusa Member Email"].lower())
             logger.info(f"Found existing user = {user}")
         except User.DoesNotExist:
             users = User.objects.filter(name__iexact=name).exclude(email__contains="medusa.org.au")
@@ -71,7 +71,7 @@ for m in mems:
     except User.DoesNotExist:
         try:
             try:
-                mem_record = MemberRecord.objects.get(email=m["Medusa Member Email"])
+                mem_record = MemberRecord.objects.get(email=m["Medusa Member Email"].lower())
             except MemberRecord.DoesNotExist:
                 mem_records = MemberRecord.objects.filter(name__iexact=name).exclude(email__contains="medusa.org.au")
                 if len(mem_records) == 1:
@@ -86,11 +86,11 @@ for m in mems:
                 else:
                     raise MemberRecord.DoesNotExist()
 
-            email = mem_record.email
+            email = mem_record.email.lower()
             logger.info(f"User doesn't exist, using MemberRecord for {name} - {email}")
         except MemberRecord.DoesNotExist:
             logger.warning(f"MemberRecord AND User do not exist, provide manual email:")
-            email = input("Enter email").strip()
+            email = input("Enter email").strip().lower()
         user = User.objects.create(name=name, email=email, is_medusa=True, is_staff=True, is_active=True)
     if m.get("Phone Number") and not user.phone_number:
         user.phone_number = m["Phone Number"]
@@ -98,11 +98,11 @@ for m in mems:
     user.save()
     subcommittee = SubCommittee.objects.get(title=m["Subcommittee"])
     role, created_role = CommitteeRole.objects.get_or_create(
-        position=m["Position"], email=m["MeDUSA Email Address"], sub_committee=subcommittee
+        email=m["MeDUSA Email Address"].lower(), sub_committee=subcommittee
     )
     if created_role:
         logger.warning(f"Created role : {role}")
-    member_rec, created = CommitteeMemberRecord.objects.get_or_create(
+    member_rec, created = CommitteeRoleRecord.objects.get_or_create(
         role=role, user=user, year=datetime.datetime.today().year
     )
     member_rec.save()

@@ -22,17 +22,19 @@
   </div>
 
   <div class="details_div">
-    {{ contribution_details }}
+    {{ cert_details }}
   </div>
-
-  <div class="bottom_text_div date">
+  <div class="bottom_text_div date_value">
+    {{ date_modified }}
+  </div>
+  <div class="bottom_text_div date_title">
     DATE
   </div>
   <div class="bottom_text_div signer_1">
-    PAOLO MASANGCAY<br>MeDUSA PRESIDENT
+    {{ signer_1.name.upper }}<br>MeDUSA {{ signer_1.current_role.position.upper }}
   </div>
   <div class="bottom_text_div signer_2">
-    RACHEL TOBIN<br>MeDUSA VICE PRESIDENT
+    {{ signer_2.name.upper }}<br>MeDUSA {{ signer_2.current_role.position.upper }}
   </div>
 </div>
 </body>

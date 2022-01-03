@@ -10,6 +10,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/backups/committee/committee_2021.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/backups/committee/committee_2022.csv">
           <value>
             <Attribute>

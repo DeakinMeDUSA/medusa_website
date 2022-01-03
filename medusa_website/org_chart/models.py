@@ -34,13 +34,13 @@ class CommitteeRole(models.Model):
         return self.__repr__()
 
 
-class CommitteeMemberRecord(models.Model):
+class CommitteeRoleRecord(models.Model):
     """
     Represents a year of holding a position on the committee for a particular year.
     """
 
     role = models.ForeignKey(CommitteeRole, on_delete=models.PROTECT, related_name="history")
-    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="committee_roles")
+    user = models.ForeignKey(User, on_delete=models.PROTECT, related_name="committee_member_records")
     year = models.IntegerField(help_text="Year that the user held this position in the committee")
 
     class Meta:

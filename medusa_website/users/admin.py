@@ -9,6 +9,7 @@ from medusa_website.users.forms import UserChangeForm, UserCreationForm
 
 from .models import (
     Contribution,
+    ContributionCertificate,
     ContributionType,
     MemberRecord,
     MemberRecordsImport,
@@ -151,10 +152,19 @@ class MemberRecordAdmin(admin.ModelAdmin):
 
 @admin.register(ContributionType)
 class ContributionTypeAdmin(admin.ModelAdmin):
-    list_display = ["name", "machine_name", "requires_signoff"]
+    list_display = ["name", "machine_name", "requires_signoff", "subtype"]
     list_display_links = ["name", "machine_name"]
-    fields = ["name", "machine_name", "requires_signoff", "signoff_requirements"]
-    search_fields = ["name", "machine_name"]
+    fields = ["name", "machine_name", "requires_signoff", "signoff_requirements", "subtype", "template"]
+    search_fields = ["name", "machine_name", "subtype"]
+    list_filter = ["subtype"]
+
+
+@admin.register(ContributionCertificate)
+class ContributionCertificateAdmin(admin.ModelAdmin):
+    list_display = ["user", "signed_off_date", "signed_off_by"]
+    list_display_links = ["user"]
+    search_fields = ["user__email", "user__name"]
+    list_filter = ["signed_off_by"]
 
 
 @admin.action(description="Sign off selected contributions")

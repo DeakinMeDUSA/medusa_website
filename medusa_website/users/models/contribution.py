@@ -1,7 +1,10 @@
 from datetime import datetime
 from typing import List
 
+import markdown
 from django.db import models
+from django.db.models import Count, QuerySet
+from django.utils.safestring import mark_safe
 from martor.models import MartorField
 
 from medusa_website.users.models import User
@@ -24,6 +27,16 @@ class ContributionType(models.Model):
         max_length=128,
         help_text="Human readable type of contribution, e.g. 'Organised MCQ Night'. Must be unique.",
         unique=True,
+    )
+    template = models.CharField(
+        max_length=128,
+        help_text="Template for certificate, use $COUNT to replace with count of that "
+        "contribution. E.g 'Creating $COUNT MCQ Bank Questions'",
+        null=True,
+        blank=True,
+    )
+    subtype = models.CharField(
+        max_length=128, choices=[("WEBSITE", "WEBSITE"), ("EVENTS", "EVENTS"), ("OTHER", "OTHER")], default="OTHER"
     )
     requires_signoff = models.BooleanField(
         default=True, help_text="True if this contribution requires signoff by a executive member"
@@ -208,14 +221,43 @@ class ContributionCertificate(models.Model):
     signed_off_date = models.DateField(help_text="Date the contribution was signed off", null=True, blank=True)
     details = MartorField(
         help_text="Markdown formatted details. This will be generated automatically by "
-        "user.generate_contribution_certificate, but can be modified afterwards as well.",
+        "ContributionCertificate.gen_cert_detail_text, but can be modified afterwards as well.",
         blank=True,
         null=True,
     )
 
-    @property
-    def contributions(self):
-        return self.user.contributions.all()
+    @staticmethod
+    def sum_contribs(contribs: QuerySet[Contribution]):
+        """
+        Groups and aggregates contributions into subtypes, and then types of contribution
+
+        Example return:
+        {
+            "WEBSITE" : {
+                "MCQ_BANK_QUESTION_REVIEW": {"template": "Creating $COUNT MCQ Bank Questions", "count": 59}
+            }
+        }
+        """
+        count_dicts = list(
+            contribs.values("type__machine_name", "type__subtype", "type__template").annotate(Count("id"))
+        )
+        out_dict = {}
+        for d in count_dicts:
+            if not out_dict.get(d["type__subtype"]):
+                out_dict[d["type__subtype"]] = {}
+            out_dict[d["type__subtype"]][d["type__machine_name"]] = {
+                "template": d["type__template"],
+                "count": d["id__count"],
+            }
+        return out_dict
+
+    def gen_contributions_and_roles_dict(self):
+        return {
+            "roles": self.user.committee_member_records.all(),
+            "website": self.sum_contribs(self.user.contributions.filter(type__subtype="WEBSITE")).get("WEBSITE"),
+            "events": self.user.contributions.filter(type__subtype="EVENTS"),
+            "other": self.user.contributions.filter(type__subtype="OTHER"),
+        }
 
     @classmethod
     def generate_for_user(cls, user: User):
@@ -229,6 +271,7 @@ class ContributionCertificate(models.Model):
         Contribution.gen_osce_bank_contributions_for_user(user)
 
         cert = cls(user=user)
+        cert.details = cert.gen_cert_detail_text()
         cert.save()
 
         return Contribution.objects.filter(user=user)
@@ -245,12 +288,48 @@ class ContributionCertificate(models.Model):
 
     @staticmethod
     def cert_signers() -> List[User]:
-        from medusa_website.org_chart.models import CommitteeMemberRecord
+        from medusa_website.org_chart.models import CommitteeRoleRecord
 
         current_year = datetime.today().year
         committee_members = [
-            CommitteeMemberRecord.objects.get(role__email="president@medusa.org.au", year=current_year),
-            CommitteeMemberRecord.objects.get(role__email="vp@medusa.org.au", year=current_year),
+            CommitteeRoleRecord.objects.get(role__email="president@medusa.org.au", year=current_year),
+            CommitteeRoleRecord.objects.get(role__email="vp@medusa.org.au", year=current_year),
         ]
         signers = [mem.user for mem in committee_members]
         return signers
+
+    def gen_cert_detail_text(self) -> str:
+        contrib_and_roles = self.gen_contributions_and_roles_dict()
+        texts = []
+        if contrib_and_roles["roles"]:
+            extra = "MeDUSA Committee Roles:\n\n"
+            for role_record in contrib_and_roles["roles"]:
+                extra += f"* {role_record.role.position} ({role_record.year})\n"
+            texts.append(extra)
+
+        if contrib_and_roles.get("website"):
+            extra = "Contributing to the MeDUSA Website:\n\n"
+            for contrib in contrib_and_roles["website"].values():
+                extra += f"* {contrib['template'].replace('$COUNT', str(contrib['count']))}\n"
+            texts.append(extra)
+
+        if contrib_and_roles.get("events"):
+            extra = "Contributing to MeDUSA Events:\n\n"
+            for contrib in contrib_and_roles["events"].values():
+                extra += f"* {contrib.description} - {contrib.date}\n"
+            texts.append(extra)
+
+        if contrib_and_roles.get("other"):
+            extra = "Other contributions:\n"
+            for contrib in contrib_and_roles["other"].values():
+                extra += f"* {contrib.description} - {contrib.date}\n"
+            texts.append(extra)
+
+        return "\n".join(texts)
+
+    def details_as_html(self):
+        if self.details:
+            html = markdown.markdown(self.details)
+            return mark_safe(html)
+        else:
+            return mark_safe("<i>No details provided!</i>")

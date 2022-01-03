@@ -1,3 +1,5 @@
+import datetime
+
 from allauth.account.models import EmailAddress
 from cuser.models import CUserManager
 from django.contrib.auth.base_user import AbstractBaseUser
@@ -151,3 +153,10 @@ class User(AbstractBaseUser, PermissionsMixin):
             return True
         except Exception as errmsg:
             return False
+
+    def current_role(self):
+        current_roles = self.committee_member_records.all().filter(year=datetime.datetime.today().year)
+        if len(current_roles) > 0:
+            return current_roles[0].role
+        else:
+            return None

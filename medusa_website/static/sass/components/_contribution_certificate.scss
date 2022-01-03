@@ -24,8 +24,6 @@ $text_y_offset: 1100px;
     line-height: 59px;
     letter-spacing: 0em;
     text-align: center;
-    border: dotted red 1px;
-
   }
 
   .for_div {
@@ -70,21 +68,23 @@ $text_y_offset: 1100px;
     color: #000000;
   }
 
-  .date {
+  .date_title {
     left: 198px;
     top: 1085px;
-    border: dotted red 1px;
+  }
+
+  .date_value {
+    left: 198px;
+    top: 1020px;
   }
 
   .signer_1 {
     left: 687px;
     top: 1085px;
-    border: dotted red 1px;
   }
 
   .signer_2 {
     left: 1166px;
     top: 1085px;
-    border: dotted red 1px;
   }
 }
