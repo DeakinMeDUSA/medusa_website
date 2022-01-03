@@ -28,7 +28,7 @@ class CommitteeRole(models.Model):
     )
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}> - {self.position}"
+        return f"<{self.__class__.__name__} - {self.position} - {self.email}>"
 
     def __str__(self):
         return self.__repr__()
