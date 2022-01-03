@@ -7,6 +7,12 @@ from .models import CommitteeMemberRecord, CommitteeRole, SubCommittee
 
 class CommitteeRoleInline(admin.TabularInline):
     model = CommitteeRole
+    extra = 0
+
+
+class CommitteeMemberRecordInline(admin.TabularInline):
+    model = CommitteeMemberRecord
+    extra = 0
 
 
 @admin.register(SubCommittee)
@@ -26,12 +32,13 @@ class CommitteeRoleAdmin(admin.ModelAdmin):
         "position",
         "email",
     )
+    inlines = [CommitteeMemberRecordInline]
 
 
 @admin.register(CommitteeMemberRecord)
 class CommitteeMemberRecordAdmin(admin.ModelAdmin):
     list_display = ["role", "user", "year"]
     search_fields = (
-        "role",
-        "user",
+        "role__position",
+        "user__email",
     )

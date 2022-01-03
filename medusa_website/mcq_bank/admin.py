@@ -3,11 +3,12 @@
 from django.contrib import admin
 from imagekit.admin import AdminThumbnail
 
-from .models import Answer, Category, History, Question, Record, QuizSession
+from .models import Answer, Category, History, Question, QuizSession, Record
 
 
 class AnswerInline(admin.TabularInline):
     model = Answer
+    extra = 0
 
 
 @admin.register(Question)
@@ -25,17 +26,17 @@ class QuestionAdmin(admin.ModelAdmin):
         "category",
     ]
     readonly_fields = ("id", "question_image_thumbnail", "answer_image_thumbnail")
-    fields = [
-        "text",
-        "category",
-        "author",
-        "question_image",
-        "answer_image",
-        "question_image_thumbnail",
-        "answer_image_thumbnail",
-        "explanation",
-        "randomise_answer_order",
-    ]
+    # fields = [
+    # "text",
+    # "category",
+    # "author",
+    # "question_image",
+    # "answer_image",
+    # "question_image_thumbnail",
+    # "answer_image_thumbnail",
+    # "explanation",
+    # "randomise_answer_order",
+    # ]
     list_filter = ("category",)
     search_fields = ("text", "explanation")
     # filter_horizontal = ("quiz",) # Must be many-to-many

@@ -47,7 +47,7 @@ class CommitteeMemberRecord(models.Model):
         unique_together = ["role", "user", "year"]
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}> - {self.role.position} - {self.user} - {self.year}"
+        return f"<{self.__class__.__name__} - {self.role.position} - {self.user} - {self.year}>"
 
     def __str__(self):
         return self.__repr__()

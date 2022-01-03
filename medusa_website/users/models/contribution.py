@@ -192,7 +192,7 @@ class ContributionCertificate(models.Model):
     user = models.OneToOneField(
         User,
         help_text="User the this contribution certificate corresponds to. Note there will only be one certificate at any one time",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="contribution_certificate",
         primary_key=True,
     )
