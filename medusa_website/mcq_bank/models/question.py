@@ -26,6 +26,7 @@ class Question(models.Model):
         unique=True,
     )
     author = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
+    creation_date = models.DateField(help_text="Date the question was created", auto_now_add=True)
     question_image = models.ImageField(
         null=True,
         blank=True,
@@ -66,6 +67,7 @@ class Question(models.Model):
     reviewed_by = models.ForeignKey(
         User, related_name="reviewed_questions", on_delete=models.PROTECT, blank=True, null=True
     )
+    review_date = models.DateField(help_text="Date the question was reviewed", null=True, blank=True)
 
     def __repr__(self):
         return fr"<Question id: {self.id}, author: '{self.author}', text: '{truncate_text(self.text)}'"

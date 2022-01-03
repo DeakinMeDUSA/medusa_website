@@ -55,6 +55,7 @@ class OSCEStation(models.Model):
     types = models.ManyToManyField(StationType)
     specialities = models.ManyToManyField(Speciality)
     author = models.ForeignKey(User, on_delete=models.PROTECT, blank=True, null=True)
+    creation_date = models.DateField(help_text="Date the OSCE Station was created", auto_now_add=True)
 
     stem = MartorField(
         help_text="OSCE Stem to be shown to the candidate completing the station",
@@ -85,6 +86,7 @@ class OSCEStation(models.Model):
     reviewed_by = models.ForeignKey(
         User, related_name="reviewed_osce_stations", on_delete=models.PROTECT, blank=True, null=True
     )
+    review_date = models.DateField(help_text="Date the OSCE station was reviewed", null=True, blank=True)
 
     stem_image = models.ImageField(
         null=True,
