@@ -4,12 +4,13 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect
+from vanilla import TemplateView, FormView
+
 from medusa_website.frontend.forms import ContactForm
 from medusa_website.frontend.models import Sponsor, Supporter, OfficialDocumentation, Publication, group_docs_by_year, \
     ElectiveReport, ConferenceReport
 from medusa_website.org_chart.models import SubCommittee
 from medusa_website.utils.general import get_pretty_logger
-from vanilla import TemplateView, FormView
 
 logger = get_pretty_logger(__name__)
 
@@ -43,12 +44,13 @@ class ContactView(FormView, TemplateView):
         return context
 
     def form_valid(self, form):
-        subject = f"[INTERNAL] Website contact request from '{form.cleaned_data['name']}'"
-        message = form.cleaned_data['message']
+        name = form.cleaned_data['name']
         sender = form.cleaned_data['email']
-        recipients = ["website@medusa.org.au"]
+        subject = f"[INTERNAL] Website contact request from '{name}' - {sender}"
+        message = f"Message from {name} <{sender}>\n{'-' * 30}\n{form.cleaned_data['message']}"
+        recipients = ["contact@medusa.org.au"]
         msg = EmailMultiAlternatives(subject=subject, body=message, from_email="website@medusa.org.au", to=recipients,
-                                     bcc=None, cc=[sender], reply_to=[sender])
+                                     bcc=None, reply_to=[sender])
         msg.send()
 
         messages.success(self.request, 'Form submitted successfully, we will get in touch shortly!')
