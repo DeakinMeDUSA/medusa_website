@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+
+$text_y_offset: 1100px;
+
+.contribution_certificate_container {
+
+  font-family: 'Roboto', sans-serif;
+  font-weight: lighter;
+
+  img {
+    //width: 100%;
+    position: absolute;
+  }
+
+  .name_div {
+    position: absolute;
+    height: 65px;
+    width: 864px;
+    left: 445px;
+    top: 527px;
+    font-size: 50px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: 59px;
+    letter-spacing: 0em;
+    text-align: center;
+    border: dotted red 1px;
+
+  }
+
+  .for_div {
+    position: absolute;
+    height: 42px;
+    width: 864px;
+    left: 445px;
+    top: 592px;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: 35px;
+    letter-spacing: 0em;
+    text-align: center;
+
+  }
+
+  .details_div {
+    position: absolute;
+    height: 362px;
+    width: 878px;
+    left: 478px;
+    top: 634px;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 200;
+    line-height: 29px;
+    letter-spacing: 0em;
+    text-align: left;
+
+  }
+
+  .bottom_text_div {
+    position: absolute;
+    width: 380px;
+    height: 97px;
+    font-style: normal;
+    font-weight: 100;
+    font-size: 30px;
+    line-height: 35px;
+    text-align: center;
+    color: #000000;
+  }
+
+  .date {
+    left: 198px;
+    top: 1085px;
+    border: dotted red 1px;
+  }
+
+  .signer_1 {
+    left: 687px;
+    top: 1085px;
+    border: dotted red 1px;
+  }
+
+  .signer_2 {
+    left: 1166px;
+    top: 1085px;
+    border: dotted red 1px;
+  }
+}

@@ -42,6 +42,9 @@ class AccountAdapter(DefaultAccountAdapter):
         # Try to get first and last name's from MemberRecords
         try:
             member_record = MemberRecord.objects.get(email=user.email)
+            user.is_member = True
+            user.create_member_id()
+            user.membership_expiry = member_record.end_date
             member_name = HumanName(member_record.name)
             member_name.capitalize(force=True)
             user.name = member_name
@@ -51,6 +54,8 @@ class AccountAdapter(DefaultAccountAdapter):
         user_part, domain_part = user.email.rsplit("@", 1)
         if domain_part == "medusa.org.au":
             user.is_medusa = True
+            user.is_member = False
+            user.is_staff = True
 
         if commit:
             user.save()

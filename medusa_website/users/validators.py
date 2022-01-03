@@ -1,15 +1,15 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
-from django.utils.translation import gettext_lazy as _
 
 from medusa_website.users.models import MemberRecord
 
 
 class MedusaMemberValidator:
-    message = _(
-        "The supplied email was not found on member list supplied by DUSA, which is updated weekly."
+    message = (
+        "The supplied email was not found on member list supplied by DUSA, which is updated weekly. "
         "If you believe this to be an error, please contact it@medusa.org.au"
     )
+
     code = "invalid"
     domain_whitelist = ["medusa.org.au", "dusa.org.au"]
 

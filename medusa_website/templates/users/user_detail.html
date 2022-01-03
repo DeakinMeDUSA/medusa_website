@@ -7,18 +7,17 @@
   <div class="container">
     {% if messages %}{% include "messages.html" %}{% endif %}
 
-    <div class="row">
-      <div class="col-sm-12">
-
-        {% if object.name %}
-          <h3>{{ object.name }}</h3>
-        {% endif %}
-        <h3>Email: {{ object.email }}</h3>
-      </div>
-    </div>
+      <h3>Personal Details:</h3>
+      <ul>
+        <li><b>Name:</b> {{ object.name }}</li>
+        <li><b>Email:</b> {{ object.email }}</li>
+        <li><b>Membership Number:</b> {{ object.member_id }}</li>
+        <li><b>Membership Expiry:</b> {{ object.membership_expiry }}</li>
+      </ul>
 
     {% if object == request.user %}
-
+      <hr>
+      <h3>Manage Account:</h3>
       <ul>
         <li><a class="btn btn-primary" href="{% url 'users:update' %}" role="button">Change user details</a></li>
         <li><a class="btn btn-primary" href="{% url 'account_change_password' %}" role="button">Change password</a></li>

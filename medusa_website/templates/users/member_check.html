@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load template_filters %}
+{% load pipeline %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %}MeDUSA - Member Query{% endblock %}
+{% block content %}
+
+  <!-- Post -->
+  <section>
+    {% if messages %}{% include "messages.html" %}{% endif %}
+    {% if exception %}<p>{{ exception }}</p>{% endif %}
+    {% if member %}
+      <h3>Membership details:</h3>
+      <ul>
+        <li><b>Name:</b> {{ member.name }}</li>
+        <li><b>Email:</b> {{ member.email }}</li>
+        <li><b>Membership Number:</b> {{ member.member_id }}</li>
+        <li><b>Membership Expiry:</b> {{ member.membership_expiry }}</li>
+      </ul>
+      <hr>
+    {% endif %}
+
+    <h3>Enter a membership number below to check their membership details</h3>
+    {% crispy form %}
+  </section>
+{% endblock %}
+
+{% block javascript %}
+  {{ block.super }}
+
+{% endblock %}

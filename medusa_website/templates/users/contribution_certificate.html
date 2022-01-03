@@ -1,0 +1,39 @@
+{% load static %}
+{% load sass_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contribution Certificate</title>
+  <link href="{% sass_src 'sass/main.scss' %}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div class="contribution_certificate_container">
+  <!–– Image size is 1754 x 1240 ––>
+  <img class="background-image" src="{% static 'images/certificates/MeDUSA-Certificate.png' %}"
+       alt="Certificate background">
+
+  <div class="name_div">
+    {{ user.name.upper }}
+  </div>
+
+  <div class="for_div">
+    for
+  </div>
+
+  <div class="details_div">
+    {{ contribution_details }}
+  </div>
+
+  <div class="bottom_text_div date">
+    DATE
+  </div>
+  <div class="bottom_text_div signer_1">
+    PAOLO MASANGCAY<br>MeDUSA PRESIDENT
+  </div>
+  <div class="bottom_text_div signer_2">
+    RACHEL TOBIN<br>MeDUSA VICE PRESIDENT
+  </div>
+</div>
+</body>
+</html>

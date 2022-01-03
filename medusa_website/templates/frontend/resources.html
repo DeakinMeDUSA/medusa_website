@@ -23,6 +23,13 @@
 
 
     </ul>
+    {% if user.is_staff %}
+      Admin links:
+      <ul class="links">
+        <li><a href="{% url 'admin:index' %}">Admin site</a></li>
+        <li><a href="{% url 'users:member_check' %}">Membership Check</a></li>
+      </ul>
+    {% endif %}
 
 
   </section>

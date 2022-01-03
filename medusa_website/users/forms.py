@@ -1,6 +1,10 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from cuser import forms as admin_forms
+from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.forms import Form, ModelForm
 from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
@@ -28,3 +32,24 @@ class UserCreationForm(admin_forms.UserCreationForm):
             return email
 
         raise ValidationError(self.error_messages["duplicate_email"])
+
+
+def validate_member_id(member_id):
+    if not User.validate_member_id(member_id):
+        raise ValidationError("Invalid member id. Should be the format of 20XX-XXXX-XX")
+
+
+class MemberDetailForm(Form):
+    class Meta:
+        fields = ["member_id"]
+
+    member_id = forms.CharField(label="Membership Number", max_length=12, validators=[validate_member_id])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.form_id = 'id-exampleForm'
+        # self.helper.form_class = 'blueForms'
+        self.helper.form_method = "post"
+        # self.helper.form_action = 'submit_survey'
+        self.helper.add_input(Submit("submit", "Submit"))
