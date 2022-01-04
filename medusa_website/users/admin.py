@@ -179,7 +179,7 @@ class ContributionTypeAdmin(admin.ModelAdmin):
 def sign_certificates(modeladmin, request, queryset: QuerySet[ContributionCertificate]):
     for cert in queryset:
         if not cert.is_signed_off:
-            cert.sign_with_user(user=request.user, email_user=True)
+            cert.sign_with_user(request=request, signing_user=request.user, email_user=True)
 
 
 @admin.action(description="Generate pdfs for the selected certificates")
@@ -227,7 +227,14 @@ class ContributionCertificateAdmin(admin.ModelAdmin):
         "date_sent_for_signoff",
     ]
     actions = [sign_certificates, generate_certificate_pdfs]
-    readonly_fields = ["signed_pdf", "preview_pdf"]
+    readonly_fields = [
+        "signed_pdf",
+        "is_signed_off",
+        "signed_off_by",
+        "signed_off_date",
+        "date_sent_for_signoff",
+        "sent_for_signoff",
+    ]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "signed_off_by":

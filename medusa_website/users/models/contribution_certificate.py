@@ -180,12 +180,34 @@ class ContributionCertificate(models.Model):
         else:
             return mark_safe("<i>No details provided!</i>")
 
-    def sign_with_user(self, user: User, email_user: True):
-        assert user.has_contrib_sign_off_permission()
-        self.signed_off_by = user
+    def sign_with_user(self, request: WSGIRequest, signing_user: User, email_user: True):
+        assert signing_user.has_contrib_sign_off_permission()
+        self.signed_off_by = signing_user
         self.signed_off_date = datetime.today().date()
         self.is_signed_off = True
-
+        if email_user:
+            url_to_signed_pdf = request.build_absolute_uri(reverse("users:certificate_pdf", kwargs={"id": self.id}))
+            cert_user = self.user
+            subject = f"Contribution Certificate has been signed off"
+            message = (
+                f"Dear {cert_user.name}, \n"
+                f"Your contribution certificate has been signed by {signing_user.name} ({signing_user.email}.\n\n"
+                f"You can view the signed certificate here: {url_to_signed_pdf}\n\n"
+                f"Kind regards,\n\n The MeDUSA team"
+            )
+            recipients = [self.user.email]
+            msg = EmailMultiAlternatives(
+                subject=subject,
+                body=message,
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=recipients,
+                cc=[signing_user.email],
+                reply_to=[signing_user.email],
+            )
+            if not settings.DEBUG:
+                msg.send()
+            else:
+                logger.warning(f"DID NOT SEND MESSAGE AS DEBUG MODE IS ACTIVE")
         self.save()
 
     def send_signoff_request(self, request: WSGIRequest):
