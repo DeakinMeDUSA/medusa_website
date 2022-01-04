@@ -199,3 +199,15 @@ def contribution_certificate_delete_view(request, *args, **kwargs):
     messages.add_message(request, messages.SUCCESS, "Certificate successfully deleted")
 
     return redirect("users:detail", email=request.user.email)
+
+
+@login_required
+def contribution_certificate_request_sign_view(request, *args, **kwargs):
+    user: User = request.user
+    cert = ContributionCertificate.objects.get(id=kwargs.get("id"))
+    if not user.has_contrib_sign_off_permission() and request.user != cert.user:
+        raise PermissionError("Users can only request signoff on their own certs, or admins")
+    cert.send_signoff_request(request)
+    messages.add_message(request, messages.SUCCESS, "Certificate request for signoff successfully sent")
+
+    return redirect("users:detail", email=request.user.email)
