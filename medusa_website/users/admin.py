@@ -17,17 +17,31 @@ from .models import (
 )
 
 
-@admin.action(description="Set selected users to staff (is_staff = True)")
-def set_staff_status(modeladmin, request, queryset: QuerySet[User]):
+@admin.action(description="Set selected users is_staff = True")
+def set_staff_status_true(modeladmin, request, queryset: QuerySet[User]):
     for user in queryset:
         user.is_staff = True
         user.save()
 
 
-@admin.action(description="Set selected users to is_medusa = True")
-def set_medusa_status(modeladmin, request, queryset: QuerySet[User]):
+@admin.action(description="Set selected users is_staff = False")
+def set_staff_status_false(modeladmin, request, queryset: QuerySet[User]):
+    for user in queryset:
+        user.is_staff = False
+        user.save()
+
+
+@admin.action(description="Set selected users is_medusa = True")
+def set_medusa_status_true(modeladmin, request, queryset: QuerySet[User]):
     for user in queryset:
         user.is_medusa = True
+        user.save()
+
+
+@admin.action(description="Set selected users is_medusa = False")
+def set_medusa_status_false(modeladmin, request, queryset: QuerySet[User]):
+    for user in queryset:
+        user.is_medusa = False
         user.save()
 
 
@@ -135,13 +149,15 @@ class UserAdmin(cuUserAdmin):
     readonly_fields = ["all_emails", "member_id"]
     list_filter = ["is_active", "is_staff", "is_medusa", "is_member", "groups", "membership_expiry"]
     actions = [
-        set_staff_status,
-        set_medusa_status,
+        create_member_ids,
+        assign_is_member,
+        set_staff_status_true,
+        set_staff_status_false,
+        set_medusa_status_true,
+        set_medusa_status_false,
         set_name_from_memberlist,
         set_reviewer_status,
         gen_contribution_certificates,
-        create_member_ids,
-        assign_is_member,
     ]
 
     def groups_list(self, obj):
