@@ -189,7 +189,7 @@ class ContributionCertificate(models.Model):
         self.save()
 
     def send_signoff_request(self, request: WSGIRequest):
-        if self.is_signed_off:
+        if self.is_signed_off or self.sent_for_signoff:
             return None
         contrib_sign_off_group_users = Group.objects.get(name="Contributions Sign Off").user_set.all()
         url_to_preview_pdf = request.build_absolute_uri(reverse("users:certificate_pdf", kwargs={"id": self.id}))
