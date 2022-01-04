@@ -34,6 +34,9 @@ Install python requirements:
 
 ```shell
 poetry install
+poetry shell
+playwright install-deps
+playwright install
 ```
 
 Install node requirements
