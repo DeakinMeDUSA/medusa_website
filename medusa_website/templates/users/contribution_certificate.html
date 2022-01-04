@@ -25,7 +25,7 @@
     {{ cert_details }}
   </div>
   <div class="bottom_text_div date_value">
-    {{ date_modified }}
+    {{ date }}
   </div>
   <div class="bottom_text_div date_title">
     DATE
@@ -36,6 +36,19 @@
   <div class="bottom_text_div signer_2">
     {{ signer_2.name.upper }}<br>MeDUSA {{ signer_2.current_role.position.upper }}
   </div>
+  {% if is_signed %}
+    <div class="bottom_text_div signer_1_image">
+      <img class="sig_image" src="{{ signer_1.signature_image.url }}" alt="Signer 1 Signature">
+    </div>
+    <div class="bottom_text_div signer_2_image">
+      <img class="sig_image" src="{{ signer_2.signature_image.url }}" alt="Signer 2 Signature">
+
+    </div>
+  {% else %}
+    <div class="preview_banner">
+      PREVIEW - NOT SIGNED
+    </div>
+  {% endif %}
 </div>
 </body>
 </html>

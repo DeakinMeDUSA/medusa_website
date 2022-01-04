@@ -24,6 +24,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/medusa_website/media/users/medusa_members_google_group.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/scripts/import_medusaq/McqData_cleaned.csv">
           <value>
             <Attribute>

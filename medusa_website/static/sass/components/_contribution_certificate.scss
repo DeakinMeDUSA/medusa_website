@@ -6,6 +6,7 @@ $text_y_offset: 1100px;
 
   font-family: 'Roboto', sans-serif;
   font-weight: lighter;
+  font-style: normal;
 
   img {
     //width: 100%;
@@ -19,7 +20,6 @@ $text_y_offset: 1100px;
     left: 445px;
     top: 527px;
     font-size: 50px;
-    font-style: normal;
     font-weight: 200;
     line-height: 59px;
     letter-spacing: 0em;
@@ -33,7 +33,6 @@ $text_y_offset: 1100px;
     left: 445px;
     top: 592px;
     font-size: 30px;
-    font-style: normal;
     font-weight: 200;
     line-height: 35px;
     letter-spacing: 0em;
@@ -48,7 +47,6 @@ $text_y_offset: 1100px;
     left: 478px;
     top: 634px;
     font-size: 25px;
-    font-style: normal;
     font-weight: 200;
     line-height: 29px;
     letter-spacing: 0em;
@@ -60,7 +58,6 @@ $text_y_offset: 1100px;
     position: absolute;
     width: 380px;
     height: 97px;
-    font-style: normal;
     font-weight: 100;
     font-size: 30px;
     line-height: 35px;
@@ -78,13 +75,44 @@ $text_y_offset: 1100px;
     top: 1020px;
   }
 
+  .sig_image {
+    max-width: 100%;
+    max-height: 100%;
+    position: relative;
+  }
+
   .signer_1 {
     left: 687px;
     top: 1085px;
   }
 
+  .signer_1_image {
+    left: 687px;
+    top: 977px;
+  }
+
   .signer_2 {
     left: 1166px;
     top: 1085px;
+  }
+
+  .signer_2_image {
+    left: 1166px;
+    top: 977px;
+  }
+
+  .preview_banner {
+    position: absolute;
+    height: 105px;
+    width: 1293px;
+    left: 247px;
+    top: 750px;
+    font-size: 120px;
+    font-weight: 800;
+    line-height: 141px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: rgba(0, 0, 0, 0.5);
+    transform: rotate(-30deg);
   }
 }

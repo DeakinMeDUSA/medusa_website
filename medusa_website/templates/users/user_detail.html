@@ -7,15 +7,32 @@
   <div class="container">
     {% if messages %}{% include "messages.html" %}{% endif %}
 
-      <h3>Personal Details:</h3>
-      <ul>
-        <li><b>Name:</b> {{ object.name }}</li>
-        <li><b>Email:</b> {{ object.email }}</li>
-        <li><b>Membership Number:</b> {{ object.member_id }}</li>
-        <li><b>Membership Expiry:</b> {{ object.membership_expiry }}</li>
-      </ul>
+    <h3>Personal Details:</h3>
+    <ul>
+      <li><b>Name:</b> {{ object.name }}</li>
+      <li><b>Email:</b> {{ object.email }}</li>
+      <li><b>Membership Number:</b> {{ object.member_id }}</li>
+      <li><b>Membership Expiry:</b> {{ object.membership_expiry }}</li>
+    </ul>
 
     {% if object == request.user %}
+      <hr>
+      <h3>Member tools:</h3>
+      <ul>
+        <li><a href="{% url 'users:certificate_create' %}" role="button">
+          Generate new contribution certificate
+        </a></li>
+        {% if request.user.contribution_certificates.all %}
+          {% for cert in request.user.contribution_certificates.all %}
+            <li><a href="{% url 'users:certificate_pdf' id=cert.id %}" role="button" target="_blank">
+              View existing {% if cert.is_signed_off %} signed {% else %} un-signed {% endif %} certificate
+              from {{ cert.date_modified }}
+            </a><sup><a style="font-size: x-small"  href="{% url 'users:certificate_delete' id=cert.id %}">&nbsp;&nbsp;(DELETE)</a></sup>
+            </li>
+          {% endfor %}
+
+        {% endif %}
+      </ul>
       <hr>
       <h3>Manage Account:</h3>
       <ul>

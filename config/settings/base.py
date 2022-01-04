@@ -536,3 +536,9 @@ SASS_PROCESSOR_STORAGE_OPTIONS = {
     "location": STATIC_ROOT,
     "base_url": STATIC_URL,
 }
+
+# Minimuim number of contributions to 'count' as a contribution on the certificate
+OSCE_BANK_STATION_CREATE_MIN = 10
+OSCE_BANK_STATION_REVIEW_MIN = 10
+MCQ_BANK_QUESTION_REVIEW_MIN = 10
+MCQ_BANK_QUESTION_CREATE_MIN = 10

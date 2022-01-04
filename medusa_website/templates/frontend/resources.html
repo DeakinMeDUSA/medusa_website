@@ -28,6 +28,10 @@
       <ul class="links">
         <li><a href="{% url 'admin:index' %}">Admin site</a></li>
         <li><a href="{% url 'users:member_check' %}">Membership Check</a></li>
+        {% if user.has_contrib_sign_off_permission %}
+          <li><a href="{% url 'admin:users_contribution_changelist' %}?requires_signing__exact=1">Contribution events to sign</a></li>
+          <li><a href="{% url 'admin:users_contributioncertificate_changelist' %}?is_signed_off__exact=0">Contribution Certificates to sign</a></li>
+        {% endif %}
       </ul>
     {% endif %}
 

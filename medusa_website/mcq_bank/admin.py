@@ -8,7 +8,7 @@ from .models import Answer, Category, History, Question, QuizSession, Record
 
 class AnswerInline(admin.TabularInline):
     model = Answer
-    extra = 0
+    extra = 0  # For some reason if this is zero a blank question is still shown
 
 
 @admin.register(Question)
