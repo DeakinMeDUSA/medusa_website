@@ -59,7 +59,7 @@ DATABASE_PASSWORD="postgres"
 Run migrations:
 
 ```shell
-python shell # To activate virtualenv
+poetry shell # To activate virtualenv
 python manage.py migrate
 ```
 
