@@ -91,7 +91,7 @@ for m in mems:
         except MemberRecord.DoesNotExist:
             logger.warning(f"MemberRecord AND User do not exist, provide manual email:")
             email = input("Enter email").strip().lower()
-        user = User.objects.create(name=name, email=email, is_medusa=True, is_staff=True, is_active=True)
+        user = User.objects.create(name=name, email=email, is_medusa=False, is_staff=True, is_active=True)
     if m.get("Phone Number") and not user.phone_number:
         user.phone_number = m["Phone Number"]
         logger.info(f"setting phone number to {user.phone_number}")
