@@ -110,6 +110,7 @@ class UserAdmin(cuUserAdmin):
                     "is_active",
                     "is_staff",
                     "is_superuser",
+                    "is_member",
                     "is_medusa",
                     "groups",
                     "user_permissions",

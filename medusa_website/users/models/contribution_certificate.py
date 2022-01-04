@@ -215,7 +215,10 @@ class ContributionCertificate(models.Model):
             cc=[request.user.email],
             reply_to=[request.user.email],
         )
-        msg.send()
+        if not settings.DEBUG:
+            msg.send()
+        else:
+            logger.warning(f"DID NOT SEND MESSAGE AS DEBUG MODE IS ACTIVE")
         self.sent_for_signoff = True
         self.date_sent_for_signoff = datetime.today().date()
         self.save()
