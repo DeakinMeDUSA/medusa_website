@@ -172,6 +172,17 @@ class MemberRecordsImportAdmin(admin.ModelAdmin):
     actions = [import_users]
 
 
+@admin.action(description="Convert the selected member(s) into Users if they do not exist")
+def convert_member_into_user(modeladmin, request, queryset: QuerySet[MemberRecord]):
+    for member in queryset:
+        try:
+            user = User.objects.get(email=member.email)
+        except User.DoesNotExist:
+            user = User(email=member.email, name=member.name, membership_expiry=member.end_date, is_member=True)
+            user.create_member_id()
+            member.save()
+
+
 @admin.register(MemberRecord)
 class MemberRecordAdmin(admin.ModelAdmin):
     list_display = ["email", "name", "end_date", "import_date", "is_welcome_email_sent", "date_welcome_email_sent"]
@@ -180,6 +191,7 @@ class MemberRecordAdmin(admin.ModelAdmin):
     search_fields = ["email", "name"]
     readonly_fields = ["import_date", "date_welcome_email_sent"]
     list_filter = ["end_date", "is_welcome_email_sent"]
+    actions = [convert_member_into_user]
 
 
 @admin.register(ContributionType)
