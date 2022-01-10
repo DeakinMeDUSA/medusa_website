@@ -166,7 +166,10 @@ class ContributionCertificate(models.Model):
             texts.append(extra)
 
         if contrib_and_roles.get("other"):
-            extra = "Other contributions:\n"
+            if len(texts) == 0:
+                extra = "Contributions:\n"
+            else:
+                extra = "Other contributions:\n"
             for contrib in contrib_and_roles["other"].values():
                 extra += f"* {contrib.description} - {contrib.date}\n"
             texts.append(extra)
