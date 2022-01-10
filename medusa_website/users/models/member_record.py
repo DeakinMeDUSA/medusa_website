@@ -27,7 +27,7 @@ class MemberRecord(models.Model):
 
     def send_welcome_email(self):
         if self.is_welcome_email_sent is True:
-            raise Exception("Welcome email already sent!")
+            raise Warning("Welcome email already sent!")
 
         msg = self.gen_welcome_email()
         msg.send()
@@ -46,6 +46,7 @@ class MemberRecord(models.Model):
             f"https://www.medusa.org.au/accounts/signup/\n\n"
             f"Registering will give you access to the MCQ Bank, OSCE Bank and generate your MeDUSA ID number "
             f"which will give you MeDUSA discounts for event tickets.\n\n"
+            f"Additionally our 1st year Survival Guide can be found here: https://www.medusa.org.au/publications/\n\n"
             f"Kind regards,\n\n"
             f"The MeDUSA team."
         )
@@ -139,6 +140,8 @@ class MemberRecordsImport(models.Model):
             )
             member.member_record_imports.add(self)
             member.save()
+            if created:
+                member.send_welcome_email()
         logger.info(f"Finished import of member list!")
         MemberRecord.send_welcome_emails_to_all_required()
 
