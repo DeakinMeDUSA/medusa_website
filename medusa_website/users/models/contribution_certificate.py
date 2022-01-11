@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Literal, Optional
 
 import markdown
 from django.conf import settings
@@ -128,8 +128,13 @@ class ContributionCertificate(models.Model):
     def email_to_user(self):
         raise NotImplementedError()
 
-    def pdf_needs_gen(self):
-        return (self.is_signed_off and not self.signed_pdf) or (not self.is_signed_off and not self.preview_pdf)
+    def pdfs_to_gen(self) -> List[str]:
+        out = []
+        if self.is_signed_off and not self.signed_pdf:
+            out.append("signed_pdf")
+        if not self.is_signed_off and not self.preview_pdf:
+            out.append("preview_pdf")
+        return out
 
     @staticmethod
     def cert_signers() -> List[User]:
@@ -188,13 +193,15 @@ class ContributionCertificate(models.Model):
         self.signed_off_by = signing_user
         self.signed_off_date = datetime.today().date()
         self.is_signed_off = True
+        self.save()
+
         if email_user:
             url_to_signed_pdf = request.build_absolute_uri(reverse("users:certificate_pdf", kwargs={"id": self.id}))
             cert_user = self.user
             subject = f"Contribution Certificate has been signed off"
             message = (
                 f"Dear {cert_user.name}, \n"
-                f"Your contribution certificate has been signed by {signing_user.name} ({signing_user.email}.\n\n"
+                f"Your contribution certificate has been signed by {signing_user.name} ({signing_user.email}).\n\n"
                 f"You can view the signed certificate here: {url_to_signed_pdf}\n\n"
                 f"Kind regards,\n\n The MeDUSA team"
             )
@@ -210,8 +217,7 @@ class ContributionCertificate(models.Model):
             if not settings.DEBUG:
                 msg.send()
             else:
-                logger.warning(f"DID NOT SEND MESSAGE AS DEBUG MODE IS ACTIVE")
-        self.save()
+                logger.warning(f"DID NOT SEND MESSAGE AS DEBUG MODE IS ACTIVE. msg_below: \n{message}")
 
     def send_signoff_request(self, request: WSGIRequest):
         if self.is_signed_off or self.sent_for_signoff:

@@ -95,7 +95,7 @@ class MemberCheckView(LoginRequiredMixin, FormView, DetailView):
 member_check_view = MemberCheckView.as_view()
 
 
-class ContributionCertificateView(LoginRequiredMixin, CreateView):
+class ContributionCertificateCreateView(LoginRequiredMixin, CreateView):
     """This view is only for auto-generating them for users, for custom ones, create them from the admin interface."""
 
     template_name = "users/contribution_certificate.html"
@@ -152,10 +152,10 @@ class ContributionCertificateView(LoginRequiredMixin, CreateView):
         return context
 
 
-contribution_certificate_create_view = ContributionCertificateView.as_view()
+contribution_certificate_create_view = ContributionCertificateCreateView.as_view()
 
 
-class ContributionCertificateDetailView(ContributionCertificateView, DetailView):
+class ContributionCertificateDetailView(ContributionCertificateCreateView, DetailView):
     model = ContributionCertificate
     lookup_field = "id"
 
@@ -180,11 +180,11 @@ contribution_certificate_detail_view = ContributionCertificateDetailView.as_view
 @login_required
 def contribution_certificate_pdf_view(request, *args, **kwargs):
     user: User = request.user
-    cert = ContributionCertificate.objects.get(id=kwargs.get("id"))
+    cert: ContributionCertificate = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
         raise PermissionError("Users can only view their own certificates, or admins")
-    if cert.pdf_needs_gen():
-        cert.gen_pdf(request)
+    if cert.pdfs_to_gen():
+        cert.gen_pdf(request=request)
     if cert.is_signed_off:
         return redirect(cert.signed_pdf.url)
     else:

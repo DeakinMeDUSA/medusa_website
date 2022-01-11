@@ -80,6 +80,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name"]
 
+    def __str__(self):
+        return f"{self.email}{f' - {self.name}' if self.name else ''}"
+
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
