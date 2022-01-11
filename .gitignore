@@ -348,3 +348,4 @@ temp/
 *credentials.json
 backups/
 
+.idea/csv-plugin.xml
