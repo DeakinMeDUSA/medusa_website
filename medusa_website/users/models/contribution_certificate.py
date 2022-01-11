@@ -44,7 +44,7 @@ class ContributionCertificate(models.Model):
     is_signed_off = models.BooleanField(help_text="True if the certificate is signed", default=False)
     details = MartorField(
         help_text="Markdown formatted details. This will be generated automatically by "
-        "ContributionCertificate.gen_cert_detail_text, but can be modified afterwards as well.",
+        "ContributionCertificate.gen_cert_detail_text, but can be set manually too.",
         blank=True,
         null=True,
     )
