@@ -9,6 +9,9 @@ from django.http import HttpRequest
 from nameparser import HumanName
 
 from medusa_website.users.validators import CustomEmailValidator
+from medusa_website.utils.general import get_pretty_logger
+
+logger = get_pretty_logger(__name__)
 
 
 class AccountAdapter(DefaultAccountAdapter):
@@ -37,9 +40,10 @@ class AccountAdapter(DefaultAccountAdapter):
         """
         from medusa_website.users.models import MemberRecord, User
 
-        user: User = super(AccountAdapter, self).save_user(request, user, form, commit=False)
+        user: User = super(AccountAdapter, self).save_user(request, user, form, commit=True)
 
         # Try to get first and last name's from MemberRecords
+        # A member record should already have been verified to exist using the custom_email_validators
         try:
             member_record = MemberRecord.objects.get(email=user.email)
             user.is_member = True
@@ -49,7 +53,7 @@ class AccountAdapter(DefaultAccountAdapter):
             member_name.capitalize(force=True)
             user.name = member_name
         except MemberRecord.DoesNotExist:
-            pass
+            logger.exception(f"Member Record for {user.email} does not exist")
 
         user_part, domain_part = user.email.rsplit("@", 1)
         if domain_part == "medusa.org.au":
