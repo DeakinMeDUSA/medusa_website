@@ -348,3 +348,5 @@ temp/
 backups/
 
 .idea/csv-plugin.xml
+
+celerybeat-schedule*
