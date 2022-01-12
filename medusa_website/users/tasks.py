@@ -51,3 +51,8 @@ def backup_db_and_media():
     logger.info(f"settings.ROOT_DIR = {settings.ROOT_DIR}")
     r2 = run_cmd(cmd=f"{backup_script_path}", cwd=settings.ROOT_DIR, capture_output=True)
     logger.info(f"Backup completed")
+
+
+@app.task(bind=True)
+def test(*args, **kwargs):
+    logger.exception("An exception produced by this test task to be run every 10 seconds")
