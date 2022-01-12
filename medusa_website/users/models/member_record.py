@@ -1,5 +1,6 @@
 from datetime import datetime
 from itertools import islice
+from time import sleep
 
 import openpyxl
 import pandas as pd
@@ -81,35 +82,46 @@ class MemberRecord(models.Model):
 
     @classmethod
     def send_welcome_emails_to_all_required(cls):
-        welcome_emails_to_send = []
-        members_to_email = []
+        welcome_emails_and_members = []  # Will be a list of tuples of (Member, EmailMsg)
+
         unsent_members = cls.objects.filter(is_welcome_email_sent=False)
         for member in unsent_members:
             if not member.exists_as_user and not member.is_expired:
-                welcome_emails_to_send.append(member.gen_welcome_email())
-                members_to_email.append(member)
-        if welcome_emails_to_send:
+                welcome_emails_and_members.append((member, member.gen_welcome_email()))
+        if len(welcome_emails_and_members) > 0:
             from django.core import mail
 
-            logger.info(f"Sending {len(welcome_emails_to_send)} Welcome emails")
-            all_emails = "\n".join([m.to[0] for m in welcome_emails_to_send])
-            notification_body = f"Sent {len(welcome_emails_to_send)} emails to:\n" f"{all_emails}"
+            logger.info(f"Sending {len(welcome_emails_and_members)} Welcome emails")
+
+            connection = mail.get_connection()  # Use default email connection
+            emails_sent = ""
+            for batch in chunks(welcome_emails_and_members, settings.EMAIL_API_MAX_BATCH_SIZE):
+                emails_to_send = [msg for (member, msg) in batch]
+                members_emailed = [member for (member, msg) in batch]
+
+                emails_sent += "\n".join([msg.to[0] for msg in emails_to_send])
+                if settings.DEBUG:
+                    logger.warning(
+                        f"DID NOT SEND MESSAGES, msgs would be sent to"
+                        + "\n".join([msg.to[0] for msg in emails_to_send])
+                    )
+                else:
+                    connection.send_messages(emails_to_send)
+
+                for member in members_emailed:
+                    member.marked_welcome_email_sent()
+                sleep(1)
+
+            notification_body = f"Sent {len(welcome_emails_and_members)} emails to:\n" f"{emails_sent}"
             notification_msg = EmailMultiAlternatives(
                 subject="Welcome Email Notification",
                 body=notification_body,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 to=["it@medusa.org.au"],
                 bcc=None,
-                reply_to=["contact@medusa.org.au"],
+                reply_to=["it@medusa.org.au"],
             )
-            welcome_emails_to_send.append(notification_msg)
-            connection = mail.get_connection()  # Use default email connection
-            for batch in chunks(welcome_emails_to_send, settings.EMAIL_API_MAX_BATCH_SIZE):
-                connection.send_messages(batch)
-
-            for mem in members_to_email:
-                mem.marked_welcome_email_sent()
-
+            notification_msg.send()
             logger.info(f"Sending emails successfully")
         else:
             logger.info(f"No welcome emails to send!")

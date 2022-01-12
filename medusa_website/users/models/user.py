@@ -64,7 +64,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         "Non-members include @medusa.org.au addresses, external clubs with accounts",
     )
 
-    date_joined = models.DateTimeField("Date joined", default=timezone.now)
+    date_joined = models.DateTimeField("Date joined", auto_now_add=True)
     membership_expiry = models.DateField(help_text="Date their membership expires", null=True, blank=True)
     signature_image = models.ImageField(
         help_text="Image of the users signature, only used for signing certificates",

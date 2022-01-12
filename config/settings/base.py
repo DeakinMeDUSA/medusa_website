@@ -268,7 +268,7 @@ EMAIL_BACKEND = "medusa_website.gmailapi_backend.mail.GmailBackend"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", default="MeDUSA Website <website@medusa.org.au>")
-EMAIL_API_MAX_BATCH_SIZE = 100
+EMAIL_API_MAX_BATCH_SIZE = 50
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
