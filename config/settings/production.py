@@ -116,7 +116,7 @@ SENTRY_LOG_LEVEL = env.int("DJANGO_SENTRY_LOG_LEVEL", logging.INFO)
 
 sentry_logging = LoggingIntegration(
     level=SENTRY_LOG_LEVEL,  # Capture info and above as breadcrumbs
-    event_level=logging.ERROR,  # Send errors as events
+    event_level=logging.WARNING,  # Send warnings as events
 )
 integrations = [sentry_logging, DjangoIntegration(), RedisIntegration()]
 sentry_sdk.init(
