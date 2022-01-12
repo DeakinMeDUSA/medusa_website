@@ -322,11 +322,15 @@ class ContributionCertificateAdmin(admin.ModelAdmin):
     def view_certificate(self, obj: ContributionCertificate):
         if obj.is_signed_off:
             return format_html(
-                f'<a href="{reverse("users:certificate_pdf_signed", kwargs={"id": obj.id})}">View signed certificate {obj.id}</a>'
+                f'<a target="_blank" '
+                f'href="{reverse("users:certificate_pdf_signed", kwargs={"id": obj.id})}">'
+                f"View signed certificate {obj.id}</a>"
             )
         else:
             return format_html(
-                f'<a href="{reverse("users:certificate_pdf", kwargs={"id": obj.id})}">View certificate {obj.id}</a>'
+                f'<a target="_blank" '
+                f'href="{reverse("users:certificate_pdf", kwargs={"id": obj.id})}">'
+                f"View certificate {obj.id}</a>"
             )
 
 
