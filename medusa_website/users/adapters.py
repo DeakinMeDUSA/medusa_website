@@ -53,7 +53,7 @@ class AccountAdapter(DefaultAccountAdapter):
             member_name.capitalize(force=True)
             user.name = member_name
         except MemberRecord.DoesNotExist:
-            logger.exception(f"Member Record for {user.email} does not exist")
+            logger.warning(f"Member Record for {user.email} does not exist")
 
         user_part, domain_part = user.email.rsplit("@", 1)
         if domain_part == "medusa.org.au":
