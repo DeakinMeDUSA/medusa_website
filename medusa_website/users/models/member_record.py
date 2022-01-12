@@ -102,15 +102,15 @@ class MemberRecord(models.Model):
                 emails_sent += "\n".join([msg.to[0] for msg in emails_to_send])
                 if settings.DEBUG:
                     logger.warning(
-                        f"DID NOT SEND MESSAGES, msgs would be sent to"
+                        f"DID NOT SEND MESSAGES OR MARK AS SENT, msgs would be sent to"
                         + "\n".join([msg.to[0] for msg in emails_to_send])
                     )
                 else:
                     connection.send_messages(emails_to_send)
 
-                for member in members_emailed:
-                    member.marked_welcome_email_sent()
-                sleep(1)
+                    for member in members_emailed:
+                        member.marked_welcome_email_sent()
+                    sleep(1)
 
             notification_body = f"Sent {len(welcome_emails_and_members)} emails to:\n" f"{emails_sent}"
             notification_msg = EmailMultiAlternatives(
