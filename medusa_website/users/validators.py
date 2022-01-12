@@ -32,7 +32,7 @@ class ExistingUserValidator:
 
             User.objects.get(email=email.lower())
             return False
-        except MemberRecord.DoesNotExist:
+        except User.DoesNotExist:
             return True
 
     def __eq__(self, other):
