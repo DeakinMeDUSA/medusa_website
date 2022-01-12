@@ -1,14 +1,15 @@
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
+from django.utils.safestring import mark_safe
 
 from medusa_website.users.models import MemberRecord
 
 
 class ExistingUserValidator:
-    message = (
-        "The supplied email was found to match an existing user. \n"
-        "This user may have been generated automatically without a password, please visit"
-        "https://www.medusa.org.au/accounts/password/reset/ to set a new one."
+    message = mark_safe(
+        "The supplied email was found to match an existing user. <br>"
+        "This user may have been generated automatically without a password, please visit "
+        '<a href="https://www.medusa.org.au/accounts/password/reset/">the password reset page</a> to set a new one.'
     )
 
     code = "invalid"
@@ -41,9 +42,9 @@ class ExistingUserValidator:
 
 
 class MedusaMemberValidator:
-    message = (
-        "The supplied email was not found on member list supplied by DUSA, which is updated weekly. "
-        "If you believe this to be an error, please contact it@medusa.org.au"
+    message = mark_safe(
+        "The supplied email was not found on member list supplied by DUSA, which is updated weekly. <br>"
+        'If you believe this to be an error, please contact <a href="mailto:it@medusa.org.au">it@medusa.org.au</a>'
     )
 
     code = "invalid"
