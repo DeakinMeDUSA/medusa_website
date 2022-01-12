@@ -195,6 +195,14 @@ def convert_member_into_user(modeladmin, request, queryset: QuerySet[MemberRecor
             user.create_member_id()
 
 
+@admin.action(description="Mark selected MemberRecords as Welcome Email Sent = True")
+def mark_welcome_email_sent(modeladmin, request, queryset: QuerySet[MemberRecord]):
+    for member in queryset:
+        if not member.is_welcome_email_sent:
+            member.is_welcome_email_sent = True
+            member.save()
+
+
 @admin.register(MemberRecord)
 class MemberRecordAdmin(admin.ModelAdmin):
     list_display = ["email", "name", "end_date", "import_date", "is_welcome_email_sent", "date_welcome_email_sent"]
@@ -203,7 +211,7 @@ class MemberRecordAdmin(admin.ModelAdmin):
     search_fields = ["email", "name"]
     readonly_fields = ["import_date", "date_welcome_email_sent"]
     list_filter = ["end_date", "is_welcome_email_sent"]
-    actions = [convert_member_into_user]
+    actions = [convert_member_into_user, mark_welcome_email_sent]
 
 
 @admin.register(ContributionType)
