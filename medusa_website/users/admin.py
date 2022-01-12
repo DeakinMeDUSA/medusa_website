@@ -225,7 +225,9 @@ def sign_certificates(modeladmin, request, queryset: QuerySet[ContributionCertif
 @admin.action(description="Generate pdfs for the selected certificates, overwriting existing ones if present")
 def generate_certificate_pdfs(modeladmin, request, queryset: QuerySet[ContributionCertificate]):
     for cert in queryset:
-        cert.gen_pdf(request=request)
+        cert.gen_pdf(request=request, signed=False)
+        if cert.is_signed_off:
+            cert.gen_pdf(request=request, signed=True)
 
 
 class ContributionCertificateAdminSignersFilter(admin.SimpleListFilter):
@@ -276,6 +278,7 @@ class ContributionCertificateAdmin(admin.ModelAdmin):
     ]
     actions = [sign_certificates, generate_certificate_pdfs]
     readonly_fields = [
+        "preview_pdf",
         "signed_pdf",
         "is_signed_off",
         "signed_off_by",
@@ -317,9 +320,14 @@ class ContributionCertificateAdmin(admin.ModelAdmin):
         return readonly_fields
 
     def view_certificate(self, obj: ContributionCertificate):
-        return format_html(
-            f'<a href="{reverse("users:certificate_pdf", kwargs={"id": obj.id})}">View certificate {obj.id}</a>'
-        )
+        if obj.is_signed_off:
+            return format_html(
+                f'<a href="{reverse("users:certificate_pdf_signed", kwargs={"id": obj.id})}">View signed certificate {obj.id}</a>'
+            )
+        else:
+            return format_html(
+                f'<a href="{reverse("users:certificate_pdf", kwargs={"id": obj.id})}">View certificate {obj.id}</a>'
+            )
 
 
 @admin.action(description="Sign off selected contributions")

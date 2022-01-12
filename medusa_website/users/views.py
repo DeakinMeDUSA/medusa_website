@@ -177,18 +177,50 @@ class ContributionCertificateDetailView(ContributionCertificateCreateView, Detai
 contribution_certificate_detail_view = ContributionCertificateDetailView.as_view()
 
 
+# class ContributionCertificateSignedDetailView(ContributionCertificateDetailView):
+#     model = ContributionCertificate
+#     lookup_field = "id"
+#
+#     def get(self, request, *args, **kwargs):
+#         self.object = self.get_object()
+#         context = self.get_context_data(object=self.object)
+#         return self.render_to_response(context)
+#
+#     def dispatch(self, request, *args, **kwargs):
+#         cert = self.get_object()
+#         context = self.get_context_data(object=cert)
+#         # Only allow  Contribution Sign Off to view/create them, or users to view their own (will be generated
+#         # without signature)"
+#         if not request.user.has_contrib_sign_off_permission() and request.user != cert.user:
+#             return self.handle_no_permission()
+#         return super().dispatch(request, clean_existing=False, *args, **kwargs)
+#
+#
+# contribution_certificate_detail_view = ContributionCertificateDetailView.as_view()
+
+
 @login_required
 def contribution_certificate_pdf_view(request, *args, **kwargs):
     user: User = request.user
     cert: ContributionCertificate = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
         raise PermissionError("Users can only view their own certificates, or admins")
-    if cert.pdfs_to_gen():
-        cert.gen_pdf(request=request)
-    if cert.is_signed_off:
-        return redirect(cert.signed_pdf.url)
-    else:
-        return redirect(cert.preview_pdf.url)
+    if "preview_pdf" in cert.pdfs_to_gen():
+        cert.gen_pdf(request=request, signed=False)
+    return redirect(cert.preview_pdf.url)
+
+
+@login_required
+def contribution_certificate_signed_pdf_view(request, *args, **kwargs):
+    user: User = request.user
+    cert: ContributionCertificate = ContributionCertificate.objects.get(id=kwargs.get("id"))
+    if not cert.is_signed_off:
+        raise PermissionError("Certificate is not signed off yet!")
+    if not user.has_contrib_sign_off_permission() and request.user != cert.user:
+        raise PermissionError("Users can only view their own certificates, or admins")
+    if "signed_pdf" in cert.pdfs_to_gen():
+        cert.gen_pdf(request=request, signed=True)
+    return redirect(cert.signed_pdf.url)
 
 
 @login_required

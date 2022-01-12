@@ -7,6 +7,7 @@ from medusa_website.users.views import (
     contribution_certificate_detail_view,
     contribution_certificate_pdf_view,
     contribution_certificate_request_sign_view,
+    contribution_certificate_signed_pdf_view,
     member_check_view,
     user_detail_view,
     user_redirect_view,
@@ -20,6 +21,14 @@ urlpatterns = [
     path("certificate/create", view=contribution_certificate_create_view, name="certificate_create"),
     path("certificate/detail/<int:id>", view=contribution_certificate_detail_view, name="certificate_detail"),
     path("certificate/pdf/<int:id>", view=contribution_certificate_pdf_view, name="certificate_pdf"),
+    path(
+        "certificate/detail_signed/<int:id>",
+        view=contribution_certificate_detail_view,
+        name="certificate_detail_signed",
+    ),
+    path(
+        "certificate/pdf_signed/<int:id>", view=contribution_certificate_signed_pdf_view, name="certificate_pdf_signed"
+    ),
     path("certificate/delete/<int:id>", view=contribution_certificate_delete_view, name="certificate_delete"),
     path(
         "certificate/request_signoff/<int:id>",

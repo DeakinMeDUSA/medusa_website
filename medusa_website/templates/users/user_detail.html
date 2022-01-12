@@ -24,16 +24,25 @@
         </a></li>
         {% if request.user.contribution_certificates.all %}
           {% for cert in request.user.contribution_certificates.all %}
-            <li><a href="{% url 'users:certificate_pdf' id=cert.id %}" role="button" target="_blank">
-              View existing {% if cert.is_signed_off %} signed {% else %} un-signed {% endif %} certificate
-              from {{ cert.date_modified }} {% if cert.sent_for_signoff %} - Sent for signoff on {{ cert.date_sent_for_signoff }}{% endif %}
-            </a>
-              <sup><a style="font-size: x-small" href="{% url 'users:certificate_delete' id=cert.id %}">&nbsp;&nbsp;(DELETE)</a></sup>
-              {% if not cert.sent_for_signoff %}
-                <sup><a style="font-size: x-small" href="{% url 'users:certificate_request_sign' id=cert.id %}">&nbsp;&nbsp;(SEND
-                  FOR SIGNING)</a></sup>
-              {% endif %}
-            </li>
+            {% if cert.is_signed_off %}
+              <li><a href="{% url 'users:certificate_pdf_signed' id=cert.id %}" role="button" target="_blank">
+                View existing signed certificate from {{ cert.date_modified }}
+              </a>
+                <sup><a style="font-size: x-small" href="{% url 'users:certificate_delete' id=cert.id %}">&nbsp;&nbsp;(DELETE)</a></sup>
+              </li>
+            {% else %}
+              <li><a href="{% url 'users:certificate_pdf' id=cert.id %}" role="button" target="_blank">
+                View existing un-signed certificate from {{ cert.date_modified }} {% if cert.sent_for_signoff %} - Sent for signoff on
+                {{ cert.date_sent_for_signoff }}{% endif %}
+              </a>
+                <sup><a style="font-size: x-small" href="{% url 'users:certificate_delete' id=cert.id %}">&nbsp;&nbsp;(DELETE)</a></sup>
+                {% if not cert.sent_for_signoff %}
+                  <sup><a style="font-size: x-small" href="{% url 'users:certificate_request_sign' id=cert.id %}">&nbsp;&nbsp;(SEND
+                    FOR SIGNING)</a></sup>
+                {% endif %}
+              </li>
+            {% endif %}
+
           {% endfor %}
 
         {% endif %}
