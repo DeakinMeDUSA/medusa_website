@@ -19,15 +19,21 @@ urlpatterns = [
     path("~redirect/", view=user_redirect_view, name="redirect"),
     path("~update/", view=cache_page(0)(user_update_view), name="update"),
     path("certificate/create", view=contribution_certificate_create_view, name="certificate_create"),
-    path("certificate/detail/<int:id>", view=contribution_certificate_detail_view, name="certificate_detail"),
-    path("certificate/pdf/<int:id>", view=contribution_certificate_pdf_view, name="certificate_pdf"),
+    path(
+        "certificate/detail/<int:id>",
+        view=cache_page(0)(contribution_certificate_detail_view),
+        name="certificate_detail",
+    ),
+    path("certificate/pdf/<int:id>", view=cache_page(0)(contribution_certificate_pdf_view), name="certificate_pdf"),
     path(
         "certificate/detail_signed/<int:id>",
-        view=contribution_certificate_detail_view,
+        view=cache_page(0)(contribution_certificate_detail_view),
         name="certificate_detail_signed",
     ),
     path(
-        "certificate/pdf_signed/<int:id>", view=contribution_certificate_signed_pdf_view, name="certificate_pdf_signed"
+        "certificate/pdf_signed/<int:id>",
+        view=cache_page(0)(contribution_certificate_signed_pdf_view),
+        name="certificate_pdf_signed",
     ),
     path("certificate/delete/<int:id>", view=contribution_certificate_delete_view, name="certificate_delete"),
     path(
@@ -36,6 +42,6 @@ urlpatterns = [
         name="certificate_request_sign",
     ),
     path("member_check/", view=member_check_view, name="member_check"),
-    path("member_check/<str:member_id>", view=member_check_view, name="member_check"),
+    path("member_check/<str:member_id>", view=cache_page(1)(member_check_view), name="member_check"),
     path("<str:email>/", view=cache_page(0)(user_detail_view), name="detail"),
 ]
