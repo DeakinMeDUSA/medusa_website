@@ -8,7 +8,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.db import models
 from django.db.models import CharField, EmailField, ManyToManyField
 
-from medusa_website.utils.general import get_pretty_logger
+from medusa_website.utils.general import chunks, get_pretty_logger
 
 logger = get_pretty_logger(__name__)
 
@@ -104,8 +104,9 @@ class MemberRecord(models.Model):
             )
             welcome_emails_to_send.append(notification_msg)
             connection = mail.get_connection()  # Use default email connection
-            connection.send_messages(welcome_emails_to_send)
-            notification_msg.send()
+            for batch in chunks(welcome_emails_to_send, settings.EMAIL_API_MAX_BATCH_SIZE):
+                connection.send_messages(batch)
+
             for mem in members_to_email:
                 mem.marked_welcome_email_sent()
 

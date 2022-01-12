@@ -1,7 +1,7 @@
 import logging
 import subprocess
 from pathlib import Path
-from typing import Dict, Union
+from typing import Dict, Iterable, Sized, Union
 
 import colorlog
 
@@ -58,3 +58,9 @@ def run_cmd(cmd: str, cwd: Union[Path, str] = None, capture_output=False, check=
     if capture_output:
         logger.info(f"Captured output\n{r.stdout}")
     return r
+
+
+def chunks(l: Sized, n: int):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i : i + n]
