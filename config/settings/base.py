@@ -412,6 +412,10 @@ PIPELINE = {
             "source_filenames": ("modules/martor/js/*.js",),
             "output_filename": "pipeline/js/martor.js",
         },
+        "js_moment": {
+            "source_filenames": ("modules/moment/*.js",),
+            "output_filename": "pipeline/js/moment.js",
+        },
     },
     "STYLESHEETS": {
         "css_core": {
