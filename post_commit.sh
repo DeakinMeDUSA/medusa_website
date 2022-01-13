@@ -45,6 +45,5 @@ sudo systemctl restart gunicorn
 sudo systemctl restart celery.service
 sudo systemctl restart celerybeat.service
 # sudo systemctl reload nginx
-echo
-# shellcheck disable=SC1073
-echo "${CELERY_BIN} -A ${CELERY_APP} worker --pidfile=${CELERYD_PID_FILE} --logfile=${CELERYD_LOG_FILE} --loglevel=${CELERYD_LOG_LEVEL}"
+
+echo "Post commit script complete!"

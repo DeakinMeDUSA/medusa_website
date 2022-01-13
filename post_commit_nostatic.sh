@@ -43,4 +43,5 @@ sudo systemctl restart gunicorn
 sudo systemctl restart celery.service
 sudo systemctl restart celerybeat.service
 # sudo systemctl reload nginx
-echo
+
+echo "Post commit script complete!"
