@@ -145,7 +145,7 @@ class UserAdmin(cuUserAdmin):
         "is_member",
     ]
     search_fields = ["email", "name"]
-    readonly_fields = ["all_emails", "member_id"]
+    readonly_fields = ["all_emails", "member_id", "date_joined", "last_login"]
     list_filter = ["is_active", "is_staff", "is_medusa", "is_member", "groups", "membership_expiry"]
     actions = [
         create_member_ids,
