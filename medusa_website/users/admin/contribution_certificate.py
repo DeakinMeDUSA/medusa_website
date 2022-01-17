@@ -1,3 +1,5 @@
+from pprint import pformat
+
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
@@ -45,14 +47,17 @@ def copy_certificate_details_to_another_user(modeladmin, request, queryset: Quer
     if "apply" in request.POST:
         # The user clicked submit on the intermediate form.
         # Perform our update action:
-        new_cert_user = User.objects.get(email=request.POST["email"])
-        new_cert = ContributionCertificate(user=new_cert_user, details=cert.details)
-        new_cert.save()
+        emails = set([em.strip() for em in request.POST["email"].split(",") if em.strip() is not None])
+        users = []
+        for email in emails:
+            new_cert_user = User.objects.get(email=email)
+            users.append(new_cert_user)
+            new_cert = ContributionCertificate(user=new_cert_user, details=cert.details)
+            new_cert.save()
 
-        # Redirect to the new certificate
-        new_cert_url = reverse("admin:users_contributioncertificate_change", args=[new_cert.id])
-        modeladmin.message_user(request, f"Created new certificate for user: {new_cert_user}")
-        return HttpResponseRedirect(new_cert_url)
+        # Redirect back to certificate changelist
+        modeladmin.message_user(request, f"Created {len(users)} new certificate(s) for users: {pformat(emails)}")
+        return HttpResponseRedirect(reverse("admin:users_contributioncertificate_changelist"))
 
     return render(request, "admin/contribution_certificate_copy_to_user.html", context={"cert": cert})
 
