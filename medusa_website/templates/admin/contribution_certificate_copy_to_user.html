@@ -1,0 +1,18 @@
+# 'admin/order_intermediate.html'
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <form action="" method="post">
+    {% csrf_token %}
+    <p>
+      Which user do you want to copy the certificate to? (provide an email address)
+    </p>
+    <input type="hidden" name="_selected_action" value="{{ cert.pk }}"/>
+
+    <label for="email">Enter email of user to copy cert details to:</label>
+    <input type="email" name="email" id="email" size="30" required>
+    <input type="hidden" name="action" value="copy_certificate_details_to_another_user"/>
+
+    <input type="submit" name="apply" value="Copy"/>
+  </form>
+{% endblock %}
