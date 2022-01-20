@@ -251,7 +251,7 @@ class ContributionCertificate(LifecycleModel):
         message = (
             f"Hi there, \n"
             f"{requesting_user.name} (member id {requesting_user.member_id}) has requested one of us to sign "
-            f"off on their Contribution Certificate.\n\n"
+            f"off on the Contribution Certificate for {self.user.name} ({self.user.email}).\n\n"
             f"You can view the un-signed preview here: {url_to_preview_pdf}\n\n"
             f"You can view all pending Contribution Certificate Requests here: {url_to_cert_signoff_list}\n\n"
             f"You do not need to notify the user or reply to this email, they will receive an email when the signoff completes."
