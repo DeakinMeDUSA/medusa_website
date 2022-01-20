@@ -5,17 +5,26 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 from django.http import HttpRequest
+from django.utils.safestring import mark_safe
 from nameparser import HumanName
 
-from medusa_website.users.validators import CustomEmailValidator
 from medusa_website.utils.general import get_pretty_logger
 
 logger = get_pretty_logger(__name__)
 
 
 class AccountAdapter(DefaultAccountAdapter):
-    custom_email_validators = CustomEmailValidator
+    email_validators = [
+        EmailValidator(),
+    ]
+    error_messages = DefaultAccountAdapter.error_messages
+    error_messages["email_taken"] = mark_safe(
+        "The supplied email was found to match an existing user. <br>"
+        "This user may have been generated automatically without a password, please visit "
+        '<a href="https://www.medusa.org.au/accounts/password/reset/">the password reset page</a> to set a new one.'
+    )
 
     def is_open_for_signup(self, request: HttpRequest):
         return getattr(settings, "ACCOUNT_ALLOW_REGISTRATION", True)
@@ -27,7 +36,7 @@ class AccountAdapter(DefaultAccountAdapter):
         """
         email = email.lower()
         try:
-            for validator in self.custom_email_validators:
+            for validator in self.email_validators:
                 validator(email)
         except ValidationError as errmsg:
             raise forms.ValidationError(errmsg)
@@ -40,7 +49,8 @@ class AccountAdapter(DefaultAccountAdapter):
         """
         from medusa_website.users.models import MemberRecord, User
 
-        user: User = super(AccountAdapter, self).save_user(request, user, form, commit=True)
+        # Uses medusa_website.users.validators.CustomSignupEmailValidator
+        user: User = super().save_user(request, user, form, commit=True)
 
         # Try to get first and last name's from MemberRecords
         # A member record should already have been verified to exist using the custom_email_validators

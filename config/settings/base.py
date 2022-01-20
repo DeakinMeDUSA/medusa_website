@@ -345,7 +345,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_PRESERVE_USERNAME_CASING = False
 ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
-ACCOUNT_USERNAME_VALIDATORS = "medusa_website.users.validators.CustomEmailValidator"
+ACCOUNT_USERNAME_VALIDATORS = "medusa_website.users.validators.CustomSignupEmailValidator"
 
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
