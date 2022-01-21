@@ -17,6 +17,16 @@ from medusa_website.utils.general import get_pretty_logger
 logger = get_pretty_logger(__name__)
 
 
+def add_msg_and_raise_permission_error(request, msg: str):
+    """
+    :param request:
+    :param msg:
+    :raises: PermissionError with msg
+    """
+    messages.add_message(request, messages.ERROR, msg)
+    raise PermissionError(msg)
+
+
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     slug_field = "email"
@@ -85,7 +95,7 @@ class MemberCheckView(LoginRequiredMixin, FormView, DetailView):
 
     def get(self, request, *args, **kwargs):
         if not self.request.user.is_staff:
-            raise PermissionError(self.permission_denied_message)
+            add_msg_and_raise_permission_error(request, self.permission_denied_message)
         form = self.get_form()
         context = self.get_context_data(form=form)
         context["member"] = self.get_object()
@@ -204,7 +214,7 @@ def contribution_certificate_pdf_view(request, *args, **kwargs):
     user: User = request.user
     cert: ContributionCertificate = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
-        raise PermissionError("Users can only view their own certificates, or admins")
+        add_msg_and_raise_permission_error(request, "Users can only view their own certificates, or admins!")
     if "preview_pdf" in cert.pdfs_to_gen():
         cert.gen_pdf(request=request, signed=False)
     return redirect(cert.preview_pdf.url)
@@ -215,9 +225,10 @@ def contribution_certificate_signed_pdf_view(request, *args, **kwargs):
     user: User = request.user
     cert: ContributionCertificate = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not cert.is_signed_off:
-        raise PermissionError("Certificate is not signed off yet!")
+        add_msg_and_raise_permission_error(request, "Certificate is not signed off yet!")
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
-        raise PermissionError("Users can only view their own certificates, or admins")
+        add_msg_and_raise_permission_error(request, "Users can only view their own certificates, or admins!")
+
     if "signed_pdf" in cert.pdfs_to_gen():
         cert.gen_pdf(request=request, signed=True)
     return redirect(cert.signed_pdf.url)
@@ -228,7 +239,7 @@ def contribution_certificate_delete_view(request, *args, **kwargs):
     user: User = request.user
     cert = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
-        raise PermissionError("Users can only view their own certificates, or admins")
+        add_msg_and_raise_permission_error(request, "Users can only view their own certificates, or admins!")
     cert.delete()
     messages.add_message(request, messages.SUCCESS, "Certificate successfully deleted")
 
@@ -240,7 +251,7 @@ def contribution_certificate_request_sign_view(request, *args, **kwargs):
     user: User = request.user
     cert = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
-        raise PermissionError("Users can only request signoff on their own certs, or admins")
+        add_msg_and_raise_permission_error(request, "Users can only request signoff on their own certs, or admins")
     cert.send_signoff_request(request)
     messages.add_message(request, messages.SUCCESS, "Certificate request for signoff successfully sent")
 
