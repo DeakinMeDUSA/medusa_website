@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.safestring import mark_safe
@@ -15,16 +16,6 @@ from medusa_website.users.models import ContributionCertificate, User
 from medusa_website.utils.general import get_pretty_logger
 
 logger = get_pretty_logger(__name__)
-
-
-def add_msg_and_raise_permission_error(request, msg: str):
-    """
-    :param request:
-    :param msg:
-    :raises: PermissionError with msg
-    """
-    messages.add_message(request, messages.ERROR, msg)
-    raise PermissionError(msg)
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -95,7 +86,7 @@ class MemberCheckView(LoginRequiredMixin, FormView, DetailView):
 
     def get(self, request, *args, **kwargs):
         if not self.request.user.is_staff:
-            add_msg_and_raise_permission_error(request, self.permission_denied_message)
+            raise PermissionDenied(self.permission_denied_message)
         form = self.get_form()
         context = self.get_context_data(form=form)
         context["member"] = self.get_object()
@@ -214,7 +205,7 @@ def contribution_certificate_pdf_view(request, *args, **kwargs):
     user: User = request.user
     cert: ContributionCertificate = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
-        add_msg_and_raise_permission_error(request, "Users can only view their own certificates, or admins!")
+        raise PermissionDenied("Users can only view their own certificates, or admins!")
     if "preview_pdf" in cert.pdfs_to_gen():
         cert.gen_pdf(request=request, signed=False)
     return redirect(cert.preview_pdf.url)
@@ -225,9 +216,9 @@ def contribution_certificate_signed_pdf_view(request, *args, **kwargs):
     user: User = request.user
     cert: ContributionCertificate = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not cert.is_signed_off:
-        add_msg_and_raise_permission_error(request, "Certificate is not signed off yet!")
+        raise PermissionDenied("Certificate is not signed off yet!")
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
-        add_msg_and_raise_permission_error(request, "Users can only view their own certificates, or admins!")
+        raise PermissionDenied("Users can only view their own certificates, or admins!")
 
     if "signed_pdf" in cert.pdfs_to_gen():
         cert.gen_pdf(request=request, signed=True)
@@ -239,7 +230,7 @@ def contribution_certificate_delete_view(request, *args, **kwargs):
     user: User = request.user
     cert = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
-        add_msg_and_raise_permission_error(request, "Users can only view their own certificates, or admins!")
+        raise PermissionDenied("Users can only view their own certificates, or admins!")
     cert.delete()
     messages.add_message(request, messages.SUCCESS, "Certificate successfully deleted")
 
@@ -251,7 +242,8 @@ def contribution_certificate_request_sign_view(request, *args, **kwargs):
     user: User = request.user
     cert = ContributionCertificate.objects.get(id=kwargs.get("id"))
     if not user.has_contrib_sign_off_permission() and request.user != cert.user:
-        add_msg_and_raise_permission_error(request, "Users can only request signoff on their own certs, or admins")
+        raise PermissionDenied("Users can only request signoff on their own certs, or admins")
+
     cert.send_signoff_request(request)
     messages.add_message(request, messages.SUCCESS, "Certificate request for signoff successfully sent")
 

@@ -5,7 +5,14 @@
 
 {% block content %}
   <h1>Forbidden (403)</h1>
-  {% include "messages.html" %}
+  {% if exception %}
+    <div
+      class="alert alert-danger"
+      role="alert">
+      {{ exception }}
+    </div>
+  {% else %}
+    <p>CSRF verification failed. Request aborted.</p>
+  {% endif %}
 
-  <p>CSRF verification failed. Request aborted.</p>
 {% endblock content %}
