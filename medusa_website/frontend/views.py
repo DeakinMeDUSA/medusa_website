@@ -8,7 +8,7 @@ from vanilla import TemplateView, FormView
 
 from medusa_website.frontend.forms import ContactForm
 from medusa_website.frontend.models import Sponsor, Supporter, OfficialDocumentation, Publication, group_docs_by_year, \
-    ElectiveReport, ConferenceReport
+    ElectiveReport, ConferenceReport, PublicationType
 from medusa_website.org_chart.models import SubCommittee
 from medusa_website.utils.general import get_pretty_logger
 
@@ -83,10 +83,12 @@ class PublicationsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context["the_pulse"] = [pub for pub in Publication.objects.filter(name="The Pulse").order_by("-pub_date")]
-        context["survival_guide"] = [pub for pub in
-                                     Publication.objects.filter(name="Survival Guide").order_by("-pub_date")]
+        context["publication_types"] = PublicationType.objects.all()
+        context["publications_grouped"] = []
+        for publication_type in PublicationType.objects.all():
+            context["publications_grouped"].append(
+                (publication_type, [pub for pub in Publication.objects.filter(type=publication_type).order_by("-pub_date")])
+            )
         return context
 
 

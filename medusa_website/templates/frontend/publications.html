@@ -17,37 +17,19 @@
     {#    <div class="image main">#}
     {#      <img alt="" src="{% static "images/frontend/building_ka.jpg" %}"/>#}
     {#    </div>#}
-    <div>
-      <h5>1st Year Survival Guide</h5>
-      <p>
-        The Deakin Medical School 1st Year Survival Guide is a guide created to ease the nerves of starting medical
-        school. It is created for students by students, so while we don’t give you info on assessment or course
-        specifics, we hope to make you feel welcome and provide student experiences and tips for starting medicine at
-        Waurn Ponds.
-      </p>
-      <div class="publication-collection">
-        {% for pub in survival_guide %}
-          {% include "frontend/publication_item.html" with publication=pub %}
-        {% endfor %}
-
+    {% for publication_type, publications in publications_grouped %}
+      <div>
+        <h5>{{ publication_type.type }}</h5>
+        <p>
+          {{ publication_type.display_description|safe }}
+        </p>
+        <div class="publication-collection">
+          {% for pub in publications %}
+            {% include "frontend/publication_item.html" with publication=pub %}
+          {% endfor %}
+        </div>
       </div>
-    </div>
-    <div>
-      <h5>The Pulse</h5>
-      <p>
-        The Pulse is a student-lead and authored publication that typically comes out a couple of times each year. We
-        look for student articles or experiences to share with all year levels and are a platform to help get your
-        writing published! If you have an article to share in the next issue please email it to
-        <a href="mailto:publications@medusa.org.au">publications@medusa.org.au</a> and we will get in touch!
-      </p>
-      <div class="publication-collection">
-        {% for pub in the_pulse %}
-          {% include "frontend/publication_item.html" with publication=pub %}
-        {% endfor %}
-
-      </div>
-
-    </div>
+    {% endfor %}
 
 
   </section>
