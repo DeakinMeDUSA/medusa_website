@@ -86,7 +86,7 @@ class Publication(models.Model):
                                   help_text="A thumbnail for the publicattion to be shown on the website. "
                                             "Will be auto-generated when the pdf is saved to the new object.")
     type = models.ForeignKey(PublicationType, related_name="publications", on_delete=models.PROTECT, null=True,
-                             blank=True)
+                             blank=False)
 
     def __repr__(self):
         return f"<{self.__class__.__name__}> - {self.name}"
