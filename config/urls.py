@@ -1,11 +1,10 @@
 from allauth.account import views as allauth_views
 from django.conf import settings
-from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.contrib.sitemaps.views import sitemap
-from django.urls import include, path, reverse_lazy
+from django.urls import include, path, re_path, reverse_lazy
 from django.views import defaults as default_views
 
 from medusa_website.mcq_bank.views.markdown_uploader import markdown_uploader
@@ -29,7 +28,7 @@ urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [
     path("osce_bank/", include("medusa_website.osce_bank.urls", namespace="osce_bank")),
     path("ping/", utils.ping),
     path("martor/", include("martor.urls")),
-    url(r"^api/uploader/$", markdown_uploader, name="markdown_uploader_page"),
+    re_path(r"^api/uploader/$", markdown_uploader, name="markdown_uploader_page"),
     path("tinymce/", include("tinymce.urls")),
 ]
 

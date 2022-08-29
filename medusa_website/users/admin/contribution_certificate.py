@@ -6,7 +6,7 @@ from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.html import format_html
 
 from medusa_website.users.models import ContributionCertificate, User
@@ -69,7 +69,7 @@ class ContributionCertificateAdminSignersFilter(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         signers = Group.objects.get(name="Contributions Sign Off").user_set.all()
         for obj in signers:
-            yield (str(obj.pk), smart_text(obj))
+            yield (str(obj.pk), smart_str(obj))
 
     def queryset(self, request, queryset):
         if self.value():

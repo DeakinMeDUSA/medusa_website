@@ -372,7 +372,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 ALLOWED_HOSTS = [""]  # Over-ridden in other configs
 APPEND_SLASH = True
 # CORS_ALLOWED_ORIGINS = ("http://localhost:3000",)
-CSRF_TRUSTED_ORIGINS = ["localhost:3000", ".medusa.org.au", ".medusa.org.au", "localhost:8000"]
+# noinspection HttpUrlsUsage
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://*.medusa.org.au",
+    "https://*.medusa.org.au",
+]
 
 # JAVASCRIPT LOADING
 # https://django-pipeline.readthedocs.io/en/latest/configuration.html

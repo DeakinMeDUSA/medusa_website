@@ -14,7 +14,7 @@ repos:
         description: Forces to replace line ending by the UNIX 'lf' character.
 
   - repo: https://github.com/psf/black
-    rev: 20.8b1
+    rev: 22.6.0
     hooks:
       - id: black
 
