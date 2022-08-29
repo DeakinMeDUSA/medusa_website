@@ -48,7 +48,7 @@ npm install
 Create database, where `postgres` is the default postgres account:
 
 ```shell
-createdb -u postgres medusa_website
+createdb -U postgres medusa_website
 ```
 
 After creating, in the top level `.env` file, set the values to what you just used:
