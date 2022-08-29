@@ -2,7 +2,6 @@
 # To run after a commit to the main branch
 
 set -euo pipefail # Exit on any non-zero exit code, and error on use of undefined var
-source "$HOME"/.poetry/env
 
 cd "$HOME"/medusa_website || exit
 echo
