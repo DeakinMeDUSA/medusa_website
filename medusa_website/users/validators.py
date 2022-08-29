@@ -1,26 +1,27 @@
+import datetime
+
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.utils.safestring import mark_safe
 
-from medusa_website.users.models import MemberRecord
+from medusa_website.users.models import MemberRecord, MemberRecordsImport
 
 
 class MedusaMemberValidator:
-    message = mark_safe(
-        "The supplied email was not found on member list supplied by DUSA, which is updated weekly. <br>"
-        'If you believe this to be an error, please contact <a href="mailto:it@medusa.org.au">it@medusa.org.au</a>'
-    )
-
     code = "invalid"
     domain_whitelist = ["medusa.org.au", "dusa.org.au"]
 
-    def __init__(self, message=None, code=None, whitelist=None):
-        if message is not None:
-            self.message = message
-        if code is not None:
-            self.code = code
-        if whitelist is not None:
-            self.domain_whitelist = whitelist
+    def __init__(self):
+        pass
+
+    @property
+    def message(self) -> str:
+        most_recent_import = MemberRecordsImport.objects.last().import_dt.date()
+        return mark_safe(
+            f"The supplied email was not found on member list supplied by DUSA. <br>"
+            f"This list is updated weekly, and was last updated {most_recent_import}.<br>"
+            'If you believe this to be an error, please contact <a href="mailto:it@medusa.org.au">it@medusa.org.au</a>'
+        )
 
     def __call__(self, value):
         try:
