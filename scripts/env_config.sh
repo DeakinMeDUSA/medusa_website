@@ -13,7 +13,7 @@ fi
 
 PARENT_PARENT_DIR="$(dirname "$SCRIPT_DIR")"
 
-export PATH="$HOME/.local/bin"
+export PATH="$HOME/.local/bin:$PATH"
 
 if test -f "$PARENT_PARENT_DIR/.env"; then
   set -o allexport
