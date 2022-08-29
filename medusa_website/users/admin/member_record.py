@@ -28,7 +28,13 @@ def convert_member_into_user(modeladmin, request, queryset: QuerySet[MemberRecor
         try:
             user = User.objects.get(email=member.email)
         except User.DoesNotExist:
-            user = User(email=member.email, name=member.name, membership_expiry=member.end_date, is_member=True)
+            user = User(
+                email=member.email,
+                name=member.name,
+                membership_expiry=member.end_date,
+                is_member=True,
+                member_record=member,
+            )
             user.save()
             user.create_member_id()
 

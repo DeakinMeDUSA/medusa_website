@@ -22,6 +22,12 @@ class MemberRecord(models.Model):
     is_welcome_email_sent = models.BooleanField(default=False)
     date_welcome_email_sent = models.DateField(null=True, blank=True)
 
+    def __repr__(self):
+        return f"<MemberRecord - {self.email} - {self.name}>"
+
+    def __str__(self):
+        return self.__repr__()
+
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.email = self.email.lower()
         super(MemberRecord, self).save()
@@ -75,8 +81,13 @@ class MemberRecord(models.Model):
         from medusa_website.users.models import User
 
         try:
-            User.objects.get(email=self.email)
-            return True
+            if User.objects.get(member_record=self):
+                return True
+            if User.objects.get(email=self.email):
+                u = User.objects.get(email=self.email)
+                u.member_record = self
+                u.save()
+                return True
         except User.DoesNotExist:
             return False
 

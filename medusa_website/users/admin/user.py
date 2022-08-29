@@ -117,7 +117,7 @@ class UserAdmin(cuUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
     fieldsets = (
-        ("Personal info", {"fields": ("name", "email", "password", "member_id", "signature_image")}),
+        ("Personal info", {"fields": ("name", "email", "password", "member_id", "signature_image", "member_record")}),
         (
             "Permissions",
             {
@@ -145,8 +145,17 @@ class UserAdmin(cuUserAdmin):
         "is_member",
     ]
     search_fields = ["email", "name"]
+    autocomplete_fields = ["member_record"]
     readonly_fields = ["all_emails", "member_id", "date_joined", "last_login"]
-    list_filter = ["is_active", "is_staff", "is_medusa", "is_member", "groups", "membership_expiry"]
+    list_filter = [
+        "is_active",
+        "is_staff",
+        "is_medusa",
+        "is_member",
+        "groups",
+        "membership_expiry",
+        ("member_record", admin.EmptyFieldListFilter),
+    ]
     actions = [
         create_member_ids,
         assign_is_member,

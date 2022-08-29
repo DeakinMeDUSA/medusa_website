@@ -59,6 +59,7 @@ class AccountAdapter(DefaultAccountAdapter):
         try:
             member_record = MemberRecord.objects.get(email=user.email)
             user.is_member = True
+            user.member_record = member_record
             user.create_member_id()
             user.membership_expiry = member_record.end_date
             member_name = HumanName(member_record.name)

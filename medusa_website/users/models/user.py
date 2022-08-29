@@ -8,8 +8,8 @@ from django.core.mail import send_mail
 from django.db import models
 from django.db.models import CharField
 from django.urls import reverse
-from django.utils import timezone
 
+from medusa_website.users.models import MemberRecord
 from medusa_website.utils.general import get_pretty_logger
 
 logger = get_pretty_logger(__name__)
@@ -79,6 +79,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["name"]
+    member_record = models.OneToOneField(MemberRecord, on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
         return f"{self.email}{f' - {self.name}' if self.name else ''}"
@@ -128,6 +129,15 @@ class User(AbstractBaseUser, PermissionsMixin):
         from medusa_website.users.models import ContributionCertificate
 
         return ContributionCertificate.generate_for_user(self)
+
+    def associate_member_record(self):
+        try:
+            if not self.is_medusa:
+                member_record = MemberRecord.objects.get(email=self.email)
+                self.member_record = member_record
+                self.save()
+        except MemberRecord.DoesNotExist:
+            logger.warning(f"Member record does not exist for user {self}")
 
     def create_member_id(self):
         """Create member_id of the format 2021-0088-48"""
