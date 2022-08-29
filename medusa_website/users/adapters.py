@@ -10,6 +10,7 @@ from django.http import HttpRequest
 from django.utils.safestring import mark_safe
 from nameparser import HumanName
 
+from medusa_website.users.validators import MedusaMemberValidator
 from medusa_website.utils.general import get_pretty_logger
 
 logger = get_pretty_logger(__name__)
@@ -18,6 +19,7 @@ logger = get_pretty_logger(__name__)
 class AccountAdapter(DefaultAccountAdapter):
     email_validators = [
         EmailValidator(),
+        MedusaMemberValidator(),
     ]
     error_messages = DefaultAccountAdapter.error_messages
     error_messages["email_taken"] = mark_safe(
