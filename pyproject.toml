@@ -18,7 +18,7 @@ authors = ["Chris Culhane <cfculhane@gmail.com>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "~3.10.4"
 Django = "~4.0"
 django-allauth = "0.51.0"
 django-anymail = "8.6"

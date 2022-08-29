@@ -26,7 +26,7 @@ class MemberRecord(models.Model):
         return f"<MemberRecord - {self.email} - {self.name}>"
 
     def __str__(self):
-        return self.__repr__()
+        return f"{self.email} - {self.name}"
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         self.email = self.email.lower()
